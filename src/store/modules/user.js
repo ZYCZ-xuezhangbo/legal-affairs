@@ -46,20 +46,20 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit }) {
       return new Promise((resolve, reject) => {
+        // 无论用户信息是否获取到，基础路由要提前配置
+        const basicsRoute = [
+          { permissionId: '/', permissionName: 'root' },
+          { permissionId: '/500', permissionName: 'page 500' },
+          { permissionId: '*', permissionName: 'page not found' }
+        ]
+        if (process.env.NODE_ENV === 'development') basicsRoute.push({ permissionId: '/test', permissionName: 'Test' })
+        commit('SET_PERMISSIONS', basicsRoute)
+
         getInfo().then(response => {
           const result = response.data
-          let permissions = []
           // 根据permission权限动态生成路由
           if (result.userMenu && result.userMenu.length > 0) {
-            permissions = result.userMenu.map(v => ({ permissionId: v.permission, permissionName: v.name }))
-            // 框架中的基础路由需要手动添加
-            const basicsRoute = [
-              { permissionId: '/', permissionName: 'root' },
-              { permissionId: '/500', permissionName: 'page 500' },
-              { permissionId: '*', permissionName: 'page not found' }
-            ]
-
-            if (process.env.NODE_ENV === 'development') basicsRoute.push({ permissionId: '/test', permissionName: 'Test' })
+            let permissions = result.userMenu.map(v => ({ permissionId: v.permission, permissionName: v.name }))
 
             permissions = [...basicsRoute, ...permissions]
             commit('SET_PERMISSIONS', permissions)

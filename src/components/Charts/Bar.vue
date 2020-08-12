@@ -1,6 +1,6 @@
 <template>
   <div v-if="show">
-    <h4 v-if="title !== ''" :style="{ marginBottom: '20px' }">{{ title }}</h4>
+    <h4 v-if="title !== ''">{{ title }}</h4>
     <v-chart :height="height" :data="list" :forceFit="true" :scale="scale">
       <v-coord v-if="isDirection" type="rect" direction="LB" />
       <v-tooltip />

@@ -126,12 +126,6 @@ export const asyncRouterMap = [
             meta: { title: '外部律师管理', keepAlive: false, permission: [] }
           },
           {
-            path: '/lawFirm/lawyerReview',
-            name: 'LawyerReview',
-            component: () => import('@/views/LawyerReview/LawyerReview'),
-            meta: { title: '外聘律师审核', keepAlive: false, permission: [] }
-          },
-          {
             path: '/lawFirm/LawyerStatistics',
             name: 'lawyerStatistics',
             component: () => import('@/views/LawyerStatistics/LawyerStatistics'),

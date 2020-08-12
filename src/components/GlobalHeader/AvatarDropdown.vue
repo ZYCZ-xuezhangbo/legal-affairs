@@ -2,7 +2,7 @@
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span>
       <!-- 占位符，可以放头像  <a-avatar :size="64" icon="user" /> -->
-      <span>{{ currentUser.name }}</span>
+      <span>当前登录：{{ currentUser.name }}</span>
     </span>
     <template v-slot:overlay>
       <a-menu :selected-keys="[]">

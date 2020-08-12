@@ -1,7 +1,8 @@
 // chart
 import ChartCard from '@/components/Charts/ChartCard'
-import ChartRing from '@/components/Charts/ChartRing'
+import ChartPie from '@/components/Charts/ChartPie'
 import ChartBar from '@/components/Charts/Bar'
+import ChartBarGroup from '@/components/Charts/BarGroup'
 import Liquid from '@/components/Charts/Liquid'
 import MiniArea from '@/components/Charts/MiniArea'
 import MiniSmoothArea from '@/components/Charts/MiniSmoothArea'
@@ -39,8 +40,9 @@ import Dialog from '@/components/Dialog'
 export {
   AvatarList,
   ChartCard,
-  ChartRing,
+  ChartPie,
   ChartBar,
+  ChartBarGroup,
   Liquid,
   MiniArea,
   MiniSmoothArea,

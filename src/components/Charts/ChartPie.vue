@@ -5,7 +5,7 @@
       <v-axis />
       <v-legend dataKey="k" />
       <v-pie position="p" color="k" :vStyle="pieStyle" :label="labelConfig" />
-      <v-coord type="theta" :radius="0.75" :innerRadius="0.6" />
+      <v-coord type="theta" v-bind="coordModal" />
     </v-chart>
   </div>
 </template>
@@ -22,6 +22,10 @@ const scale = [{
 
 export default {
   props: {
+    isRing: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Array,
       default() {
@@ -48,6 +52,13 @@ export default {
     }
   },
   computed: {
+    coordModal() {
+      if (this.isRing) {
+        return { radius: 0.75, innerRadius: 0.6 }
+      } else {
+        return {}
+      }
+    },
     list() {
       const sum = this.data.reduce((accumulator, current) => accumulator + current.v, 0)
       const l = this.data.map(item => {

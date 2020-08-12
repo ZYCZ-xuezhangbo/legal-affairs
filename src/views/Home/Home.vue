@@ -1,8 +1,10 @@
 <template>
   <div>
     <LegalSystem />
-    <CaseStatistics class="margin-top-lg" :ringData="ringData" :majorCasesData="majorCasesData" :barData="barData" />
-    <LegalReview class="margin-top-lg"/>
+    <CaseStatistics class="margin-top-lg" :pie-data="pieData" :majorCasesData="majorCasesData" :barData="barData" />
+    <LegalReview class="margin-top-lg" />
+    <FirmExternal class="margin-top-lg" :pie-data="pieData" :bar-group-data="barGroupData" />
+    <Propaganda class="margin-top-lg" />
   </div>
 </template>
 
@@ -10,16 +12,20 @@
 import LegalSystem from './components/LegalSystem'
 import CaseStatistics from './components/CaseStatistics'
 import LegalReview from './components/LegalReview'
+import FirmExternal from './components/FirmExternal'
+import Propaganda from './components/Propaganda'
 
 export default {
   components: {
     LegalSystem,
     CaseStatistics,
-    LegalReview
+    LegalReview,
+    FirmExternal,
+    Propaganda
   },
   data() {
     return {
-      ringData: [
+      pieData: [
         { k: '事例1', v: 41 },
         { k: '事例2', v: 22 },
         { k: '事例3', v: 13 },
@@ -32,6 +38,12 @@ export default {
         { x: '印度', y: 104970 },
         { x: '印尼', y: 23489 },
         { x: '巴西', y: 18203 }
+      ],
+      barGroupData: [
+        { x: '律所1', y1: 2800, y2: 2260 },
+        { x: '律所2', y1: 800, y2: 569 },
+        { x: '律所3', y1: 741, y2: 785 },
+        { x: '律所4', y1: 521, y2: 125 }
       ],
       majorCasesData: [
         {
