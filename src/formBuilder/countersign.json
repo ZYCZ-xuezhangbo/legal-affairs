@@ -1,0 +1,197 @@
+{
+  "list": [
+    {
+      "type": "grid",
+      "label": "栅格布局",
+      "columns": [
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "会签名称",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "name",
+              "key": "input_1596795116875",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "textarea",
+              "label": "审核意见",
+              "icon": "edit",
+              "options": {
+                "width": "100%",
+                "minRows": 4,
+                "maxRows": 6,
+                "maxLength": null,
+                "defaultValue": "",
+                "clearable": false,
+                "hidden": false,
+                "disabled": false,
+                "placeholder": "请输入"
+              },
+              "model": "opinion",
+              "key": "textarea_1596795141817",
+              "rules": [
+                {
+                  "required": false,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 12,
+          "lg": 12,
+          "xl": 12,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "接收人部门",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "recipientDepartment",
+              "key": "input_1596795161954",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 12,
+          "lg": 12,
+          "xl": 12,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "接收人",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "recipient",
+              "key": "input_1596795163725",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "uploadFile",
+              "label": "附件",
+              "icon": "upload",
+              "options": {
+                "defaultValue": "[]",
+                "multiple": false,
+                "disabled": false,
+                "hidden": false,
+                "drag": false,
+                "downloadWay": "a",
+                "dynamicFun": "",
+                "width": "100%",
+                "limit": 1000,
+                "data": "{}",
+                "fileName": "file",
+                "headers": {},
+                "action": "http://cdn.kcz66.com/uploadFile.txt",
+                "placeholder": "上传"
+              },
+              "model": "resourceUrl",
+              "key": "uploadFile_1596795203947",
+              "rules": [
+                {
+                  "required": false,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "options": {
+        "gutter": 48
+      },
+      "key": "grid_1596795060568"
+    }
+  ],
+  "config": {
+    "layout": "vertical",
+    "labelCol": {
+      "span": 4
+    },
+    "wrapperCol": {
+      "span": 18
+    },
+    "hideRequiredMark": false,
+    "customStyle": ""
+  }
+}

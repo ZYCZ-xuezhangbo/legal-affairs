@@ -1,0 +1,64 @@
+{
+  // 强制单引号
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": false, //匿名函数括号前不加空格
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  // 保存时自动fix
+  "editor.formatOnSave": false,
+  // 格式化插件的配置
+  "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      // 属性强制折行对齐 [auto|force|force-aligned|force-expand-multiline] ["auto"]
+      "wrap_attributes": "auto",
+      "end_with_newline": false
+    },
+    "prettier": {
+      "singleQuote": true, // 格式化以单引号为主
+      "semi": false // 格式化不加分号
+    }
+  },
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx",
+    "vue": "html",
+    "vue-html": "html"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "editor.wordWrap": "on",
+  "emmet.triggerExpansionOnTab": true,
+  "editor.tabSize": 2,
+  "vetur.format.options.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "breadcrumbs.enabled": true,
+  "editor.renderWhitespace": "none",
+  "explorer.confirmDragAndDrop": false,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.css": "scss"
+  },
+  "window.zoomLevel": 0,
+  "explorer.confirmDelete": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
+}

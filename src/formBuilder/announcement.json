@@ -1,0 +1,131 @@
+{
+  "list": [
+    {
+      "type": "grid",
+      "label": "栅格布局",
+      "columns": [
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "标题",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "title",
+              "key": "input_1596707298946",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "textarea",
+              "label": "内容",
+              "icon": "edit",
+              "options": {
+                "width": "100%",
+                "minRows": 4,
+                "maxRows": 6,
+                "maxLength": null,
+                "defaultValue": "",
+                "clearable": false,
+                "hidden": false,
+                "disabled": false,
+                "placeholder": "请输入"
+              },
+              "model": "content",
+              "key": "textarea_1596707311643",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "uploadFile",
+              "label": "附件",
+              "icon": "upload",
+              "options": {
+                "defaultValue": "[]",
+                "multiple": false,
+                "disabled": false,
+                "hidden": false,
+                "drag": false,
+                "downloadWay": "a",
+                "dynamicFun": "",
+                "width": "100%",
+                "limit": 100,
+                "data": "{}",
+                "fileName": "file",
+                "headers": {},
+                "action": "http://cdn.kcz66.com/uploadFile.txt",
+                "placeholder": "上传"
+              },
+              "model": "resourceUrl",
+              "key": "uploadFile_1596707324308",
+              "rules": [
+                {
+                  "required": false,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "options": {
+        "gutter": 0
+      },
+      "key": "grid_1596707294060"
+    }
+  ],
+  "config": {
+    "layout": "vertical",
+    "labelCol": {
+      "span": 4
+    },
+    "wrapperCol": {
+      "span": 18
+    },
+    "hideRequiredMark": false,
+    "customStyle": ""
+  }
+}

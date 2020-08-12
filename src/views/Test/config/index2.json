@@ -1,0 +1,101 @@
+{
+	"list": [
+		{
+			"type": "card",
+			"label": "卡片布局",
+			"options": {
+				"bordered": true
+			},
+			"list": [
+				{
+					"type": "grid",
+					"label": "栅格布局",
+					"columns": [
+						{
+							"xs": 24,
+							"sm": 24,
+							"md": 12,
+							"lg": 12,
+							"xl": 12,
+							"span": 12,
+							"list": [
+								{
+									"type": "input",
+									"label": "输入框",
+									"icon": "icon-write",
+									"options": {
+										"type": "text",
+										"width": "100%",
+										"defaultValue": "",
+										"placeholder": "请输入",
+										"clearable": false,
+										"maxLength": null,
+										"hidden": false,
+										"disabled": false
+									},
+									"model": "name",
+									"key": "input_1595917436402",
+									"rules": [
+										{
+											"required": false,
+											"message": "必填项"
+										}
+									]
+								}
+							]
+						},
+						{
+							"xs": 24,
+							"sm": 24,
+							"md": 12,
+							"lg": 12,
+							"xl": 12,
+							"span": 12,
+							"list": [
+								{
+									"type": "input",
+									"label": "输入框",
+									"icon": "icon-write",
+									"options": {
+										"type": "text",
+										"width": "100%",
+										"defaultValue": "",
+										"placeholder": "请输入",
+										"clearable": false,
+										"maxLength": null,
+										"hidden": false,
+										"disabled": false
+									},
+									"model": "input_1595917437531",
+									"key": "input_1595917437531",
+									"rules": [
+										{
+											"required": false,
+											"message": "必填项"
+										}
+									]
+								}
+							]
+						}
+					],
+					"options": {
+						"gutter": 48
+					},
+					"key": "grid_1595917417474"
+				}
+			],
+			"key": "card_1595917279083"
+		}
+	],
+	"config": {
+		"layout": "vertical",
+		"labelCol": {
+			"span": 4
+		},
+		"wrapperCol": {
+			"span": 18
+		},
+		"hideRequiredMark": false,
+		"customStyle": ""
+	}
+}

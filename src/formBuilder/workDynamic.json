@@ -1,0 +1,128 @@
+{
+  "list": [
+    {
+      "type": "grid",
+      "label": "栅格布局",
+      "columns": [
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "标题",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "title",
+              "key": "input_1596622264508",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": [
+            {
+              "type": "uploadImg",
+              "label": "封面",
+              "icon": "image",
+              "options": {
+                "defaultValue": "[]",
+                "multiple": false,
+                "hidden": false,
+                "disabled": false,
+                "width": "100%",
+                "data": "{}",
+                "limit": 1,
+                "placeholder": "上传",
+                "fileName": "image",
+                "headers": {},
+                "action": "http://cdn.kcz66.com/upload-img.txt",
+                "listType": "picture-card"
+              },
+              "model": "resourceUrl",
+              "key": "uploadImg_1596622008578",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            },
+            {
+              "type": "editor",
+              "label": "富文本",
+              "icon": "LC_icon_edit_line_1",
+              "list": [],
+              "options": {
+                "height": 300,
+                "placeholder": "请输入",
+                "defaultValue": "",
+                "chinesization": true,
+                "hidden": false,
+                "disabled": false,
+                "showLabel": false,
+                "width": "100%"
+              },
+              "model": "others",
+              "key": "editor_1596622027738",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 24,
+          "md": 24,
+          "lg": 24,
+          "xl": 24,
+          "span": 12,
+          "list": []
+        }
+      ],
+      "options": {
+        "gutter": 48
+      },
+      "key": "grid_1596621993441"
+    }
+  ],
+  "config": {
+    "layout": "vertical",
+    "labelCol": {
+      "span": 4
+    },
+    "wrapperCol": {
+      "span": 18
+    },
+    "hideRequiredMark": false,
+    "customStyle": ""
+  }
+}

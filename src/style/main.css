@@ -1,0 +1,529 @@
+.round {
+  border-radius: 5000px;
+}
+
+/* ==================
+          边框
+ ==================== */
+
+/* -- 实线 -- */
+
+.solid,
+.solid-top,
+.solid-right,
+.solid-bottom,
+.solid-left,
+.solids,
+.solids-top,
+.solids-right,
+.solids-bottom,
+.solids-left,
+.dashed,
+.dashed-top,
+.dashed-right,
+.dashed-bottom,
+.dashed-left {
+  position: relative;
+}
+
+.solid::after,
+.solid-top::after,
+.solid-right::after,
+.solid-bottom::after,
+.solid-left::after,
+.solids::after,
+.solids-top::after,
+.solids-right::after,
+.solids-bottom::after,
+.solids-left::after,
+.dashed::after,
+.dashed-top::after,
+.dashed-right::after,
+.dashed-bottom::after,
+.dashed-left::after {
+  content: ' ';
+  width: 200%;
+  height: 200%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: inherit;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.solid::after {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.solid-top::after {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.solid-right::after {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.solid-bottom::after {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.solid-left::after {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.solids::after {
+  border: 4px solid #eee;
+}
+
+.solids-top::after {
+  border-top: 4px solid #eee;
+}
+
+.solids-right::after {
+  border-right: 4px solid #eee;
+}
+
+.solids-bottom::after {
+  border-bottom: 4px solid #eee;
+}
+
+.solids-left::after {
+  border-left: 4px solid #eee;
+}
+
+
+/*  -- 内外边距 -- */
+
+.margin-0 {
+  margin: 0;
+}
+
+.margin-xs {
+  margin: 2px;
+}
+
+.margin-sm {
+  margin: 4px;
+}
+
+.margin {
+  margin: 8px;
+}
+
+.margin-lg {
+  margin: 16px;
+}
+
+.margin-xl {
+  margin: 40px;
+}
+
+.margin-top-xs {
+  margin-top: 2px;
+}
+
+.margin-top-sm {
+  margin-top: 4px;
+}
+
+.margin-top {
+  margin-top: 8px;
+}
+
+.margin-top-lg {
+  margin-top: 16px;
+}
+
+.margin-top-xl {
+  margin-top: 40px;
+}
+
+.margin-right-xs {
+  margin-right: 2px;
+}
+
+.margin-right-sm {
+  margin-right: 4px;
+}
+
+.margin-right {
+  margin-right: 8px;
+}
+
+.margin-right-lg {
+  margin-right: 16px;
+}
+
+.margin-right-xl {
+  margin-right: 40px;
+}
+
+.margin-bottom-xs {
+  margin-bottom: 2px;
+}
+
+.margin-bottom-sm {
+  margin-bottom: 4px;
+}
+
+.margin-bottom {
+  margin-bottom: 8px;
+}
+
+.margin-bottom-lg {
+  margin-bottom: 16px;
+}
+
+.margin-bottom-xl {
+  margin-bottom: 40px;
+}
+
+.margin-left-xs {
+  margin-left: 2px;
+}
+
+.margin-left-sm {
+  margin-left: 4px;
+}
+
+.margin-left {
+  margin-left: 8px;
+}
+
+.margin-left-lg {
+  margin-left: 16px;
+}
+
+.margin-left-xl {
+  margin-left: 40px;
+}
+
+.margin-lr-xs {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.margin-lr-sm {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.margin-lr {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.margin-lr-lg {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.margin-lr-xl {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.margin-tb-xs {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.margin-tb-sm {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.margin-tb {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.margin-tb-lg {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.margin-tb-xl {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.padding-0 {
+  padding: 0;
+}
+
+.padding-xs {
+  padding: 2px;
+}
+
+.padding-sm {
+  padding: 4px;
+}
+
+.padding {
+  padding: 8px;
+}
+
+.padding-lg {
+  padding: 16px;
+}
+
+.padding-xl {
+  padding: 40px;
+}
+
+.padding-top-xs {
+  padding-top: 2px;
+}
+
+.padding-top-sm {
+  padding-top: 4px;
+}
+
+.padding-top {
+  padding-top: 8px;
+}
+
+.padding-top-lg {
+  padding-top: 16px;
+}
+
+.padding-top-xl {
+  padding-top: 40px;
+}
+
+.padding-right-xs {
+  padding-right: 2px;
+}
+
+.padding-right-sm {
+  padding-right: 4px;
+}
+
+.padding-right {
+  padding-right: 8px;
+}
+
+.padding-right-lg {
+  padding-right: 16px;
+}
+
+.padding-right-xl {
+  padding-right: 40px;
+}
+
+.padding-bottom-xs {
+  padding-bottom: 2px;
+}
+
+.padding-bottom-sm {
+  padding-bottom: 4px;
+}
+
+.padding-bottom {
+  padding-bottom: 8px;
+}
+
+.padding-bottom-lg {
+  padding-bottom: 16px;
+}
+
+.padding-bottom-xl {
+  padding-bottom: 40px;
+}
+
+.padding-left-xs {
+  padding-left: 2px;
+}
+
+.padding-left-sm {
+  padding-left: 4px;
+}
+
+.padding-left {
+  padding-left: 8px;
+}
+
+.padding-left-lg {
+  padding-left: 16px;
+}
+
+.padding-left-xl {
+  padding-left: 40px;
+}
+
+.padding-lr-xs {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.padding-lr-sm {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.padding-lr {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.padding-lr-lg {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.padding-lr-xl {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.padding-tb-xs {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.padding-tb-sm {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.padding-tb {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.padding-tb-lg {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.padding-tb-xl {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* -- 浮动 --  */
+
+.cf::after,
+.cf::before {
+  content: ' ';
+  display: table;
+}
+
+.cf::after {
+  clear: both;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+/* ==================
+          文本
+ ==================== */
+
+.text-xs {
+  font-size: 11px;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.text-df {
+  font-size: 14px;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
+.text-xl {
+  font-size: 22px;
+}
+
+.text-xxl {
+  font-size: 26px;
+}
+
+.text-sl {
+  font-size: 32px;
+}
+
+.text-Abc {
+  text-transform: Capitalize;
+}
+
+.text-ABC {
+  text-transform: Uppercase;
+}
+
+.text-abc {
+  text-transform: Lowercase;
+}
+
+.text-cut {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center-lr {
+  text-align: justify;
+  text-justify: distribute-all-lines;
+}
+
+.text-red,
+.line-red,
+.lines-red {
+  color: #e54d42;
+}
+
+.text-gray,
+.line-gray,
+.lines-gray {
+  color: #8d8f93;
+}
+.text-blue,
+.line-blue,
+.lines-blue {
+  color: #0081ff;
+}
+.text-bold {
+  font-weight: bold;
+}
+
+.text-grey,
+.line-grey,
+.lines-grey {
+  color: #8799a3;
+}
+
+.text-orange,
+.line-orange,
+.lines-orange {
+  color: #f37b1d;
+}
