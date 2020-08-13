@@ -9,13 +9,9 @@ import locales from '@/locales/index'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Icon } from 'ant-design-vue'
-// import themePluginConfig from '../config/themePluginConfig'
-
 // 表单设计器
 import KFormDesign from './components/KFormDesign/packages'
 import './components/KFormDesign/styles/form-design.less'
-
-// mock.不支持IE，请不要在“production”ENV中使用
 // import './mock'
 
 import bootstrap from './core/bootstrap'
@@ -27,6 +23,13 @@ import './global.less'
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1957392_fuhqlam5lqk.js'
 })
+
+// 表单设计器配置
+KFormDesign.setConfig({
+  uploadFile: 'http://cdn.kcz66.com/uploadFile.txt', // 上传文件地址
+  uploadImage: 'http://cdn.kcz66.com/upload-img.txt' // 上传图片地址
+})
+
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
@@ -45,8 +48,6 @@ const i18n = new VueI18n({
 })
 
 Vue.prototype.$uploadUrl = process.env.NODE_ENV === 'production' ? '' : 'http://cdn.kcz66.com/uploadFile.txt'
-
-// window.umi_plugin_ant_themeVar = themePluginConfig.theme
 
 new Vue({
   router,

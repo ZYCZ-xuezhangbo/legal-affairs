@@ -4,7 +4,7 @@
       <v-coord type="rect" direction="LT" />
       <v-tooltip />
       <v-legend />
-      <v-axis dataKey="value" position="right" />
+      <v-axis dataKey="value" position="right" :show="false" />
       <v-axis dataKey="x" :label="label" />
       <v-bar position="x*value" color="type" :adjust="adjust" />
     </v-chart>

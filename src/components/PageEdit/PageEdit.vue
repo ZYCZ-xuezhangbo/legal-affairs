@@ -1,7 +1,10 @@
 <template>
   <div>
     <a-modal v-bind="editModal" :title="isEdit?'编辑':'新建'" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <k-form-build ref="form" :value="formData" :dynamic-data="dynamicData" />
+      <a-skeleton v-show="pageLoading" active />
+      <div v-show="!pageLoading">
+        <k-form-build ref="form" :value="formData" :dynamic-data="dynamicData" />
+      </div>
     </a-modal>
   </div>
 </template>
@@ -63,6 +66,7 @@ export default {
   },
   data() {
     return {
+      pageLoading: false,
       confirmLoading: false,
       API: require(`@/api/${this.api}`)
     }
@@ -87,11 +91,11 @@ export default {
       })
     },
     getDetail() {
-      const pageLoading = this.$message.loading(this.$t('messageLoadingText'), 0)
+      this.pageLoading = true
       this.API.getById(this.id).then(res => {
         this.$refs.form.setData(res.data).catch(e => console.log(e))
       }).finally(() => {
-        setTimeout(pageLoading, 0)
+        this.pageLoading = false
       })
     },
     handleCancel() {

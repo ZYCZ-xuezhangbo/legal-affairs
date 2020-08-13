@@ -5,10 +5,10 @@
   <div :style="{ width: record.options.width }">
     <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
-        <a-icon type="upload" /> {{ record.options.placeholder }}
+        <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
     </a-upload>
-    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <p class="ant-upload-drag-icon">
         <a-icon type="cloud-upload" />
       </p>
@@ -113,8 +113,9 @@ export default {
     },
     handlePreview(file) {
       // 下载文件
-      const downloadWay = this.record.options.downloadWay
+      const downloadWay = this.record.options.downloadWay || 'a'
       const dynamicFun = this.record.options.dynamicFun
+
       if (downloadWay === 'a') {
         // 使用a标签下载
         const a = document.createElement('a')
@@ -199,3 +200,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+/deep/ .ant-upload-list-item-name {
+  cursor: pointer;
+}
+</style>

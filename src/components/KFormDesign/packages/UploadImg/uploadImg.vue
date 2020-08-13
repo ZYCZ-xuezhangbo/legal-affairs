@@ -5,11 +5,11 @@
   <div :style="{ width: record.options.width }" class="upload-img-box-9136076486841527">
     <a-upload :name="config.uploadImageName || record.options.fileName" :headers="config.uploadImageHeaders || record.options.headers" :data="config.uploadImageData || optionsData" :action="config.uploadImage || record.options.action" :multiple="record.options.multiple" :listType="record.options.listType" :disabled="record.options.disabled || parentDisabled" :fileList="fileList" accept="image/gif, image/jpeg, image/png" @change="handleChange" @preview="handlePreview" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="record.options.listType !== 'picture-card' && fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
-        <a-icon type="upload" /> {{ record.options.placeholder }}
+        <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
       <div v-if="record.options.listType === 'picture-card' && fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
         <a-icon type="plus" />
-        <div class="ant-upload-text">{{ record.options.placeholder }}</div>
+        <div class="ant-upload-text">{{ record.options.placeholder || '上传' }}</div>
       </div>
     </a-upload>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">

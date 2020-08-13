@@ -27,7 +27,6 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(store.getters.addRouters)
             // 请求带有 redirect 重定向时，登录自动重定向到该地址
             const redirect = decodeURIComponent(from.query.redirect || to.path)
-
             if (to.path === redirect) {
               // 设置replace:true，这样导航就不会留下历史记录
               next({ ...to, replace: true })
@@ -36,10 +35,9 @@ router.beforeEach((to, from, next) => {
             }
           })
         }).catch((res) => {
-          console.error(res)
           // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
           store.dispatch('Logout').then(() => {
-            // next({ path: loginRoutePath, query: { redirect: to.fullPath } })
+            next({ path: loginRoutePath, query: { redirect: to.fullPath } })
           })
         })
       } else {

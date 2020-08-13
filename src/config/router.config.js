@@ -18,7 +18,7 @@ const RouteView = {
 export const asyncRouterMap = [
   {
     path: '/',
-    name: 'index',
+    name: 'Index',
     component: BasicLayout,
     meta: { title: '主页' },
     redirect: '/analysis',
@@ -253,17 +253,17 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       {
-        path: 'login',
+        path: '/user/login',
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/Login')
       },
       {
-        path: 'register',
+        path: '/user/register',
         name: 'register',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/Register')
       },
       {
-        path: 'register-result',
+        path: '/user/register-result',
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/RegisterResult')
       }

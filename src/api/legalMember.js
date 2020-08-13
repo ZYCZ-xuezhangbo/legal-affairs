@@ -3,67 +3,11 @@ import request from '@/utils/request'
 
 const api = '/legalMember'
 
-export function create({
-  birthDate,
-  certificateNumber,
-  company,
-  dept,
-  educationBackground,
-  educationalSystem,
-  employmentPeriod,
-  enterpriseNumber,
-  enterpriseProfession,
-  fullTime,
-  gender,
-  joinWork,
-  lammyCompany,
-  lammyDept,
-  legalMajor,
-  legalProfession,
-  majorName,
-  name,
-  officePhone,
-  phone,
-  postLevel,
-  postName,
-  professionGrade,
-  resourceUrl,
-  school,
-  userName,
-  work
-}) {
+export function create(params) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: {
-      birthDate,
-      certificateNumber,
-      company,
-      dept,
-      educationBackground,
-      educationalSystem,
-      employmentPeriod,
-      enterpriseNumber,
-      enterpriseProfession,
-      fullTime,
-      gender,
-      joinWork,
-      lammyCompany,
-      lammyDept,
-      legalMajor,
-      legalProfession,
-      majorName,
-      name,
-      officePhone,
-      phone,
-      postLevel,
-      postName,
-      professionGrade,
-      resourceUrl,
-      school,
-      userName,
-      work
-    }
+    data: params
   })
 }
 
@@ -89,62 +33,10 @@ export function page({ pageNum = 1, pageSize = 10, company, enterpriseProfession
   })
 }
 
-export function update({
-  birthDate,
-  certificateNumber,
-  company,
-  dept,
-  educationBackground,
-  educationalSystem,
-  employmentPeriod,
-  enterpriseNumber,
-  enterpriseProfession,
-  fullTime,
-  gender,
-  id,
-  joinWork,
-  legalMajor,
-  legalProfession,
-  majorName,
-  name,
-  officePhone,
-  phone,
-  postLevel,
-  postName,
-  professionGrade,
-  resourceUrl,
-  school,
-  userName,
-  work
- }) {
+export function update(params) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { birthDate,
-      certificateNumber,
-      company,
-      dept,
-      educationBackground,
-      educationalSystem,
-      employmentPeriod,
-      enterpriseNumber,
-      enterpriseProfession,
-      fullTime,
-      gender,
-      id,
-      joinWork,
-      legalMajor,
-      legalProfession,
-      majorName,
-      name,
-      officePhone,
-      phone,
-      postLevel,
-      postName,
-      professionGrade,
-      resourceUrl,
-      school,
-      userName,
-      work }
+    data: params
   })
 }

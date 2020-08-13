@@ -1,5 +1,4 @@
 import storage from 'store'
-import router from '@/router'
 import { getInfo, logout } from '@/api/user'
 import { login } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -76,7 +75,15 @@ const user = {
       })
     },
     // 登出
-    Logout({ commit, state }) {
+    Logout({ commit }) {
+      return new Promise((resolve) => {
+        commit('SET_TOKEN', '')
+        commit('SET_PERMISSIONS', [])
+        storage.remove(ACCESS_TOKEN)
+        resolve()
+      })
+    },
+    LogoutByApi({ commit, state }) {
       return new Promise((resolve) => {
         logout(state.token).then((res) => {
           resolve()
@@ -86,7 +93,6 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_PERMISSIONS', [])
           storage.remove(ACCESS_TOKEN)
-          router.push('login')
         })
       })
     }

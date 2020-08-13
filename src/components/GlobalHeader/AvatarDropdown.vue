@@ -45,7 +45,9 @@ export default {
         okText: '退出',
         cancelText: '取消',
         onOk: () => {
-          return this.$store.dispatch('Logout')
+          return this.$store.dispatch('LogoutByApi').then(() => {
+            this.$router.push('/user/login')
+          })
         },
         onCancel() { }
       })
@@ -55,5 +57,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 </style>

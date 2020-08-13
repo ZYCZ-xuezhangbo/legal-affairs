@@ -72,7 +72,7 @@
                 </a-col>
                 <a-col v-bind="searchFormGrid">
                   <a-form-model-item label="涉案金额" prop="fieldC">
-                    <a-input-number class="response" placeholder="最小金额" />
+                    <a-input-number class="response" :min="0" placeholder="最小金额" />
                   </a-form-model-item>
                 </a-col>
                 <a-col v-bind="searchFormGrid">

@@ -52,7 +52,9 @@ request.interceptors.response.use((res) => {
           description: res.msg,
           duration: 6
         })
-        store.dispatch('Logout')
+        store.dispatch('Logout').then(() => {
+          router.push('/user/login')
+        })
         break
       default:
         Notification.error({

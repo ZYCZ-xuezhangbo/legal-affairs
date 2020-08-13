@@ -1,0 +1,262 @@
+{
+  "list": [
+    {
+      "type": "grid",
+      "label": "栅格布局",
+      "columns": [
+        {
+          "xs": 24,
+          "sm": 12,
+          "md": 8,
+          "lg": 6,
+          "xl": 6,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "律所名称\t",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "lawFirmName",
+              "key": "input_1597285481666",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 12,
+          "md": 8,
+          "lg": 6,
+          "xl": 6,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "地址",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "address",
+              "key": "input_1597285483175",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 12,
+          "md": 8,
+          "lg": 6,
+          "xl": 6,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "联系人",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "linkman",
+              "key": "input_1597285484295",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "xs": 24,
+          "sm": 12,
+          "md": 8,
+          "lg": 6,
+          "xl": 6,
+          "span": 12,
+          "list": [
+            {
+              "type": "input",
+              "label": "联系电话",
+              "icon": "write",
+              "options": {
+                "type": "text",
+                "width": "100%",
+                "defaultValue": "",
+                "placeholder": "请输入",
+                "clearable": false,
+                "maxLength": null,
+                "hidden": false,
+                "disabled": false
+              },
+              "model": "phone",
+              "key": "input_1597285485481",
+              "rules": [
+                {
+                  "required": true,
+                  "message": "必填项"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "options": {
+        "gutter": 48
+      },
+      "key": "grid_1597285402085"
+    },
+    {
+      "type": "textarea",
+      "label": "律所简介",
+      "options": {
+        "width": "100%",
+        "minRows": 4,
+        "maxRows": 6,
+        "maxLength": null,
+        "defaultValue": "",
+        "clearable": false,
+        "hidden": false,
+        "disabled": false,
+        "placeholder": "请输入"
+      },
+      "model": "lawFirmDesc",
+      "key": "textarea_1597285551578",
+      "rules": [
+        {
+          "required": true,
+          "message": "必填项"
+        }
+      ]
+    },
+    {
+      "type": "uploadImg",
+      "label": "展示图片",
+      "options": {
+        "defaultValue": "[]",
+        "multiple": false,
+        "hidden": false,
+        "disabled": false,
+        "width": "100%",
+        "data": "{}",
+        "limit": 1000,
+        "placeholder": "上传",
+        "fileName": "image",
+        "headers": {},
+        "action": "http://cdn.kcz66.com/upload-img.txt",
+        "listType": "picture-card"
+      },
+      "model": "photographs",
+      "key": "uploadImg_1597285586787",
+      "rules": [
+        {
+          "required": false,
+          "message": "必填项"
+        }
+      ]
+    },
+    {
+      "type": "uploadFile",
+      "label": "展示视频",
+      "options": {
+        "defaultValue": "[]",
+        "multiple": false,
+        "disabled": false,
+        "hidden": false,
+        "drag": false,
+        "downloadWay": "a",
+        "dynamicFun": "",
+        "width": "100%",
+        "limit": 1000,
+        "data": "{}",
+        "fileName": "file",
+        "headers": {},
+        "action": "http://cdn.kcz66.com/uploadFile.txt",
+        "placeholder": "上传"
+      },
+      "model": "videos",
+      "key": "uploadFile_1597285589203",
+      "rules": [
+        {
+          "required": false,
+          "message": "必填项"
+        }
+      ]
+    },
+    {
+      "type": "uploadFile",
+      "label": "文件",
+      "options": {
+        "defaultValue": "[]",
+        "multiple": false,
+        "disabled": false,
+        "hidden": false,
+        "drag": false,
+        "downloadWay": "a",
+        "dynamicFun": "",
+        "width": "100%",
+        "limit": 1000,
+        "data": "{}",
+        "fileName": "file",
+        "headers": {},
+        "action": "http://cdn.kcz66.com/uploadFile.txt",
+        "placeholder": "上传"
+      },
+      "model": "resourceUrl",
+      "key": "uploadFile_1597285571803",
+      "rules": [
+        {
+          "required": false,
+          "message": "必填项"
+        }
+      ]
+    }
+  ],
+  "config": {
+    "layout": "vertical",
+    "labelCol": {
+      "span": 4
+    },
+    "wrapperCol": {
+      "span": 18
+    },
+    "hideRequiredMark": false,
+    "customStyle": ""
+  }
+}
