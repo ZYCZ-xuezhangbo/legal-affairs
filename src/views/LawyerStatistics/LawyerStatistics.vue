@@ -1,13 +1,8 @@
 <template>
-  <page-header-wrapper>
-    <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="e=>activeTab=e">
-      <template #tabBarExtraContent>
-        <a-button type="primary" @click="handleSearch">查询</a-button>
-      </template>
-      <Page ref="page1" v-show="activeTab==='1'" :tab="activeTab" />
-      <Page ref="page2" v-show="activeTab==='2'" :tab="activeTab" />
-      <Page ref="page3" v-show="activeTab==='3'" :tab="activeTab" />
-    </a-card>
+  <page-header-wrapper :tab-list="tabs" :tab-active-key="activeTab" @tabChange="e => activeTab = e">
+    <Page ref="page1" v-show="activeTab==='1'" :tab="activeTab" />
+    <Page ref="page2" v-show="activeTab==='2'" :tab="activeTab" />
+    <Page ref="page3" v-show="activeTab==='3'" :tab="activeTab" />
   </page-header-wrapper>
 </template>
 
@@ -51,17 +46,6 @@ export default {
         { k: '事例4', v: 14 },
         { k: '事例5', v: 5 }
       ]
-    }
-  },
-  methods: {
-    handleSearch() {
-      if (this.activeTab === '1') {
-        this.$refs.page1.search()
-      } else if (this.activeTab === '2') {
-        this.$refs.page2.search()
-      } else if (this.activeTab === '3') {
-        this.$refs.page3.search()
-      }
     }
   }
 }

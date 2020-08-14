@@ -142,7 +142,7 @@
                     岗级0
                   </a-select-option>
                   <a-select-option value="1">
-                    岗级11
+                    岗级1
                   </a-select-option>
                 </a-select>
               </a-form-model-item>

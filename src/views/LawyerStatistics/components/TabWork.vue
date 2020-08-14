@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-card :bordered="false">
     <a-row :gutter="48">
       <a-col :sm="24" :md="12">
         <ChartPie :data="dataPie" />
@@ -8,7 +8,7 @@
         <ChartBarGroup :data="dataBar" />
       </a-col>
     </a-row>
-  </div>
+  </a-card>
 </template>
 
 <script>

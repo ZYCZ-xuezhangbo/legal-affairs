@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-card :bordered="false">
     <a-row :gutter="48">
       <a-col :sm="24" :md="12">
         <div class="charts-title">外聘律师工作数量：67</div>
@@ -15,7 +15,7 @@
         律师评价排名
       </template>
     </a-table>
-  </div>
+  </a-card>
 </template>
 
 <script>

@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { getCause as httpGetCauseOfAction } from '@/api/case'
+import { getBrief as httpGetBriefList } from '@/api/case'
 import { FooterToolbar } from '@/components'
 
 const rules = {
@@ -152,7 +152,7 @@ export default {
       if (this.anyouSearchTimer) clearTimeout(this.anyouSearchTimer)
       this.anyouSearchTimer = setTimeout(() => {
         this.anyouLoading = true
-        httpGetCauseOfAction(keyword).then(res => {
+        httpGetBriefList(keyword).then(res => {
           const list = res.data.map(v => ({ id: v.id, value: v.value, label: v.label, pId: v.pid }))
           this.anyou = list
         }).finally(() => {

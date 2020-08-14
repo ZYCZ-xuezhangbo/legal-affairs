@@ -40,3 +40,19 @@ export function update({ age, educationBackground, gender, id, lammyCompany, lam
     data: { age, educationBackground, gender, id, lammyCompany, lammyDept, lawName, legalProfession, major, phone, professionalLife, resourceUrl, serviceContent }
   })
 }
+
+/**
+ * 所有的律所列表
+ */
+export function getLawFirmName() {
+  return request({
+    url: `${api}/getLawFirmName`,
+    method: 'get'
+  })
+}
+export function getLayerByFirmId(id) {
+  return request({
+    url: `${api}/getLayerByFirmId/${id}`,
+    method: 'get'
+  })
+}

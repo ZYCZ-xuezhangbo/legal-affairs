@@ -45,9 +45,10 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        // 无论用户信息是否获取到，基础路由要提前配置
+        // 跟权限无关的基础路由，默认加载
         const basicsRoute = [
           { permissionId: '/', permissionName: 'root' },
+          { permissionId: '/case/caseDetail/:id', permissionName: 'case detail' },
           { permissionId: '/500', permissionName: 'page 500' },
           { permissionId: '*', permissionName: 'page not found' }
         ]

@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper :title="false" :breadcrumb="false">
+  <page-header-wrapper :back="()=>$router.back(-1)">
     <!-- 新增回款 - 弹框 -->
     <a-modal title="新增回款" ok-text="提交" :visible="dialog.showAddHuikuan" :confirm-loading="false" @ok="dialog.showAddHuikuan=false" @cancel="dialog.showAddHuikuan=false">
       <a-table :columns="addHuikuanColumns" :data-source="data" bordered>
@@ -13,9 +13,6 @@
       TODO
     </a-modal>
 
-    <template #content>
-      <a-page-header title="返回" sub-title="案件进展" @back="handleGoBack" style="padding:0;" />
-    </template>
     <a-card :bordered="false">
       <a-row>
         <a-col :sm="24" :md="16">
@@ -135,9 +132,6 @@ export default {
     }
   },
   methods: {
-    handleGoBack() {
-      this.$router.back(-1)
-    },
     handleStepChange(e) {
       this.curStep = e
     },
@@ -155,12 +149,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/ .ant-page-header-content {
-  padding-top: 0;
-}
-.svg-yzj {
-  width: 140px;
-  margin-left: 12px;
-  cursor: pointer;
-}
 </style>

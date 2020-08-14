@@ -1,6 +1,9 @@
 .round {
   border-radius: 5000px;
 }
+.response {
+  width: 100%;
+}
 
 /* ==================
           边框
@@ -93,7 +96,6 @@
 .solids-left::after {
   border-left: 4px solid #eee;
 }
-
 
 /*  -- 内外边距 -- */
 

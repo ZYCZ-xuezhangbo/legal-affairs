@@ -129,7 +129,7 @@ export default {
     handleActClick({ act, id }) {
       console.log(act + ',' + id)
       if (act === 'edit') {
-        this.$router.push(`/other/caseDetail/${id}`)
+        this.$router.push(`/case/caseDetail/${id}`)
       }
     }
   }

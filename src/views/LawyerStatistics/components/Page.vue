@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Search class="search" ref="search" :tab="tab" />
+    <Search :tab="tab" />
     <TabWork v-if="tab==='1'" :data-pie="tabWord.dataPie" :data-bar="tabWord.dataBar" />
     <TabEvaluate v-else-if="tab==='2'" :data-pie="tabEvaluate.dataPie" :data-bar="tabEvaluate.dataBar" />
     <TabEvaluateRank v-else-if="tab==='3'" />
@@ -60,18 +60,9 @@ export default {
         ]
       }
     }
-  },
-  methods: {
-    search() {
-      const form = this.$refs.search.form
-      console.log(form)
-    }
   }
 }
 </script>
 
 <style>
-.search {
-  margin-bottom: 50px;
-}
 </style>

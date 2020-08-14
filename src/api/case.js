@@ -3,10 +3,27 @@ import request from '@/utils/request'
 
 const api = '/case'
 
-export function getCause(keyword) {
+/**
+ * 案由列表
+ * @param {string} keyword
+ */
+export function getBrief(keyword) {
   return request({
-    url: `${api}/getCause`,
+    url: `${api}/getBrief`,
     method: 'get',
     params: { label: keyword }
+  })
+}
+export function getCaseDictionaries() {
+  return request({
+    url: `${api}/getCaseDictionaries`,
+    method: 'get'
+  })
+}
+export function create(params) {
+  return request({
+    url: `${api}/create`,
+    method: 'post',
+    data: params
   })
 }

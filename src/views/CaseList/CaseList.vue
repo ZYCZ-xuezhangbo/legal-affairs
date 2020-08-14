@@ -1,6 +1,5 @@
 <template>
-  <page-header-wrapper>
-    <a-card class="title" :bordered="false" :tab-list="tabList" :active-tab-key="activeTab" @tabChange="e => activeTab = e"> </a-card>
+  <page-header-wrapper :tab-list="tabList" :tab-active-key="activeTab" @tabChange="e => activeTab = e">
     <CasePage v-show="activeTab === '1'" type="zaisu" :list-title="listTitle" />
     <CasePage v-show="activeTab === '2'" type="year" :list-title="listTitle" />
     <CasePage v-show="activeTab === '3'" type="all" :list-title="listTitle" />
@@ -47,11 +46,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.title {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  /deep/ .ant-card-head {
-    margin-bottom: 0;
-  }
-}
+
 </style>

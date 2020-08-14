@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-card :bordered="false" class="margin-bottom-lg">
     <a-row :gutter="48">
       <a-col :sm="24" :md="12">
         <div class="padding-bottom-lg">
@@ -54,7 +54,8 @@
         </template>
       </a-col>
     </a-row>
-  </div>
+    <a-button type="primary">查询</a-button>
+  </a-card>
 </template>
 
 <script>

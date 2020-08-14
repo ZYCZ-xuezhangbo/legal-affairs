@@ -48,6 +48,13 @@ export const asyncRouterMap = [
             meta: { title: '案件列表', hidden: false, keepAlive: false, permission: [] }
           },
           {
+            path: '/case/caseDetail/:id',
+            name: 'CaseDetail',
+            hidden: true,
+            component: () => import('@/views/CaseDetail/CaseDetail'),
+            meta: { title: '案件详情', hidden: true, permission: [] }
+          },
+          {
             path: '/case/caseEntry',
             name: 'CaseEntry',
             component: () => import('@/views/CaseEntry/CaseEntry'),
@@ -225,12 +232,6 @@ export const asyncRouterMap = [
         name: 'Exception500',
         hidden: true,
         component: () => import('@/views/Exception/500')
-      },
-      {
-        path: '/test',
-        name: 'Test',
-        component: () => import('@/views/Test/Index2'),
-        meta: { title: 'Test', icon: designerSvg, keepAlive: false, permission: [] }
       }
     ]
   },
@@ -238,6 +239,13 @@ export const asyncRouterMap = [
     path: '*',
     redirect: '/404',
     hidden: true
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    hidden: true,
+    component: () => import('@/views/Test/Index2'),
+    meta: { title: 'Test', icon: designerSvg, keepAlive: false, permission: [] }
   }
 ]
 
@@ -266,20 +274,6 @@ export const constantRouterMap = [
         path: '/user/register-result',
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/User/RegisterResult')
-      }
-    ]
-  },
-  {
-    path: '/other',
-    name: 'Other',
-    component: BasicLayout,
-    hideChildrenInMenu: true,
-    children: [
-      {
-        path: '/other/caseDetail/:id',
-        name: 'CaseDetail',
-        component: () => import('@/views/CaseDetail/CaseDetail'),
-        meta: { title: '案件详情', hidden: true, permission: [] }
       }
     ]
   },

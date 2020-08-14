@@ -1,5 +1,5 @@
 <template>
-  <a-card :bordered="false" class="title">
+  <a-card :bordered="false">
     <div class="table-page-search-wrapper">
       <a-form-model ref="searchForm" :model="searchForm" layout="inline">
         <a-row :gutter="gutter">
@@ -133,10 +133,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.title {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
 .flex {
   display: flex;
 }

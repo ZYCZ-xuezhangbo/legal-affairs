@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <a-card :bordered="false">
     <a-table :columns="columns" :data-source="data" :bordered="true" :pagination="false" :row-key="e=>e.id">
       <template #title>
         律师评价排名
       </template>
     </a-table>
-  </div>
+  </a-card>
 </template>
 
 <script>
