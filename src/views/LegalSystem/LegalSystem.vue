@@ -106,7 +106,7 @@ export default {
         this.typeList = res.data
         this.typeList.unshift({
           code: '',
-          name: '---全部---'
+          name: '不限'
         })
         this.dynamicData.typeList = this.typeList.map(v => ({ label: v.name, value: v.code }))
       })

@@ -8,7 +8,7 @@
         <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
     </a-upload>
-    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <p class="ant-upload-drag-icon">
         <a-icon type="cloud-upload" />
       </p>

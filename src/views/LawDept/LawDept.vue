@@ -32,7 +32,7 @@ export default {
       companyList: [
         {
           code: '',
-          name: '---全部---'
+          name: '不限'
         },
         {
           code: 'com1',
@@ -46,7 +46,7 @@ export default {
       deptList: [
         {
           code: '',
-          name: '---全部---'
+          name: '不限'
         },
         {
           code: 'dept1',

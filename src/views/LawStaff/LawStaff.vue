@@ -34,7 +34,7 @@ export default {
       companyList: [
         {
           code: '',
-          name: '---请选择---'
+          name: '不限'
         },
         {
           code: 'com1',
@@ -104,7 +104,10 @@ export default {
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
+        this.list = res.data.list.map(v => {
+          v.gender = v.gender === '0' ? '女' : '男'
+          return v
+        })
         this.pagination.pageTotal = res.data.total
       }).finally(() => {
         this.loading = false
@@ -116,9 +119,9 @@ export default {
     },
     handleActClick({ act, id }) {
       if (act === 'edit') {
-        // this.dialog.editId = id
-        // this.dialog.isEdit = true
-        // this.dialog.showAdd = true
+        this.dialog.editId = id
+        this.dialog.isEdit = true
+        this.dialog.showAdd = true
       }
     }
   },

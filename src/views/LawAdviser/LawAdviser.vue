@@ -98,7 +98,12 @@ export default {
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
+        this.list = res.data.list.map(v => {
+          v.legalMajor = v.legalMajor === '0' ? '否' : '是'
+          v.fullTime = v.fullTime === '0' ? '否' : '是'
+          v.gender = v.gender === '0' ? '女' : '男'
+          return v
+        })
         this.pagination.pageTotal = res.data.total
       }).finally(() => {
         this.loading = false

@@ -3,9 +3,9 @@ import request from '@/utils/request'
 
 const api = '/case'
 
-export function get(keyword) {
+export function getCause(keyword) {
   return request({
-    url: `${api}/get`,
+    url: `${api}/getCause`,
     method: 'get',
     params: { label: keyword }
   })

@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { get as httpGetCauseOfAction } from '@/api/case'
+import { getCause as httpGetCauseOfAction } from '@/api/case'
 import { FooterToolbar } from '@/components'
 
 const rules = {

@@ -16,7 +16,7 @@ const errorHandler = (error) => {
     const status = error.response.status
     const data = error.response.data
     const url = error.response.config.url
-    const whiteList = ['userLogin', 'getLogout']
+    const whiteList = ['userLogin', 'getLogout', 'getMyUserInfo']
 
     if (status === 500 && !whiteList.some(v => url.indexOf(v) > -1)) { // 当500错误，且接口不在白名单里时，跳转至500页
       router.push('/500')

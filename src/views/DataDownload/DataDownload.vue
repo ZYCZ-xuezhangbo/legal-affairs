@@ -94,8 +94,8 @@ export default {
         },
         {
           title: '发布时间',
-          dataIndex: 'updateTime',
-          key: 'updateTime'
+          dataIndex: 'createTime',
+          key: 'createTime'
         }
       ]
     }
@@ -131,7 +131,7 @@ export default {
       httpGetTypeList().then(res => {
         this.typeList = [{
           code: '',
-          name: '---全部---'
+          name: '不限'
         }, ...res.data]
         this.dynamicData.typeList = this.typeList.map(v => ({ label: v.name, value: v.code }))
       })

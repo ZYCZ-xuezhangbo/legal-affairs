@@ -24,10 +24,13 @@ const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1957392_fuhqlam5lqk.js'
 })
 
+const uploadFileUrl = 'http://cdn.kcz66.com/uploadFile.txt'
+const uploadImageUrl = 'http://cdn.kcz66.com/upload-img.txt'
+
 // 表单设计器配置
 KFormDesign.setConfig({
-  uploadFile: 'http://cdn.kcz66.com/uploadFile.txt', // 上传文件地址
-  uploadImage: 'http://cdn.kcz66.com/upload-img.txt' // 上传图片地址
+  uploadFile: uploadFileUrl, // 上传文件地址
+  uploadImage: uploadImageUrl // 上传图片地址
 })
 
 Vue.config.productionTip = false
@@ -47,7 +50,8 @@ const i18n = new VueI18n({
   fallbackLocale: 'US'
 })
 
-Vue.prototype.$uploadUrl = process.env.NODE_ENV === 'production' ? '' : 'http://cdn.kcz66.com/uploadFile.txt'
+Vue.prototype.$uploadFileUrl = process.env.NODE_ENV === 'production' ? '' : 'http://cdn.kcz66.com/uploadFile.txt'
+Vue.prototype.$uploadImageUrl = process.env.NODE_ENV === 'production' ? '' : 'http://cdn.kcz66.com/upload-img.txt'
 
 new Vue({
   router,

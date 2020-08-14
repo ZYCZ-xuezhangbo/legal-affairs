@@ -32,7 +32,7 @@ export default {
       companyList: [
         {
           code: '',
-          name: '---请选择---'
+          name: '不限'
         },
         {
           code: 'com1',
