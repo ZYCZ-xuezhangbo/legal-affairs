@@ -1,9 +1,16 @@
 <template>
   <page-header-wrapper>
     <template #content>
-      <a-button type="primary" class="margin-right-lg">选择关联案件</a-button>
-      <a>我方涉案单位：xx股份有限公司，诉讼地位：原告，案号：SFLAFLJAW09534</a>
+      <a-button type="primary" class="margin-right-lg" @click="dialog.caseRelationShow=true">选择关联案件</a-button>
+      <template v-if="relationCase">
+        我方涉案单位：{{ relationCase.ourUnits }}，诉讼地位：{{ relationCase.locusStand }}，案号：{{ relationCase.caseNo }}
+        <a class="margin-left-lg text-red" @click="relationCase=null">
+          取消关联 <a-icon type="close-circle"></a-icon>
+        </a>
+      </template>
     </template>
+
+    <CaseRelation :show="dialog.caseRelationShow" :lawsuit="lawsuit" @choose="handleCaseRelationChoose" @close="dialog.caseRelationShow=false" />
 
     <a-card :bordered="false">
       <a-form-model ref="form" :model="form" :rules="rules">
@@ -80,9 +87,6 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="涉案金额（万元）" prop="caseAmount">
-              <template #help>
-                精确到小数点后2位
-              </template>
               <a-input-number v-model="form.caseAmount" :precision="2" :min="0" class="response" />
             </a-form-model-item>
           </a-col>
@@ -239,9 +243,6 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="委托代理费（元）" prop="entrust">
-              <template #help>
-                精确到小数点后2位
-              </template>
               <a-input-number v-model="form.entrust" :precision="2" :min="0" class="response" />
             </a-form-model-item>
           </a-col>
@@ -280,22 +281,18 @@
 </template>
 
 <script>
-import {
-  getCaseDictionaries as httpGetDict,
-  getBrief as httpGetBriefList,
-  create as httpCreate
-} from '@/api/case'
-import {
-  getLawFirmName as httpGetLawFirmList,
-  getLayerByFirmId as httpGetLayerListByFirmCode
-} from '@/api/outsideLawManager'
+import { getCaseDictionaries as httpGetDict, getBrief as httpGetBriefList, create as httpCreate } from '@/api/case'
+import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
 import { TreeSelect } from 'ant-design-vue'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
+import CaseRelation from './components/CaseRelation'
 
 const SHOW_ALL = TreeSelect.SHOW_ALL
+
 export default {
   components: {
-    UploadFile
+    UploadFile,
+    CaseRelation
   },
   data() {
     const validateLawyerPhone = (rule, value, callback) => {
@@ -317,10 +314,14 @@ export default {
         lg: 8,
         xl: 6
       },
+      dialog: {
+        caseRelationShow: false
+      },
       textAreaAutoSize: {
         minRows: 5,
         maxRows: 15
       },
+      relationCase: null, // 关联案件详情
       SHOW_ALL,
       briefTimer: null,
       briefLoading: false, // 案由搜索loading
@@ -416,9 +417,15 @@ export default {
     }
   },
   methods: {
+    /**
+     * 涉案单位下拉框模糊查询（本地查询）
+     */
     handleSearchOurUnits(input, option) {
       return option.componentOptions.children[0].text.indexOf(input) >= 0
     },
+    /**
+     * 搜索案由列表
+     */
     handleSearchbriefList(keyword) {
       this.briefSearchValue = keyword
 
@@ -438,6 +445,9 @@ export default {
         }, 1000)
       }
     },
+    /**
+     * 获取当前页的字典
+     */
     getDict() {
       httpGetDict().then(res => {
         this.caseType = res.data.CASETYPE
@@ -448,16 +458,21 @@ export default {
         this.lawFirmList = res.data
       })
     },
+    /**
+     * 提交
+     */
     handleSubmit() {
       this.$refs.form.validate().then(() => {
-        console.log('验证成功')
-        httpCreate(this.form).then(res => {
-          console.log(res)
+        httpCreate({ caseFolderId: this.relationCase.caseFolderId || '', ...this.form }).then(res => {
+          this.$router.push('/case/caseList')
         })
       }).catch(() => {
         console.log('验证失败')
       })
     },
+    /**
+     * 添加一条当事人输入框
+     */
     handleAddCaseUsers() {
       this.form.caseUsers.push({
         key: new Date().getTime(),
@@ -467,6 +482,9 @@ export default {
         stateOwned: '0'
       })
     },
+    /**
+     * 删除一条当事人输入框
+     */
     handleDelCaseUsers(item) {
       if (this.form.caseUsers.length <= 1) {
         this.$warning({
@@ -492,6 +510,13 @@ export default {
       }).finally(() => {
         this.lawyerListLoading = false
       })
+    },
+    /**
+     * 选中一条关联案件
+     */
+    handleCaseRelationChoose(item) {
+      this.dialog.caseRelationShow = false
+      this.relationCase = item
     }
   },
   mounted() {
@@ -500,5 +525,5 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 </style>

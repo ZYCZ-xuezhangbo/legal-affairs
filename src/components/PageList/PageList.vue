@@ -2,7 +2,7 @@
   <div>
     <a-card :bordered="false" :title="title" class="margin-top-lg">
       <template #extra>
-        <a-button class="margin-right" type="primary" @click="handleShowAdd"> 新建 </a-button>
+        <a-button type="primary" @click="handleShowAdd"> 新建 </a-button>
         <a-button type="primary" @click="handleExport"> 导出 </a-button>
       </template>
       <a-table :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
@@ -97,7 +97,7 @@ export default {
           case 'edit':
             item.name = '修改'
             break
-          case 'look':
+          case 'detail':
             item.name = '查看'
             break
           case 'caseProgress':

@@ -3,11 +3,11 @@ import request from '@/utils/request'
 
 const api = '/outsideLawManager'
 
-export function create({ age, educationBackground, gender, lammyCompany, lammyDept, lawName, legalProfession, major, phone, professionalLife, resourceUrl, serviceContent }) {
+export function create(parmas) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: { age, educationBackground, gender, lammyCompany, lammyDept, lawName, legalProfession, major, phone, professionalLife, resourceUrl, serviceContent }
+    data: parmas
   })
 }
 
@@ -33,11 +33,11 @@ export function page({ pageNum = 1, pageSize = 10, lawFirmName, lawName }) {
   })
 }
 
-export function update({ age, educationBackground, gender, id, lammyCompany, lammyDept, lawName, legalProfession, major, phone, professionalLife, resourceUrl, serviceContent }) {
+export function update(parmas) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { age, educationBackground, gender, id, lammyCompany, lammyDept, lawName, legalProfession, major, phone, professionalLife, resourceUrl, serviceContent }
+    data: parmas
   })
 }
 

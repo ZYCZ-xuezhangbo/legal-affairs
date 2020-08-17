@@ -4,7 +4,7 @@
     <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" />
     <Search @search="handleSearch" />
 
-    <List api="outsideLawFirm" :columns="columns" :actions="['edit', 'look']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="outsideLawFirm" :columns="columns" :actions="['edit', 'detail']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
 
   </page-header-wrapper>
 </template>
@@ -92,7 +92,7 @@ export default {
         this.dialog.editId = id
         this.dialog.isEdit = true
         this.dialog.showAdd = true
-      } else if (act === 'look') {
+      } else if (act === 'detail') {
         this.dialog.editId = id
         this.dialog.showDetail = true
       }

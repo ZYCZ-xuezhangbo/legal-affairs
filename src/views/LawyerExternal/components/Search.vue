@@ -5,23 +5,17 @@
         <a-form-model ref="searchForm" layout="inline" :model="searchForm">
           <a-row :gutter="searchTableGrid.gutter">
             <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="公告标题" prop="title">
-                <a-input v-model="searchForm.title" placeholder="公告标题" />
+              <a-form-model-item label="律所名称" prop="lawFirmName">
+                <a-select v-model="searchForm.lawFirmName">
+                  <a-select-option :value="item.code" v-for="(item,index) in lawFirmList" :key="index">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="发布时间" prop="startDate">
-                <a-date-picker class="date" v-model="searchForm.startDate" format="YYYY-MM-DD" placeholder="开始时间" inputReadOnly @change="(e,str)=>searchForm.startDate=str" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="至" prop="endDate">
-                <a-date-picker class="date" v-model="searchForm.endDate" format="YYYY-MM-DD" placeholder="结束时间" inputReadOnly @change="(e,str)=>searchForm.endDate=str" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="发布人" prop="releasePerson">
-                <a-input v-model="searchForm.releasePerson" placeholder="发布人" />
+              <a-form-model-item label="律师名称" prop="lawName">
+                <a-input v-model="searchForm.lawName" placeholder="律师名称" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
@@ -39,13 +33,19 @@
 
 <script>
 export default {
+  props: {
+    lawFirmList: {
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
   data() {
     return {
       searchForm: {
-        title: '', // 标题
-        startDate: null,
-        endDate: null,
-        releasePerson: '' // 发布人
+        lawFirmName: '',
+        lawName: ''
       }
     }
   },

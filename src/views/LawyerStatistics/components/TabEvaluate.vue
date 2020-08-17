@@ -1,21 +1,25 @@
 <template>
-  <a-card :bordered="false">
-    <a-row :gutter="48">
-      <a-col :sm="24" :md="12">
-        <div class="charts-title">外聘律师工作数量：67</div>
-        <ChartPie :data="dataPie" />
-      </a-col>
-      <a-col :sm="24" :md="12">
-        <div class="charts-title">各评分内工作数</div>
-        <ChartBar :data="dataBar" :is-direction="true" />
-      </a-col>
-    </a-row>
-    <a-table :columns="columns" :data-source="data" :bordered="true" :pagination="false" :row-key="e=>e.id">
-      <template #title>
-        律师评价排名
-      </template>
-    </a-table>
-  </a-card>
+  <div>
+    <a-card :bordered="false">
+      <a-row :gutter="48">
+        <a-col :sm="24" :md="12">
+          <div class="charts-title">外聘律师工作数量：67</div>
+          <ChartPie :data="dataPie" />
+        </a-col>
+        <a-col :sm="24" :md="12">
+          <div class="charts-title">各评分内工作数</div>
+          <ChartBar :data="dataBar" :is-direction="true" />
+        </a-col>
+      </a-row>
+    </a-card>
+    <a-card :bordered="false" class="margin-top-lg">
+      <a-table :columns="columns" :data-source="data" :bordered="true" :pagination="false" :row-key="e=>e.id">
+        <template #title>
+          律师评价排名
+        </template>
+      </a-table>
+    </a-card>
+  </div>
 </template>
 
 <script>

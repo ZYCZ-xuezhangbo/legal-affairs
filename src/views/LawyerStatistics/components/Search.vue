@@ -39,7 +39,7 @@
       <a-col :sm="24" :md="12">
         <template v-if="tab==='1'">
           <div class="title"> 律师事务所 </div>
-          <a-input v-model="form.officeName" />
+          <a-input v-model="form.officeName" placeholder="律师事务所" />
         </template>
         <template v-else-if="tab!=='1'">
           <div class="title"> 集团内涉案企业 </div>

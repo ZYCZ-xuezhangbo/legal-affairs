@@ -3,43 +3,11 @@ import request from '@/utils/request'
 
 const api = '/lawFirmWork'
 
-export function create({
-  chargeDesc,
-  fillTime,
-  fillUnit,
-  informant,
-  lammyCompany,
-  lammyDept,
-  lawFirmName,
-  lawName,
-  lawSource,
-  resourceUrl,
-  serviceCharge,
-  serviceMatter,
-  serviceTimeEnd,
-  serviceTimeStart,
-  serviceType
-}) {
+export function create(params) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: {
-      chargeDesc,
-      fillTime,
-      fillUnit,
-      informant,
-      lammyCompany,
-      lammyDept,
-      lawFirmName,
-      lawName,
-      lawSource,
-      resourceUrl,
-      serviceCharge,
-      serviceMatter,
-      serviceTimeEnd,
-      serviceTimeStart,
-      serviceType
-    }
+    data: params
   })
 }
 
@@ -65,40 +33,10 @@ export function page({ pageNum = 1, pageSize = 10, company, startTime, endTime, 
   })
 }
 
-export function update({
-  chargeDesc,
-  fillTime,
-  fillUnit,
-  id,
-  informant,
-  lawFirmName,
-  lawName,
-  lawSource,
-  resourceUrl,
-  serviceCharge,
-  serviceMatter,
-  serviceTimeEnd,
-  serviceTimeStart,
-  serviceType
-}) {
+export function update(params) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: {
-      chargeDesc,
-      fillTime,
-      fillUnit,
-      id,
-      informant,
-      lawFirmName,
-      lawName,
-      lawSource,
-      resourceUrl,
-      serviceCharge,
-      serviceMatter,
-      serviceTimeEnd,
-      serviceTimeStart,
-      serviceType
-    }
+    data: params
   })
 }

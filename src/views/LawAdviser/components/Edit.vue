@@ -1,6 +1,9 @@
 <template>
   <div>
-    <a-modal v-bind="editModal" :title="isEdit?'编辑':'新建'" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
+    <a-modal v-bind="editModal" :title="modalTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
+      <template v-if="act==='detail'" #footer>
+        <a-button @click="$emit('close')">关闭</a-button>
+      </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
         <a-form-model ref="form" :model="form">
@@ -12,7 +15,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="公司" prop="company">
-                <a-select v-model="form.company">
+                <a-select v-model="form.company" :disabled="disabled">
                   <a-select-option value="0">
                     公司0
                   </a-select-option>
@@ -30,7 +33,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="部门" prop="dept">
-                <a-select v-model="form.dept">
+                <a-select v-model="form.dept" :disabled="disabled">
                   <a-select-option value="0">
                     部门0
                   </a-select-option>
@@ -48,7 +51,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="用户名" prop="userName">
-                <a-select v-model="form.userName">
+                <a-select v-model="form.userName" :disabled="disabled">
                   <a-select-option value="0">
                     用户名0
                   </a-select-option>
@@ -63,12 +66,12 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="姓名" prop="name">
-                <a-input v-model="form.name" placeholder="请输入" />
+                <a-input v-model="form.name" placeholder="请输入" :disabled="disabled" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="性别" prop="gender">
-                <a-radio-group name="gender" v-model="form.gender">
+                <a-radio-group name="gender" v-model="form.gender" :disabled="disabled">
                   <a-radio value="1">
                     男
                   </a-radio>
@@ -80,47 +83,51 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="出生日期" prop="birthDate">
-                <a-date-picker v-model="form.birthDate" inputReadOnly @change="(e,str)=>form.birthDate=str" />
+                <a-date-picker v-model="form.birthDate" :disabled="disabled" inputReadOnly @change="(e,str)=>form.birthDate=str" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="开始参加工作时间" prop="joinWork">
-                <a-date-picker v-model="form.joinWork" @change="(e,str)=>form.joinWork=str" />
+              <a-form-model-item label="顾问类别" prop="counselorType">
+                <a-select v-model="form.counselorType" :disabled="disabled">
+                  <a-select-option value="1">
+                    总法律顾问
+                  </a-select-option>
+                  <a-select-option value="2">
+                    副总法律顾问
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="办公室电话" prop="officePhone">
-                <a-input v-model="form.officePhone" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="手机" prop="phone">
-                <a-input v-model="form.phone" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="学历" prop="educationBackground">
-                <a-input v-model="form.educationBackground" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="学制" prop="educationalSystem">
-                <a-input v-model="form.educationalSystem" placeholder="请输入" />
+              <a-form-model-item label="是否法学类专业" prop="legalMajor">
+                <a-radio-group name="legalMajor" :disabled="disabled" v-model="form.legalMajor">
+                  <a-radio value="1">
+                    是
+                  </a-radio>
+                  <a-radio value="0">
+                    否
+                  </a-radio>
+                </a-radio-group>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="学校" prop="school">
-                <a-input v-model="form.school" placeholder="请输入" />
+                <a-input v-model="form.school" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="专业名称" prop="majorName">
-                <a-input v-model="form.majorName" placeholder="请输入" />
+                <a-input v-model="form.majorName" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="法学类专业" prop="legalMajor">
-                <a-radio-group name="gender" v-model="form.legalMajor">
+              <a-form-model-item label="职务" prop="duty">
+                <a-input v-model="form.duty" :disabled="disabled" placeholder="请输入" />
+              </a-form-model-item>
+            </a-col>
+            <a-col v-bind="span">
+              <a-form-model-item label="是否专职" prop="fullTime">
+                <a-radio-group name="fullTime" :disabled="disabled" v-model="form.fullTime">
                   <a-radio value="1">
                     是
                   </a-radio>
@@ -131,35 +138,13 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="岗位名称" prop="postName">
-                <a-input v-model="form.postName" placeholder="请输入" />
+              <a-form-model-item label="办公室电话" prop="officePhone">
+                <a-input v-model="form.officePhone" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="岗级" prop="postLevel">
-                <a-select v-model="form.postLevel">
-                  <a-select-option value="0">
-                    岗级0
-                  </a-select-option>
-                  <a-select-option value="1">
-                    岗级1
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="负责工作" prop="work">
-                <a-input v-model="form.work" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="开始任职时间" prop="employmentPeriod">
-                <a-date-picker v-model="form.employmentPeriod" inputReadOnly @change="(e,str)=>form.joinemploymentPeriodWork=str" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="专职" prop="fullTime">
-                <a-radio-group name="fullTime" v-model="form.fullTime">
+              <a-form-model-item label="是否具备法律职业资格" prop="professionStatus">
+                <a-radio-group name="professionStatus" :disabled="disabled" v-model="form.professionStatus">
                   <a-radio value="1">
                     是
                   </a-radio>
@@ -170,8 +155,13 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="是否具备法律职业资格" prop="legalProfession">
-                <a-radio-group name="legalProfession" v-model="form.legalProfession">
+              <a-form-model-item label="法律职业资格证书编号" prop="legalCertificateNumber">
+                <a-input v-model="form.legalCertificateNumber" :disabled="disabled" placeholder="请输入" />
+              </a-form-model-item>
+            </a-col>
+            <a-col v-bind="span">
+              <a-form-model-item label="是否有企业法律顾问职业资格" prop="legalProfession">
+                <a-radio-group name="legalProfession" :disabled="disabled" v-model="form.legalProfession">
                   <a-radio value="1">
                     是
                   </a-radio>
@@ -182,37 +172,25 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="法律职业资格证书编号" prop="certificateNumber">
-                <a-input v-model="form.certificateNumber" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="是否有企业法律顾问职业资格" prop="enterpriseProfession">
-                <a-radio-group name="enterpriseProfession" v-model="form.enterpriseProfession">
-                  <a-radio value="1">
-                    是
-                  </a-radio>
-                  <a-radio value="0">
-                    否
-                  </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="企业法律顾问职业资格证书编号" prop="enterpriseNumber">
-                <a-input v-model="form.enterpriseNumber" placeholder="请输入" />
+              <a-form-model-item label="企业法律顾问职业资格证书编号" prop="certificateNumber">
+                <a-input v-model="form.certificateNumber" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="顾问职业岗位等级资格" prop="professionGrade">
-                <a-select v-model="form.professionGrade">
+                <a-select v-model="form.professionGrade" :disabled="disabled">
                   <a-select-option value="0">
-                    等级0
+                    岗位等级
                   </a-select-option>
                   <a-select-option value="1">
-                    等级1
+                    岗位等级1
                   </a-select-option>
                 </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-model-item label="分管工作" prop="work">
+                <a-textarea placeholder="分管工作" :disabled="disabled" :auto-size="{ minRows: 3, maxRows: 10 }" v-model="form.work" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -223,7 +201,6 @@
           </a-row>
         </a-form-model>
       </div>
-
     </a-modal>
   </div>
 </template>
@@ -234,12 +211,12 @@ import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
 export default {
   props: {
-    isEdit: {
-      type: Boolean,
-      default: false
+    act: {
+      type: String,
+      default: ''
     },
     id: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     show: {
@@ -257,9 +234,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
-      if (newVal && this.isEdit) {
+      if (newVal && ['edit', 'detail'].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && !this.isEdit) {
+      } else if (newVal && this.act === 'add') {
         this.$nextTick(() => {
           this.form = {}
         })
@@ -283,11 +260,12 @@ export default {
         model: 'upload',
         options: {
           action: this.$uploadImageUrl,
-          defaultValue: this.form.portrait,
+          defaultValue: [],
           fileName: 'image',
           limit: 1,
           listType: 'picture-card',
-          width: '100%'
+          width: '100%',
+          disabled: this.disabled
         }
       }
     },
@@ -299,9 +277,24 @@ export default {
           width: '100%',
           limit: 1000,
           fileName: 'file',
-          action: this.$uploadFileUrl
+          action: this.$uploadFileUrl,
+          disabled: this.disabled
         }
       }
+    },
+    modalTitle() {
+      let title = ''
+      if (this.act === 'edit') {
+        title = '修改'
+      } else if (this.act === 'detail') {
+        title = '查看'
+      } else if (this.act === 'add') {
+        title = '新增'
+      }
+      return title
+    },
+    disabled() {
+      return this.act === 'detail' && this.id !== ''
     }
   },
   data() {
@@ -317,27 +310,22 @@ export default {
         birthDate: '',
         certificateNumber: '',
         company: '',
+        counselorType: '',
         dept: '',
-        educationBackground: '',
-        educationalSystem: '',
-        employmentPeriod: '',
-        enterpriseNumber: '',
-        enterpriseProfession: '',
+        duty: '',
         fullTime: '',
         gender: '',
-        joinWork: '',
         lammyCompany: '',
         lammyDept: '',
+        legalCertificateNumber: '',
         legalMajor: '',
         legalProfession: '',
         majorName: '',
         name: '',
         officePhone: '',
-        phone: '',
         portrait: [],
-        postLevel: '',
-        postName: '',
         professionGrade: '',
+        professionStatus: '',
         resourceUrl: [],
         school: '',
         userName: '',
@@ -352,7 +340,7 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
-        if (this.isEdit) { // 修改
+        if (this.act === 'edit') { // 修改
           this.API.update({ id: this.id, ...this.form }).then(res => {
             this.requestSuccess(res.msg)
           }).finally(() => {

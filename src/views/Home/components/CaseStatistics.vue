@@ -2,9 +2,14 @@
   <div>
     <a-card :bordered="false" title="案件统计">
       <a-row :gutter="50">
-        <a-col v-for="(item,index) in 2" :key="index" :sm="24" :md="6">
+        <a-col :sm="24" :md="6">
           <a-card class="margin-bottom-lg">
-            <a-statistic title="在诉案件数量" :value="1234+index"> </a-statistic>
+            <a-statistic title="在诉案件数量" :value="1234"> </a-statistic>
+          </a-card>
+        </a-col>
+        <a-col :sm="24" :md="6">
+          <a-card class="margin-bottom-lg">
+            <a-statistic title="本年度结案案件数量" :value="1234"> </a-statistic>
           </a-card>
         </a-col>
       </a-row>

@@ -1,13 +1,13 @@
 <template>
   <div v-if="data.length && show">
     <v-chart :forceFit="true" height="200" :data="data" padding="0">
+      <!-- <v-tooltip /> -->
       <v-facet type="rect" :showTitle="false" :eachView="eachView" />
     </v-chart>
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
     total: {
@@ -40,7 +40,7 @@ export default {
         view.intervalStack().position('value').color('type', ['#0a9afe', '#eceef1']).opacity(1)
         view.guide().html({
           position: ['50%', '50%'],
-          html: `<div class="g2-guide-html"><p class="title"></p><p class="value">${this.value}人</p></div>`
+          html: `<div class="g2-guide-html"><p class="value">${this.value}人</p></div>`
         })
       }
     }
@@ -57,7 +57,7 @@ export default {
             height: 50px;
             vertical-align: middle;
             text-align: center;
-            line-height: 1.5
+            line-height: 50px;
         }
 
         .g2-guide-html .title {
@@ -70,6 +70,9 @@ export default {
             font-size: 18px;
             color: #000;
             font-weight: bold;
+            margin-bottom: 0;
+            height: 50px;
+            line-height: 50px;
         }
       `
       const style = document.createElement('style')

@@ -27,3 +27,14 @@ export function create(params) {
     data: params
   })
 }
+/**
+ * 获取案件关联的列表
+ * @param {object} params
+ */
+export function relevancyPage(params) {
+  return request({
+    url: `${api}/relevancyPage`,
+    method: 'get',
+    params
+  })
+}

@@ -1,9 +1,19 @@
 <template>
   <a-card :bordered="false" title="法律体系">
     <a-row :gutter="50">
-      <a-col v-for="(item,index) in 3" :key="index" :sm="24" :md="8">
+      <a-col :sm="24" :md="8">
         <a-card class="margin-bottom-lg">
-          <a-statistic :title="'标题'+index" :value="1234+index"> </a-statistic>
+          <a-statistic title="总法顾问人员数量" :value="1234"> </a-statistic>
+        </a-card>
+      </a-col>
+      <a-col :sm="24" :md="8">
+        <a-card class="margin-bottom-lg">
+          <a-statistic title="法律人员数量" :value="1234"> </a-statistic>
+        </a-card>
+      </a-col>
+      <a-col :sm="24" :md="8">
+        <a-card class="margin-bottom-lg">
+          <a-statistic title="法律制度数量" :value="1234"> </a-statistic>
         </a-card>
       </a-col>
     </a-row>

@@ -1,11 +1,9 @@
 <template>
   <page-header-wrapper>
-    <!-- <Edit api="legalMember" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" /> -->
     <Edit api="legalMember" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
     <Search :company-list="companyList" @search="handleSearch" />
 
-    <List api="legalMember" :columns="columns" :actions="['edit','look', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="legalMember" :columns="columns" :actions="['edit','detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 

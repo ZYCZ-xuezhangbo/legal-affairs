@@ -1,7 +1,7 @@
 <template>
   <div>
     <Search />
-    <List api="user" :title="listTitle" :columns="columns" :actions="['edit', 'look','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="user" :title="listTitle" :columns="columns" :actions="['edit', 'detail','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </div>
 </template>
 

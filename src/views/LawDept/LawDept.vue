@@ -4,7 +4,7 @@
 
     <Search :company-list="companyList" :dept-list="deptList" @search="handleSearch" />
 
-    <List api="legalDept" :columns="columns" :actions="['edit', 'look', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="legalDept" :columns="columns" :actions="['edit', 'detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 

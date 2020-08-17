@@ -3,59 +3,11 @@ import request from '@/utils/request'
 
 const api = '/legalCounsel'
 
-export function create({
-  birthDate,
-  certificateNumber,
-  company,
-  counselorType,
-  dept,
-  duty,
-  fullTime,
-  gender,
-  lammyCompany,
-  lammyDept,
-  legalCertificateNumber,
-  legalMajor,
-  legalProfession,
-  majorName,
-  name,
-  officePhone,
-  portraitList,
-  professionGrade,
-  professionStatus,
-  resourceUrl,
-  school,
-  userName,
-  work
-}) {
+export function create(params) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: {
-      birthDate,
-      certificateNumber,
-      company,
-      counselorType,
-      dept,
-      duty,
-      fullTime,
-      gender,
-      lammyCompany,
-      lammyDept,
-      legalCertificateNumber,
-      legalMajor,
-      legalProfession,
-      majorName,
-      name,
-      officePhone,
-      portraitList,
-      professionGrade,
-      professionStatus,
-      resourceUrl,
-      school,
-      userName,
-      work
-    }
+    data: params
   })
 }
 
@@ -81,56 +33,10 @@ export function page({ pageNum = 1, pageSize = 10, legalMajor, legalProfession, 
   })
 }
 
-export function update({
-  birthDate,
-  certificateNumber,
-  company,
-  counselorType,
-  dept,
-  duty,
-  fullTime,
-  gender,
-  id,
-  legalCertificateNumber,
-  legalMajor,
-  legalProfession,
-  majorName,
-  name,
-  officePhone,
-  portraitList,
-  professionGrade,
-  professionStatus,
-  resourceUrl,
-  school,
-  userName,
-  work
-}) {
+export function update(params) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: {
-      birthDate,
-      certificateNumber,
-      company,
-      counselorType,
-      dept,
-      duty,
-      fullTime,
-      gender,
-      id,
-      legalCertificateNumber,
-      legalMajor,
-      legalProfession,
-      majorName,
-      name,
-      officePhone,
-      portraitList,
-      professionGrade,
-      professionStatus,
-      resourceUrl,
-      school,
-      userName,
-      work
-    }
+    data: params
   })
 }

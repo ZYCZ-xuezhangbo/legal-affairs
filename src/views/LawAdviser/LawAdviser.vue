@@ -1,17 +1,17 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalCounsel" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="legalCounsel" :act="dialog.act" :show="dialog.showAdd" :id="dialog.id" @close="dialog.showAdd=false" @success="getList" />
     <Search @search="handleSearch" />
 
-    <List api="legalCounsel" :columns="columns" :actions="['edit', 'look', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="legalCounsel" :columns="columns" :actions="['edit', 'detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 
 <script>
 import { page as httpGetList } from '@/api/legalCounsel'
 import Search from './components/Search'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import Edit from './components/Edit'
+import { PageList as List } from '@/components'
 
 export default {
   components: {
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       dialog: {
-        editId: '',
-        isEdit: false,
+        id: '',
+        act: '',
         showAdd: false
       },
       formData: require('@/formBuilder/lawAdviser.json'),
@@ -110,15 +110,13 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.isEdit = false
+      this.dialog.act = 'add'
       this.dialog.showAdd = true
     },
     handleActClick({ act, id }) {
-      if (act === 'edit') {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
-      }
+      this.dialog.act = act
+      this.dialog.id = id
+      this.dialog.showAdd = true
     }
   },
   mounted() {

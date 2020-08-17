@@ -45,12 +45,12 @@ export default {
       data: [
         {
           id: 1,
-          name: 'name1',
+          name: 'XXX制度',
           date: '2020-01-01'
         },
         {
           id: 2,
-          name: 'name2',
+          name: 'XXX制度',
           date: '2020-01-02'
         }
       ]
