@@ -4,24 +4,24 @@
       <a-row :gutter="50">
         <a-col :sm="24" :md="6">
           <a-card class="margin-bottom-lg">
-            <a-statistic title="在诉案件数量" :value="1234"> </a-statistic>
+            <a-statistic title="在诉案件数量" :value="data.litigationCaseNum"> </a-statistic>
           </a-card>
         </a-col>
         <a-col :sm="24" :md="6">
           <a-card class="margin-bottom-lg">
-            <a-statistic title="本年度结案案件数量" :value="1234"> </a-statistic>
+            <a-statistic title="本年度结案案件数量" :value="data.yearClosedCaseNum"> </a-statistic>
           </a-card>
         </a-col>
       </a-row>
       <a-row class="margin-top-lg">
         <a-col :sm="24" :md="12">
-          <ChartPie :is-ring="true" title="各阶段案件数量占比" :data="pieData" />
+          <ChartPie title="各阶段案件数量占比" is-ring :data="dataPie" />
         </a-col>
         <a-col :sm="24" :md="12">
-          <ChartBar :data="barData" title="各案件种类数量" is-direction />
+          <ChartBar title="各案件种类数量" is-direction :data="dataBar" />
         </a-col>
       </a-row>
-      <a-table :columns="majorCasesColumn" :data-source="majorCasesData" bordered :pagination="false">
+      <a-table :columns="columns" :data-source="data.majorCaseDTOList" bordered :pagination="false">
         <template #title>
           各单位重大案件
         </template>
@@ -39,41 +39,37 @@ export default {
     ChartBar
   },
   props: {
-    pieData: {
-      type: Array,
+    data: {
+      type: Object,
       default() {
-        return []
-      }
-    },
-    barData: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    majorCasesData: {
-      type: Array,
-      default() {
-        return []
+        return {}
       }
     }
   },
   data() {
     return {
-      majorCasesColumn: [
+      columns: [
         {
           title: '单位',
-          dataIndex: 'name'
+          dataIndex: 'companyName'
         },
         {
           title: '数量',
-          dataIndex: 'num'
+          dataIndex: 'number'
         },
         {
           title: '金额（万元）',
           dataIndex: 'money'
         }
       ]
+    }
+  },
+  computed: {
+    dataPie() {
+      return this.data.circularChartXYDTOList.map(v => ({ k: v.key, v: v.value }))
+    },
+    dataBar() {
+      return this.data.formChartXYDTOList.map(v => ({ x: v.key, y: v.value }))
     }
   }
 }

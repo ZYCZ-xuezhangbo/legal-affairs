@@ -1,9 +1,9 @@
 <template>
   <page-header-wrapper :tab-list="tabList" :tab-active-key="activeTab" @tabChange="e => activeTab = e">
-    <CasePage v-show="activeTab === '0'" :type="activeTab" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '1'" :type="activeTab" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '2'" :type="activeTab" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '3'" :type="activeTab" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === '0'" type="0" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === '1'" type="1" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === '2'" type="2" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === '3'" type="3" :list-title="listTitle" :search-dict-data="searchDictData" />
   </page-header-wrapper>
 </template>
 

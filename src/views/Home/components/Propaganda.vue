@@ -8,17 +8,34 @@
           </a-radio-button>
         </a-radio-group>
       </template>
-      <a-table :columns="columns" :data-source="data" :bordered="false" :pagination="false" :row-key="e=>e.id">
-        <template #title>
-          {{ tableTitle }}
-        </template>
-      </a-table>
+      <div v-show="radioVal===1">
+        <a-table :columns="columns" :data-source="legalSystemList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+          <template #title>
+            {{ tableTitle }}
+          </template>
+        </a-table>
+      </div>
+      <div v-show="radioVal===2">
+        <a-table :columns="columns" :data-source="noticeList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+          <template #title>
+            {{ tableTitle }}
+          </template>
+        </a-table>
+      </div>
     </a-card>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    data: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       radioVal: 1,
@@ -35,35 +52,20 @@ export default {
       columns: [
         {
           title: '标题',
-          dataIndex: 'name'
+          dataIndex: 'title'
         },
         {
           title: '日期',
-          dataIndex: 'date'
+          dataIndex: 'time'
         }
       ],
-      data: [
-        {
-          id: 1,
-          name: 'XXX制度',
-          date: '2020-01-01'
-        },
-        {
-          id: 2,
-          name: 'XXX制度',
-          date: '2020-01-02'
-        }
-      ]
+      legalSystemList: this.data.legalSystemList,
+      noticeList: this.data.noticeList
     }
   },
   computed: {
     tableTitle() {
       return this.radios.find(v => v.key === this.radioVal).name
-    }
-  },
-  methods: {
-    handleRadioChange(e) {
-      console.log(e)
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.length && show">
+  <div v-if="value>0 && show">
     <v-chart :forceFit="true" height="200" :data="data" padding="0">
       <!-- <v-tooltip /> -->
       <v-facet type="rect" :showTitle="false" :eachView="eachView" />
@@ -16,7 +16,7 @@ export default {
     },
     value: {
       type: Number,
-      default: 10
+      default: 0
     }
   },
   data() {
@@ -43,6 +43,11 @@ export default {
           html: `<div class="g2-guide-html"><p class="value">${this.value}人</p></div>`
         })
       }
+    }
+  },
+  watch: {
+    value(val) {
+      this.data[0].value = val
     }
   },
   methods: {

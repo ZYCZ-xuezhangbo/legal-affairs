@@ -1,10 +1,10 @@
 <template>
   <div>
-    <LegalSystem />
-    <CaseStatistics class="margin-top-lg" :pie-data="pieData" :majorCasesData="majorCasesData" :barData="barData" />
-    <LegalReview class="margin-top-lg" />
-    <FirmExternal class="margin-top-lg" :pie-data="pieData" :bar-group-data="barGroupData" />
-    <Propaganda class="margin-top-lg" />
+    <LegalSystem :data="indexLegalSystemDTO" />
+    <CaseStatistics class="margin-top-lg" :data="indexCaseDTO" />
+    <LegalReview class="margin-top-lg" :data="indexLegalReviewDTO" />
+    <FirmExternal class="margin-top-lg" :data="indexOutsideLawFirmDTO" />
+    <Propaganda class="margin-top-lg" :data="indexPublicityDTO" />
   </div>
 </template>
 
@@ -26,54 +26,97 @@ export default {
   },
   data() {
     return {
-      pieData: [
-        { k: '一审', v: 41 },
-        { k: '二审', v: 22 },
-        { k: '执行', v: 13 },
-        { k: '再审', v: 14 },
-        { k: '结案', v: 5 }
-      ],
-      barData: [
-        { x: '破产清算', y: 29034 },
-        { x: '行政诉讼', y: 131744 },
-        { x: '工程纠纷', y: 104970 },
-        { x: '生产作业纠纷', y: 23489 },
-        { x: '土地使用权纠纷', y: 12822 },
-        { x: '贸易纠纷', y: 13803 },
-        { x: '其他', y: 14823 }
-      ],
-      barGroupData: [
-        { x: '律所1', y1: 2800, y2: 2260 },
-        { x: '律所2', y1: 800, y2: 569 },
-        { x: '律所3', y1: 741, y2: 785 },
-        { x: '律所4', y1: 521, y2: 125 }
-      ],
-      majorCasesData: [
-        {
-          key: '1',
-          name: '股份有限公司1',
-          money: '300',
-          num: '10'
-        },
-        {
-          key: '2',
-          name: '股份有限公司2',
-          money: '3001',
-          num: '102'
-        },
-        {
-          key: '3',
-          name: '股份有限公司3',
-          money: '3002',
-          num: '101'
-        }
-      ]
+      // 案件统计
+      indexCaseDTO: {
+        // 各阶段案件数量占比
+        circularChartXYDTOList: [
+          {
+            key: '',
+            value: 0
+          }
+        ],
+        // 各案件总类数量
+        formChartXYDTOList: [
+          {
+            key: '',
+            value: 0
+          }
+        ],
+        litigationCaseNum: 0, // 在诉案件数量
+        // 各单位重大案件
+        majorCaseDTOList: [
+          {
+            companyName: '',
+            money: 0,
+            number: 0
+          }
+        ],
+        yearClosedCaseNum: 0 // 年度案件结案数量
+      },
+      // 法律审核
+      indexLegalReviewDTO: {
+        contractReviewMoney: 0, // 合同万元
+        contractReviewNum: 0, // 合同审核
+        countersignatureReview: 0, // 会签审核
+        decisionReview: 0, // 决策审核
+        systemReviewNum: 0// 制度审核
+      },
+      // 法律体系
+      indexLegalSystemDTO: {
+        adviserNum: 0, // 总法顾问人员数量
+        legalPersonnelNum: 0, // 法律人员数量
+        legalSystemNum: 0, // 法律制度数量
+        occupationalNum: 0, // 职业资格数量
+        professionalNum: 0, // 专业背景数量
+        soleDutyNum: 0// 专职数量
+      },
+      // 外部律所服务
+      indexOutsideLawFirmDTO: {
+        // 律所服务类型
+        lawFirmChartXYDTOList: [
+          {
+            key: '',
+            value: 0
+          }
+        ],
+        // 律所服务统计
+        lawFirmChartXYYDTODTOList: [
+          {
+            key: '',
+            value1: 0,
+            value2: 0
+          }
+        ]
+      },
+      // 普法宣传平台
+      indexPublicityDTO: {
+        // 法律制度
+        legalSystemList: [
+          {
+            id: '',
+            time: '',
+            title: ''
+          }
+        ],
+        // 公告列表
+        noticeList: [
+          {
+            id: '',
+            time: '',
+            title: ''
+          }
+        ]
+      }
     }
   },
   methods: {
     getData() {
       httpGetData().then(res => {
-        console.log(res)
+        this.indexCaseDTO = res.data.indexCaseDTO
+        this.indexLegalReviewDTO = res.data.indexLegalReviewDTO
+        this.indexLegalSystemDTO = res.data.indexLegalSystemDTO
+        this.indexOutsideLawFirmDTO = res.data.indexOutsideLawFirmDTO
+        this.indexPublicityDTO = res.data.indexPublicityDTO
       })
     }
   },

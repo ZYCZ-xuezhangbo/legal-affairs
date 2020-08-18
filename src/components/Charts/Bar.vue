@@ -82,7 +82,12 @@ export default {
         })
         return dv.rows
       } else {
-        return this.data
+        if (this.isDirection) {
+          const v = this.data
+          return v.reverse()
+        } else {
+          return this.data
+        }
       }
     }
   },
