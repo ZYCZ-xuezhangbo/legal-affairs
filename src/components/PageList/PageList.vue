@@ -9,7 +9,7 @@
         <template #action="item">
           <span v-if="actList.length>0">
             <span v-for="(v,k) in actList" :key="k">
-              <a @click="handleClick(v.code,item.id)">{{ v.name }}</a>
+              <a @click="handleClick(v.code,item)">{{ v.name }}</a>
               <a-divider v-if="k < actList.length-1" type="vertical" />
             </span>
           </span>
@@ -131,11 +131,12 @@ export default {
         pageSize: e.size
       })
     },
-    handleClick(act, id) {
+    handleClick(act, item) {
+      const id = item.id
       if (act === 'delete') {
         this.handleDelete(id)
       } else {
-        this.$emit('actClick', { act, id })
+        this.$emit('actClick', { act, item })
       }
     },
     handleShowAdd() {
@@ -166,5 +167,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+/deep/ .ant-btn + .ant-btn {
+  margin-left: 8px;
+}
 </style>

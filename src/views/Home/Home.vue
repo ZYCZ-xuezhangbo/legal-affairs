@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { info as httpGetData } from '@/api/home'
 import LegalSystem from './components/LegalSystem'
 import CaseStatistics from './components/CaseStatistics'
 import LegalReview from './components/LegalReview'
@@ -69,10 +70,15 @@ export default {
       ]
     }
   },
-  computed: {
-    isMobile() {
-      return this.$store.state.app.isMobile
+  methods: {
+    getData() {
+      httpGetData().then(res => {
+        console.log(res)
+      })
     }
+  },
+  mounted() {
+    this.getData()
   }
 }
 </script>

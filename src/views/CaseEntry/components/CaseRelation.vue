@@ -1,6 +1,9 @@
 <template>
   <div>
     <a-modal title="关联案件选择" :visible="show" @ok="handleOk" @cancel="handleCancel" :width="1000">
+      <template #footer>
+        <a-button @click="handleCancel">关闭</a-button>
+      </template>
       <div class="table-page-search-wrapper">
         <a-form-model ref="searchForm" layout="inline" :model="searchForm">
           <a-row :gutter="gutter">
@@ -21,7 +24,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="案由" prop="professionStatus">
-                <a-tree-select v-model="searchForm.professionStatus" style="width: 100%" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all @search="handleSearchbriefList">
+                <a-tree-select v-model="searchForm.brief" style="width: 100%;overflow:hidden;" allowClear :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
                   <template #suffixIcon>
                     <a-icon v-show="briefLoading" type="loading" />
                   </template>
@@ -30,7 +33,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="诉讼地位" prop="locusStand">
-                <a-select v-model="searchForm.locusStand" placeholder="诉讼地位">
+                <a-select v-model="searchForm.locusStand" placeholder="诉讼地位" allowClear>
                   <a-select-option v-for="(item,index) in lawsuit" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>
@@ -51,7 +54,7 @@
           </a-row>
         </a-form-model>
       </div>
-      <a-table :loading="loading" :columns="columns" :data-source="data" :pagination="pagination" :row-key="e => e.caseNo">
+      <a-table :loading="loading" :columns="columns" :data-source="data" :pagination="pagination" :row-key="e => e.id">
         <template #action="item">
           <a @click="handleChoose(item)">选择</a>
         </template>
@@ -91,10 +94,10 @@ export default {
       },
       loading: false,
       searchForm: {
-        brief: '',
+        brief: undefined,
         caseNo: '',
         endTime: '',
-        locusStand: '',
+        locusStand: undefined,
         ourUnits: '',
         startTime: ''
       },

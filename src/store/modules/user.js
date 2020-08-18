@@ -48,7 +48,7 @@ const user = {
         // 跟权限无关的基础路由，默认加载
         const basicsRoute = [
           { permissionId: '/', permissionName: 'root' },
-          { permissionId: '/case/caseDetail/:id', permissionName: 'case detail' },
+          { permissionId: '/case/caseDetail/:id/:fId', permissionName: 'case detail' },
           { permissionId: '/500', permissionName: 'page 500' },
           { permissionId: '*', permissionName: 'page not found' }
         ]

@@ -1,5 +1,6 @@
 <template>
   <div v-if="show">
+    <div v-if="title" class="text-center text-gray padding-bottom-lg">{{ title }}</div>
     <v-chart :forceFit="true" :height="height" :data="list" :scale="scale">
       <v-tooltip :showTitle="false" />
       <v-axis />
@@ -25,6 +26,10 @@ export default {
     isRing: {
       type: Boolean,
       default: false
+    },
+    title: {
+      type: String,
+      default: ''
     },
     data: {
       type: Array,
@@ -83,3 +88,6 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+</style>

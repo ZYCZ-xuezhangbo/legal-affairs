@@ -1,5 +1,6 @@
 <template>
   <div v-if="show">
+    <div v-if="title" class="text-center text-gray padding-bottom">{{ title }}</div>
     <v-chart :height="400" :data="newData" :forceFit="true">
       <v-coord type="rect" direction="LT" />
       <v-tooltip />
@@ -17,6 +18,10 @@ const DataSet = require('@antv/data-set')
 
 export default {
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     data: {
       type: Array,
       default() {

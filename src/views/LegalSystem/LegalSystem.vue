@@ -94,7 +94,8 @@ export default {
       this.dialog.isEdit = false
       this.dialog.showAdd = true
     },
-    handleActClick({ act, id }) {
+    handleActClick({ act, item }) {
+      const id = item.id
       if (act === 'edit') {
         this.dialog.editId = id
         this.dialog.isEdit = true

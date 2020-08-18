@@ -66,10 +66,10 @@
           </a-form-model-item>
         </a-col>
       </a-row>
+      <div class="text-center">
+        <a-button type="primary" :loading="submitLoading" @click="handleSubmit">提交</a-button>
+      </div>
     </a-form-model>
-    <footer-toolbar v-if="isModify" :is-mobile="isMobile">
-      <a-button type="primary" @click="handleSubmit">提交</a-button>
-    </footer-toolbar>
   </div>
 </template>
 
@@ -108,6 +108,7 @@ export default {
     return {
       rules,
       isModify: true,
+      submitLoading: false,
       anyouSearchTimer: null,
       anyouLoading: false,
       anyou: [],
@@ -125,25 +126,16 @@ export default {
       }
     }
   },
-  computed: {
-    isMobile() {
-      return this.$store.state.app.isMobile
-    }
-  },
   methods: {
     handleModify() {
       this.isModify = true
     },
-    handleShowAddJinzhan() {
-      this.$emit('showAddJinzhan')
-    },
     handleSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.isModify = false
-        } else {
-          return false
-        }
+      this.$refs.form.validate().then(() => {
+        console.log('验证成功')
+      }).catch((e) => {
+        console.log('验证失败')
+        console.log(e)
       })
     },
     causeOfActionSearch(keyword) {

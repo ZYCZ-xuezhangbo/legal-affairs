@@ -38,3 +38,10 @@ export function relevancyPage(params) {
     params
   })
 }
+export function page(params) {
+  return request({
+    url: `${api}/casePage`,
+    method: 'get',
+    params
+  })
+}

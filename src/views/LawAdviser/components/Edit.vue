@@ -6,7 +6,7 @@
       </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
-        <a-form-model ref="form" :model="form">
+        <a-form-model ref="form" :rules="rules" :model="form">
           <a-row :gutter="gutter">
             <a-col v-bind="span">
               <a-form-model-item label="头像" prop="portrait">
@@ -314,7 +314,7 @@ export default {
         dept: '',
         duty: '',
         fullTime: '',
-        gender: '',
+        gender: '1',
         lammyCompany: '',
         lammyDept: '',
         legalCertificateNumber: '',
@@ -330,6 +330,11 @@ export default {
         school: '',
         userName: '',
         work: ''
+      },
+      rules: {
+        company: [
+          { required: true, message: '必填项', trigger: ['change', 'blur'] }
+        ]
       },
       pageLoading: false,
       confirmLoading: false,
@@ -353,6 +358,8 @@ export default {
             this.confirmLoading = false
           })
         }
+      }).catch(() => {
+        this.$message.warning(this.$t('message.form.validate.fail'))
       })
     },
     getDetail() {

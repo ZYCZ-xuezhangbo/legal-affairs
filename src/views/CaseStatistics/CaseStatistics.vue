@@ -79,12 +79,10 @@
     <a-card :bordered="false" class="margin-top-lg">
       <a-row :gutter="gutter">
         <a-col v-bind="span">
-          <div class="text-gray text-center">各阶段案件数量占比</div>
-          <ChartPie is-ring :data="dataPie" />
+          <ChartPie is-ring :data="dataPie" title="各阶段案件数量占比" />
         </a-col>
         <a-col v-bind="span">
-          <div class="text-gray text-center">案件种类统计</div>
-          <ChartBar :data="dataBar" is-direction />
+          <ChartBar :data="dataBar" is-direction title="案件种类统计" />
         </a-col>
       </a-row>
     </a-card>

@@ -15,12 +15,10 @@
       </a-row>
       <a-row class="margin-top-lg">
         <a-col :sm="24" :md="12">
-          <div class="text-center text-gray">各阶段案件数量占比</div>
-          <ChartPie :is-ring="true" :data="pieData" />
+          <ChartPie :is-ring="true" title="各阶段案件数量占比" :data="pieData" />
         </a-col>
         <a-col :sm="24" :md="12">
-          <div class="text-center text-gray">各案件种类数量</div>
-          <ChartBar :data="barData" is-direction />
+          <ChartBar :data="barData" title="各案件种类数量" is-direction />
         </a-col>
       </a-row>
       <a-table :columns="majorCasesColumn" :data-source="majorCasesData" bordered :pagination="false">

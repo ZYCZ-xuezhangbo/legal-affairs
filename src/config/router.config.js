@@ -48,7 +48,7 @@ export const asyncRouterMap = [
             meta: { title: '案件列表', hidden: false, keepAlive: false, permission: [] }
           },
           {
-            path: '/case/caseDetail/:id',
+            path: '/case/caseDetail/:id/:fId',
             name: 'CaseDetail',
             hidden: true,
             component: () => import('@/views/CaseDetail/CaseDetail'),

@@ -113,7 +113,8 @@ export default {
       this.dialog.act = 'add'
       this.dialog.showAdd = true
     },
-    handleActClick({ act, id }) {
+    handleActClick({ act, item }) {
+      const id = item.id
       this.dialog.act = act
       this.dialog.id = id
       this.dialog.showAdd = true

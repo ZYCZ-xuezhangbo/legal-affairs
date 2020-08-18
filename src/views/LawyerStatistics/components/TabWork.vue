@@ -2,10 +2,10 @@
   <a-card :bordered="false">
     <a-row :gutter="48">
       <a-col :sm="24" :md="12">
-        <ChartPie :data="dataPie" />
+        <ChartPie :data="dataPie" title="律所服务类型" />
       </a-col>
       <a-col :sm="24" :md="12">
-        <ChartBarGroup :data="dataBar" />
+        <ChartBarGroup :data="dataBar" title="律所服务统计" />
       </a-col>
     </a-row>
   </a-card>

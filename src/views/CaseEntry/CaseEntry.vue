@@ -1,13 +1,21 @@
 <template>
   <page-header-wrapper>
     <template #content>
-      <a-button type="primary" class="margin-right-lg" @click="dialog.caseRelationShow=true">选择关联案件</a-button>
-      <template v-if="relationCase">
-        我方涉案单位：{{ relationCase.ourUnits }}，诉讼地位：{{ relationCase.locusStand }}，案号：{{ relationCase.caseNo }}
-        <a class="margin-left-lg text-red" @click="relationCase=null">
-          取消关联 <a-icon type="close-circle"></a-icon>
-        </a>
-      </template>
+      <a-row type="flex">
+        <a-col class="margin-bottom">
+          <a-button type="primary" class="margin-right-lg" @click="dialog.caseRelationShow=true">选择关联案件</a-button>
+        </a-col>
+        <a-col :flex="1">
+          <template v-if="relationCase">
+            <span class="margin-right-lg margin-bottom" style="display:inline-block">
+              我方涉案单位：{{ relationCase.ourUnits }}，诉讼地位：{{ relationCase.locusStand }}，案号：{{ relationCase.caseNo }}
+            </span>
+            <a class="text-red margin-bottom" style="display:inline-block" @click="relationCase=null">
+              取消关联 <a-icon type="close-circle"></a-icon>
+            </a>
+          </template>
+        </a-col>
+      </a-row>
     </template>
 
     <CaseRelation :show="dialog.caseRelationShow" :lawsuit="lawsuit" @choose="handleCaseRelationChoose" @close="dialog.caseRelationShow=false" />
@@ -17,7 +25,7 @@
         <a-row :gutter="gutter">
           <a-col v-bind="span">
             <a-form-model-item label="我方涉案单位" prop="ourUnits">
-              <a-select v-model="form.ourUnits" show-search option-filter-prop="children" :filter-option="handleSearchOurUnits">
+              <a-select v-model="form.ourUnits" show-search option-filter-prop="children" :filter-option="handleSearchOurUnits" placeholder="我方涉案单位">
                 <a-select-option value="1">
                   单位1
                 </a-select-option>
@@ -29,7 +37,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="诉讼地位" prop="locusStand">
-              <a-select v-model="form.locusStand">
+              <a-select v-model="form.locusStand" placeholder="诉讼地位">
                 <a-select-option v-for="(item,index) in lawsuit" :key="index" :value="item.code">
                   {{ item.name }}
                 </a-select-option>
@@ -38,7 +46,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="案由" prop="brief">
-              <a-tree-select v-model="form.brief" style="width: 100%" :show-checked-strategy="SHOW_ALL" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all @search="handleSearchbriefList">
+              <a-tree-select v-model="form.brief" style="width: 100%" :show-checked-strategy="SHOW_ALL" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
                 <template #suffixIcon>
                   <a-icon v-show="briefLoading" type="loading" />
                 </template>
@@ -47,7 +55,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="案号" prop="caseNo">
-              <a-input v-model="form.caseNo" />
+              <a-input v-model="form.caseNo" placeholder="案号" />
             </a-form-model-item>
           </a-col>
           <a-col v-bind="span">
@@ -57,7 +65,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="案件种类" prop="caseType">
-              <a-select v-model="form.caseType">
+              <a-select v-model="form.caseType" placeholder="案件种类">
                 <a-select-option v-for="(item,index) in caseType" :key="index" :value="item.code">
                   {{ item.name }}
                 </a-select-option>
@@ -66,7 +74,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="案件所处阶段" prop="caseStage">
-              <a-select v-model="form.caseStage">
+              <a-select v-model="form.caseStage" placeholder="案件所处阶段">
                 <a-select-option v-for="(item,index) in caseStage" :key="index" :value="item.code">
                   {{ item.name }}
                 </a-select-option>
@@ -92,12 +100,12 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="管辖法院" prop="competentCourt">
-              <a-input v-model="form.competentCourt" />
+              <a-input v-model="form.competentCourt" placeholder="管辖法院" />
             </a-form-model-item>
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="主管法官" prop="trialJudge">
-              <a-input v-model="form.trialJudge" />
+              <a-input v-model="form.trialJudge" placeholder="主管法官" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -114,7 +122,7 @@
                   message: '必填项',
                   trigger: 'blur'
                 }">
-                  <a-input-search v-model="item.adversary" @search="handleDelCaseUsers(item)">
+                  <a-input-search v-model="item.adversary" @search="handleDelCaseUsers(item)" placeholder="对方当事人姓名">
                     <template #enterButton>
                       <a-button> <span class="text-red">删除</span> </a-button>
                     </template>
@@ -226,7 +234,7 @@
           </a-col>
           <a-col v-bind="span">
             <a-form-model-item label="律师电话" prop="lawyerPhone">
-              <a-input v-model="form.lawyerPhone" />
+              <a-input v-model="form.lawyerPhone" placeholder="律师电话" />
             </a-form-model-item>
           </a-col>
           <a-col v-bind="span">
@@ -274,7 +282,7 @@
         </a-row>
       </a-form-model>
       <div class="text-center">
-        <a-button type="primary" @click="handleSubmit">提交</a-button>
+        <a-button type="primary" :loading="submitLoading" @click="handleSubmit">提交</a-button>
       </div>
     </a-card>
   </page-header-wrapper>
@@ -314,6 +322,7 @@ export default {
         lg: 8,
         xl: 6
       },
+      submitLoading: false,
       dialog: {
         caseRelationShow: false
       },
@@ -342,14 +351,14 @@ export default {
         }
       },
       form: {
-        brief: '', // 案由
+        brief: undefined, // 案由
         caseAccessory: [],
         caseAmount: 0, // 涉案金额
         caseDescription: '', // 案件描述
         caseFolderId: '',
         caseNo: '',
-        caseStage: '', // 案件所处阶段
-        caseType: '', // 案件种类
+        caseStage: undefined, // 案件所处阶段
+        caseType: undefined, // 案件种类
         caseUsers: [{ // 对方当事人
           key: new Date().getTime(),
           adjust: '0',
@@ -364,14 +373,14 @@ export default {
         lammyCompany: '',
         lammyDept: '',
         lawOffice: '0', // 律所来源
-        lawOfficeName: '', // 律所名称
+        lawOfficeName: undefined, // 律所名称
         lawsuitTime: '', // 成诉时间
-        lawyerName: '', // 律师名称
+        lawyerName: undefined, // 律师名称
         lawyerPhone: '', // 律师电话
         layerCertificates: [],
-        locusStand: '', // 诉讼地位
+        locusStand: undefined, // 诉讼地位
         measure: '',
-        ourUnits: '', // 我方涉案单位
+        ourUnits: undefined, // 我方涉案单位
         propertyClue: '',
         riskAgency: '1',
         trialJudge: ''
@@ -462,12 +471,21 @@ export default {
      * 提交
      */
     handleSubmit() {
+      const caseFolderId = (this.relationCase && this.relationCase.caseFolderId) || ''
+
       this.$refs.form.validate().then(() => {
-        httpCreate({ caseFolderId: this.relationCase.caseFolderId || '', ...this.form }).then(res => {
+        this.submitLoading = true
+        httpCreate({ caseFolderId, ...this.form }).then(res => {
+          this.$notification.success({
+            message: '案件录入成功',
+            description: ''
+          })
           this.$router.push('/case/caseList')
+        }).finally(() => {
+          this.submitLoading = false
         })
-      }).catch(() => {
-        console.log('验证失败')
+      }).catch((e) => {
+        this.$message.warning(this.$t('message.form.validate.fail'))
       })
     },
     /**

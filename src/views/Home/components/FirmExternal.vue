@@ -3,10 +3,10 @@
     <a-card :bordered="false" title="外部律所服务">
       <a-row>
         <a-col :sm="24" :md="12">
-          <ChartPie :data="pieData" />
+          <ChartPie :data="pieData" title="律所服务类型" />
         </a-col>
         <a-col :sm="24" :md="12">
-          <ChartBarGroup :data="barGroupData" />
+          <ChartBarGroup :data="barGroupData" title="律所服务统计" />
         </a-col>
       </a-row>
     </a-card>

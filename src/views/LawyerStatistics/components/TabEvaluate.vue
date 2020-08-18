@@ -3,12 +3,10 @@
     <a-card :bordered="false">
       <a-row :gutter="48">
         <a-col :sm="24" :md="12">
-          <div class="charts-title">外聘律师工作数量：67</div>
-          <ChartPie :data="dataPie" />
+          <ChartPie :data="dataPie" title="外聘律师工作数量：67" />
         </a-col>
         <a-col :sm="24" :md="12">
-          <div class="charts-title">各评分内工作数</div>
-          <ChartBar :data="dataBar" :is-direction="true" />
+          <ChartBar :data="dataBar" :is-direction="true" title="各评分内工作数" />
         </a-col>
       </a-row>
     </a-card>
@@ -68,7 +66,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .charts-title {
   font-size: 15px;
   padding-bottom: 40px;

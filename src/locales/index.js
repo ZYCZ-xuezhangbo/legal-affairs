@@ -1,7 +1,7 @@
 module.exports = {
   messages: {
     CN: {
-      'messageLoadingText': '加载中...'
+      'message.form.validate.fail': '表单验证失败，请检查后再试'
     },
     US: {}
   }

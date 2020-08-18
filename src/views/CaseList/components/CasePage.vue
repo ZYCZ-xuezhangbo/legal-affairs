@@ -1,35 +1,15 @@
 <template>
   <div>
-    <Search />
-    <List api="user" :title="listTitle" :columns="columns" :actions="['edit', 'detail','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <Search :dic-data="searchDictData" @search="handleSearch" />
+    <List api="user" :title="listTitle" :columns="columns" :actions="['edit','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </div>
 </template>
 
 <script>
-import moment from 'moment'
+import { page as httpGetCaseList } from '@/api/case'
 import Search from './Search'
 import { PageList as List } from '@/components'
 
-const list = []
-for (let i = 0; i < 10; i++) {
-  const item = {
-    key: i,
-    id: i,
-    order: i,
-    unitInvolvedOfWe: `${i}股份有限公司有限公司有限公`,
-    litigationStatus: '原告',
-    latestCaseNumber: `SDFWEIFJ32${i}`,
-    causeOfAction: '人格纠纷',
-    timeOfLitigation: moment().calendar(),
-    isMajorCase: '是',
-    amountInvolved: `9438${i}`,
-    competentCourt: `${i}法院`,
-    stageOfTheCase: '二审',
-    progressStatus: '审理'
-  }
-
-  list.push(item)
-}
 export default {
   components: {
     Search,
@@ -43,6 +23,16 @@ export default {
     listTitle: {
       type: String,
       default: ''
+    },
+    searchDictData: {
+      type: Object,
+      default() {
+        return {
+          ourUnits: [],
+          caseTypeList: [],
+          caseStageList: []
+        }
+      }
     }
   },
   data() {
@@ -56,46 +46,39 @@ export default {
       },
       columns: [
         {
-          title: '序号',
-          dataIndex: 'order',
-          key: 'order'
-        },
-        {
           title: '我方涉案单位',
-          dataIndex: 'unitInvolvedOfWe',
-          key: 'unitInvolvedOfWe',
-          scopedSlots: { customRender: 'unitInvolvedOfWe' }
+          dataIndex: 'ourUnits',
+          key: 'ourUnits'
         },
         {
           title: '诉讼地位',
-          dataIndex: 'litigationStatus',
-          key: 'litigationStatus'
+          dataIndex: 'locusStand',
+          key: 'locusStand'
         },
         {
-          title: '最新案号',
-          dataIndex: 'latestCaseNumber',
-          key: 'latestCaseNumber',
-          scopedSlots: { customRender: 'latestCaseNumber' }
+          title: '案号',
+          dataIndex: 'caseNo',
+          key: 'caseNo'
         },
         {
           title: '案由',
-          dataIndex: 'causeOfAction',
-          key: 'causeOfAction'
+          dataIndex: 'brief',
+          key: 'brief'
         },
         {
           title: '成诉时间',
-          dataIndex: 'timeOfLitigation',
-          key: 'timeOfLitigation'
+          dataIndex: 'lawsuitTime',
+          key: 'lawsuitTime'
         },
         {
           title: '是否重大案件',
-          dataIndex: 'isMajorCase',
-          key: 'isMajorCase'
+          dataIndex: 'importantCase',
+          key: 'importantCase'
         },
         {
-          title: '涉案金额',
-          dataIndex: 'amountInvolved',
-          key: 'amountInvolved'
+          title: '涉案金额(万元)',
+          dataIndex: 'caseAmount',
+          key: 'caseAmount'
         },
         {
           title: '管辖法院',
@@ -104,8 +87,8 @@ export default {
         },
         {
           title: '案件所处阶段',
-          dataIndex: 'stageOfTheCase',
-          key: 'stageOfTheCase'
+          dataIndex: 'caseStage',
+          key: 'caseStage'
         },
         {
           title: '进展状态',
@@ -113,25 +96,40 @@ export default {
           key: 'progressStatus'
         }
       ],
-      list
+      list: []
     }
   },
   methods: {
+    handleSearch(e) {
+      this.pagination.pageNum = 1
+      this.searchForm = e
+      this.getList()
+    },
     handleReload({ pageNum, pageSize }) {
       this.pagination.pageNum = pageNum
       this.pagination.pageSize = pageSize
       this.getList()
     },
     getList() {
-      console.log('case list getList()')
+      this.loading = true
+      httpGetCaseList({ type: this.type, ...this.pagination, ...this.searchForm }).then(res => {
+        this.list = res.data.list
+        this.pagination.pageTotal = res.data.total
+      }).finally(() => {
+        this.loading = false
+      })
     },
-    handleShowAdd() { },
-    handleActClick({ act, id }) {
-      console.log(act + ',' + id)
+    handleShowAdd() {
+      this.$router.push('/case/caseEntry')
+    },
+    handleActClick({ act, item }) {
       if (act === 'edit') {
-        this.$router.push(`/case/caseDetail/${id}`)
+        this.$router.push(`/case/caseDetail/${item.id}/${item.caseFolderId}`)
       }
     }
+  },
+  mounted() {
+    this.getList()
   }
 }
 </script>
