@@ -3,7 +3,7 @@
     <a-card :bordered="false" title="法律审核">
       <a-row :gutter="50">
         <a-col :xs="24" :sm="12" :md="8" :lg="6">
-          <Statistics :values="statistics.systemReview" title="规章制度审核" />
+          <Statistics :values="statistics.systemReview" title="规章制度审核" jump-url="https://www.baidu.com" />
         </a-col>
         <a-col :xs="24" :sm="12" :md="8" :lg="6">
           <Statistics :values="statistics.contractReview" title="合同审核" />
@@ -70,6 +70,8 @@ export default {
         ]
       }
     }
+  },
+  methods: {
   }
 }
 </script>

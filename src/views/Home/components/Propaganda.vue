@@ -9,14 +9,14 @@
         </a-radio-group>
       </template>
       <div v-show="radioVal===1">
-        <a-table :columns="columns" :data-source="legalSystemList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+        <a-table :columns="columns" :data-source="data.legalSystemList" :bordered="false" :pagination="false" :row-key="e=>e.id">
           <template #title>
             {{ tableTitle }}
           </template>
         </a-table>
       </div>
       <div v-show="radioVal===2">
-        <a-table :columns="columns" :data-source="noticeList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+        <a-table :columns="columns" :data-source="data.noticeList" :bordered="false" :pagination="false" :row-key="e=>e.id">
           <template #title>
             {{ tableTitle }}
           </template>
@@ -58,9 +58,7 @@ export default {
           title: '日期',
           dataIndex: 'time'
         }
-      ],
-      legalSystemList: this.data.legalSystemList,
-      noticeList: this.data.noticeList
+      ]
     }
   },
   computed: {

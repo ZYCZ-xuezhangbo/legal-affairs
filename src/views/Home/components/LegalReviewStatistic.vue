@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card>
+    <a-card hoverable @click="handleClick">
       <a-row type="flex" align="bottom">
         <a-col v-for="(item,index) in values" :key="index">
           <span class="value">{{ item.value }}</span>
@@ -27,6 +27,17 @@ export default {
     title: {
       type: String,
       default: 'title'
+    },
+    jumpUrl: {
+      type: String,
+      default: ''
+    }
+  },
+  methods: {
+    handleClick() {
+      if (this.jumpUrl !== '') {
+        window.open(this.jumpUrl, '_blank')
+      }
     }
   }
 }

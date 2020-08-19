@@ -6,6 +6,7 @@
       <v-tooltip />
       <v-axis dataKey="x" />
       <v-bar position="x*y" />
+      <!-- <v-interval position="x*y" opacity="1" :label="barLabel" /> -->
     </v-chart>
   </div>
 </template>
@@ -67,7 +68,8 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      barLabel: ['y', {}]
     }
   },
   computed: {

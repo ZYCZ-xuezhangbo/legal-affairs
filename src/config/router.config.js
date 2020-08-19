@@ -39,13 +39,13 @@ export const asyncRouterMap = [
         path: '/case',
         redirect: '/case/caseList',
         component: RouteView,
-        meta: { title: '案件管理', icon: anJianSvg, permission: [] },
+        meta: { title: '案件管理', keepAlive: true, icon: anJianSvg, permission: [] },
         children: [
           {
             path: '/case/caseList',
             name: 'CaseList',
             component: () => import('@/views/CaseList/CaseList'),
-            meta: { title: '案件列表', hidden: false, keepAlive: false, permission: [] }
+            meta: { title: '案件列表', hidden: false, keepAlive: true, permission: [] }
           },
           {
             path: '/case/caseDetail/:id/:fId',

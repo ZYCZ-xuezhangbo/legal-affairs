@@ -8,6 +8,7 @@
       <v-axis dataKey="value" position="right" :show="false" />
       <v-axis dataKey="x" :label="label" />
       <v-bar position="x*value" color="type" :adjust="adjust" />
+      <!-- <v-interval position="x*value" opacity="1" :label="barLabel" /> -->
     </v-chart>
   </div>
 </template>
@@ -43,7 +44,8 @@ export default {
     return {
       show: false,
       label: { offset: 12 },
-      adjust: [{ type: 'dodge', marginRatio: 1 / 32 }]
+      adjust: [{ type: 'dodge', marginRatio: 1 / 32 }],
+      barLabel: ['value', {}]
     }
   },
   computed: {

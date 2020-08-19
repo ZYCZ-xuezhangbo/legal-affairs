@@ -1,57 +1,19 @@
 <template>
-  <page-header-wrapper :back="()=>$router.back(-1)">
-    <!-- 新增回款 - 弹框 -->
-    <ModalAddHuikuan :show="dialog.showAddHuikuan" @close="dialog.showAddHuikuan=false" />
+  <page-header-wrapper :back="()=>$router.back()">
     <!-- 新增进展 - 弹框 -->
     <ModalAddJinzhan :show="dialog.showAddJinzhan" @close="dialog.showAddJinzhan=false" />
 
-    <a-card :bordered="false">
-      <a-row>
-        <a-col :sm="24" :md="12">
-          <a-descriptions>
-            <a-descriptions-item label="执行金额（元）">
-              10000
-            </a-descriptions-item>
-            <a-descriptions-item label="未回款">
-              10000
-            </a-descriptions-item>
-            <a-descriptions-item label="已回款">
-              10000
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-col>
-        <a-col :sm="24" :md="12" :class="!isMobile?'text-right':''">
-          <a-button type="primary" @click="dialog.showAddHuikuan=true">新增回款</a-button>
-          <a-button type="primary" @click="handleGoCaseEntry">新增案件</a-button>
-          <a-button type="primary">终结</a-button>
-          <a-button type="primary">
-            <a-icon theme="filled" type="star"></a-icon>
-            已收藏
-          </a-button>
-        </a-col>
-      </a-row>
-      <div class="margin-top-xl">
-        <a-divider dashed />
-        <a-row type="flex" justify="center">
-          <a-col :span="24">
-            <a-steps v-model="curStep" @change="handleStepChange" style="width:70%;margin:0 auto;">
-              <a-step v-for="(item,index) in stepList" :key="index" :status="curStep===index?'process':'wait'" :title="item.name">
-                <a-icon slot="icon" :type="curStep===index?'folder-open':'folder'" />
-              </a-step>
-            </a-steps>
-          </a-col>
-        </a-row>
-      </div>
-    </a-card>
-    <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="handleTabChange" class="margin-top-lg">
+    <CaseFolderDetail :loading="caseFolderLoading" :case-folder-id="caseFolderId" :case-id="chooseCaseId" :data="caseFolderInfo" @changeStep="handleChangeStep" @changeFav="handleChangeFav" @reload="getCaseFolderInfo" />
+
+    <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="e=>activeTab=e" class="margin-top-lg">
       <template #tabBarExtraContent>
         <div v-show="activeTab=='1'">
           <a-button type="primary" @click="dialog.showAddJinzhan=true">新增进展</a-button>
-          <a-button type="primary" icon="edit">修改</a-button>
+          <a-button type="primary" @click="isEdit=true">修改</a-button>
         </div>
       </template>
       <div v-show="activeTab=='1'">
-        <TabCaseDetail />
+        <TabCaseDetail :loading="caseInfoLoading" :is-edit="isEdit" :case-info="caseInfo" />
       </div>
       <div v-show="activeTab=='2'">
         <TabCaseModifyRecord />
@@ -61,44 +23,40 @@
 </template>
 
 <script>
+import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo } from '@/api/case'
+import CaseFolderDetail from './components/CaseFolderDetail'
 import TabCaseDetail from './components/TabCaseDetail'
 import TabCaseModifyRecord from './components/TabCaseModifyRecord'
-import ModalAddHuikuan from './components/ModalAddHuikuan'
 import ModalAddJinzhan from './components/ModalAddJinzhan'
+
+// const caseStageDict = ['FIRST_INSTANCE', 'SECOND_INSTANCE', 'EXECUTE', 'REVIEW_INSTANCE', 'ARBITRATION', 'NOT_LAWSUIT', 'FINALITY']
 
 export default {
   components: {
+    CaseFolderDetail,
     TabCaseDetail,
     TabCaseModifyRecord,
-    ModalAddHuikuan,
     ModalAddJinzhan
   },
   data() {
     return {
       caseId: '', // 案件id
       caseFolderId: '', // 案件夹id
+      chooseCaseId: '',
+      isEdit: false,
+      caseFolderLoading: false, // 案件夹详情loading
+      caseInfoLoading: false, // 案件详情loading
       dialog: {
         showAddHuikuan: false,
         showAddJinzhan: false
       },
-      stepList: [
-        {
-          id: '1',
-          name: '一审',
-          isFinish: false
-        },
-        {
-          id: '2',
-          name: '二审',
-          isFinish: false
-        },
-        {
-          id: '3',
-          name: '执行',
-          isFinish: false
-        }
-      ],
-      curStep: 1,
+      caseFolderInfo: {
+        caseStageList: [], // 案件阶段
+        caseAmount: 0, // 执行金额
+        caseReturnedMoneyList: [], // 回款列表
+        collect: false // 此案件夹是否已收藏
+      },
+      caseInfo: {}, // 案件详情
       activeTab: '1',
       tabs: [
         {
@@ -109,29 +67,45 @@ export default {
           key: '2',
           tab: '案件修改记录'
         }
-      ],
-      editingKey: ''
-    }
-  },
-  computed: {
-    isMobile() {
-      return this.$store.state.app.isMobile
+      ]
     }
   },
   methods: {
-    handleStepChange(e) {
-      this.curStep = e
+    handleChangeStep(caseId) {
+      this.isEdit = false
+      this.chooseCaseId = caseId
+      this.getCaseInfo(caseId)
     },
-    handleTabChange(e) {
-      this.activeTab = e
+    getCaseFolderInfo() {
+      this.caseFolderLoading = true
+      httpGetCaseFolderById(this.caseFolderId).then(res => {
+        this.caseFolderInfo = res.data
+      }).finally(() => {
+        this.caseFolderLoading = false
+      })
     },
-    handleGoCaseEntry() {
-      this.$router.push('/case/caseEntry')
+    /**
+     * 获取案件详情
+     */
+    getCaseInfo(caseId) {
+      this.caseInfoLoading = true
+      httpGetCaseInfo(caseId).then(res => {
+        this.caseInfo = res.data
+      }).finally(() => {
+        this.caseInfoLoading = false
+      })
+    },
+    handleChangeFav(state) {
+      this.caseFolderInfo.collect = state
     }
   },
   created() {
-    this.caseId = this.$route.params.id
+    this.caseId = this.chooseCaseId = this.$route.params.id
     this.caseFolderId = this.$route.params.fId
+  },
+  mounted() {
+    this.getCaseFolderInfo()
+    this.getCaseInfo(this.caseId)
   }
 }
 </script>
