@@ -3,11 +3,11 @@ import request from '@/utils/request'
 
 const api = '/legalMember'
 
-export function create(params) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: params
+    data
   })
 }
 
@@ -25,18 +25,18 @@ export function getById(id) {
   })
 }
 
-export function page({ pageNum = 1, pageSize = 10, company, enterpriseProfession, legalMajor, legalProfession }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, company, enterpriseProfession, legalMajor, legalProfession }
+    params
   })
 }
 
-export function update(params) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: params
+    data
   })
 }

@@ -3,39 +3,11 @@ import request from '@/utils/request'
 
 const api = '/legalDept'
 
-export function create({
-  company,
-  contactOfficePhone,
-  contactPerson,
-  contactPhone,
-  deptName,
-  deptObligation,
-  deptPhone,
-  deptType,
-  id,
-  lammyCompany,
-  lammyDept,
-  principal,
-  resourceUrl
-}) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: {
-      company,
-      contactOfficePhone,
-      contactPerson,
-      contactPhone,
-      deptName,
-      deptObligation,
-      deptPhone,
-      deptType,
-      id,
-      lammyCompany,
-      lammyDept,
-      principal,
-      resourceUrl
-    }
+    data
   })
 }
 
@@ -53,46 +25,18 @@ export function getById(id) {
   })
 }
 
-export function page({ pageNum = 1, pageSize = 10, company, deptName }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, company, deptName }
+    params
   })
 }
 
-export function update({
-  company,
-  contactOfficePhone,
-  contactPerson,
-  contactPhone,
-  deptName,
-  deptObligation,
-  deptPhone,
-  deptType,
-  id,
-  lammyCompany,
-  lammyDept,
-  principal,
-  resourceUrl
-}) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: {
-      company,
-      contactOfficePhone,
-      contactPerson,
-      contactPhone,
-      deptName,
-      deptObligation,
-      deptPhone,
-      deptType,
-      id,
-      lammyCompany,
-      lammyDept,
-      principal,
-      resourceUrl
-    }
+    data
   })
 }

@@ -2,7 +2,7 @@
   <div>
     <a-skeleton v-show="loading" active />
     <div v-show="!loading">
-      <CaseDetailForm :case-info="caseInfo" :is-edit="isEdit" :submitLoading="submitLoading" @submit="handleSubmit" />
+      <CaseDetailForm :case-info="caseInfo" :case-pro-status="caseProStatus" :is-edit="isEdit" :submitLoading="submitLoading" @submit="handleSubmit" />
     </div>
   </div>
 </template>
@@ -23,6 +23,12 @@ export default {
       type: Object,
       default() {
         return {}
+      }
+    },
+    caseProStatus: {
+      type: Array,
+      default() {
+        return []
       }
     },
     isEdit: {

@@ -6,15 +6,17 @@
         <a-button @click="handleClose">取消</a-button>
       </template>
 
-      <a-form-model ref="form" :model="form">
-        <a-form-model-item label="" prop="content">
-          <a-textarea v-model="form.content" :disabled="!isEdit" :auto-size="{ minRows: 5, maxRows: 10 }" />
-        </a-form-model-item>
-        <a-form-model-item label="附件" prop="resourceUrl">
-          <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
-        </a-form-model-item>
-      </a-form-model>
-
+      <a-skeleton v-show="pageLoading" active />
+      <div v-show="!pageLoading">
+        <a-form-model ref="form" :model="form">
+          <a-form-model-item label="" prop="content">
+            <a-textarea v-model="form.content" :disabled="!isEdit" :auto-size="{ minRows: 5, maxRows: 10 }" />
+          </a-form-model-item>
+          <a-form-model-item label="附件" prop="resourceUrl">
+            <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
+          </a-form-model-item>
+        </a-form-model>
+      </div>
     </a-modal>
   </div>
 </template>
@@ -43,6 +45,7 @@ export default {
   },
   data() {
     return {
+      pageLoading: false,
       form: {
         content: '',
         resourceUrl: []
@@ -68,8 +71,11 @@ export default {
   watch: {
     show(val) {
       if (val && !this.isEdit) {
+        this.pageLoading = true
         httpGetInfo(this.caseFolderId).then(res => {
           this.form = res.data
+        }).finally(() => {
+          this.pageLoading = false
         })
       }
     }

@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- 新增回款 - 弹框 -->
-    <ModalAddHuikuan :show="dialog.showAddHuikuan" @close="dialog.showAddHuikuan=false" />
+    <ModalAddHuikuan :show="dialog.showAddHuikuan" :case-folder-id="caseFolderId" :list="data.caseReturnedMoneyList" :sum-payment="sumPayment" @close="dialog.showAddHuikuan=false" @reload="handleReload" />
     <!-- 终结 - 弹框 -->
-    <ModalCaseFinality :show="dialog.showCaseFinality" :is-edit="caseFinalityIsEdit" :case-folder-id="caseFolderId" @close="dialog.showCaseFinality=false" @reload="$emit('reload')" />
+    <ModalCaseFinality :show="dialog.showCaseFinality" :is-edit="caseFinalityIsEdit" :case-folder-id="caseFolderId" @close="dialog.showCaseFinality=false" @reload="handleReload" />
 
     <a-card :bordered="false">
       <a-skeleton v-show="loading" active />
@@ -78,7 +78,12 @@ export default {
     data: {
       type: Object,
       default() {
-        return {}
+        return {
+          caseAmount: 0, // 执行金额
+          caseReturnedMoneyList: [], // 回款列表
+          caseStageList: [], // 案件阶段
+          collect: 0 // 是否收藏
+        }
       }
     }
   },
@@ -176,6 +181,9 @@ export default {
       }).finally(() => {
         this.favLoading = false
       })
+    },
+    handleReload() {
+      this.$emit('reload')
     }
   }
 }

@@ -21,7 +21,7 @@
           <ChartBar title="各案件种类数量" is-direction :data="dataBar" />
         </a-col>
       </a-row>
-      <a-table :columns="columns" :data-source="data.majorCaseDTOList" bordered :pagination="false">
+      <a-table :columns="columns" :data-source="data.majorCaseDTOList" bordered :pagination="false" :row-key="e=>e.id">
         <template #title>
           各单位重大案件
         </template>

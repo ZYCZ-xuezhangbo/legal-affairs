@@ -103,7 +103,7 @@ export default {
       this.pageLoading = false
     },
     requestSuccess(msg) {
-      this.$message.success(msg)
+      // this.$message.success(msg)
       this.$emit('success')
       this.$emit('close')
       this.$refs.form.reset()

@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper :back="()=>$router.back()">
     <!-- 新增进展 - 弹框 -->
-    <ModalAddJinzhan :show="dialog.showAddJinzhan" @close="dialog.showAddJinzhan=false" />
+    <ModalAddJinzhan :show="dialog.showAddJinzhan" :case-id="caseId" :case-pro-status="caseProStatus" @close="dialog.showAddJinzhan=false" @reload="handleReloadCaseInfo" />
 
     <CaseFolderDetail :loading="caseFolderLoading" :case-folder-id="caseFolderId" :case-id="chooseCaseId" :data="caseFolderInfo" @changeStep="handleChangeStep" @changeFav="handleChangeFav" @reload="getCaseFolderInfo" />
 
@@ -13,7 +13,7 @@
         </div>
       </template>
       <div v-show="activeTab=='1'">
-        <TabCaseDetail :loading="caseInfoLoading" :is-edit="isEdit" :case-info="caseInfo" />
+        <TabCaseDetail :loading="caseInfoLoading" :is-edit="isEdit" :case-info="caseInfo" :case-pro-status="caseProStatus" />
       </div>
       <div v-show="activeTab=='2'">
         <TabCaseModifyRecord />
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
 import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo } from '@/api/case'
 import CaseFolderDetail from './components/CaseFolderDetail'
 import TabCaseDetail from './components/TabCaseDetail'
@@ -57,6 +58,7 @@ export default {
         collect: false // 此案件夹是否已收藏
       },
       caseInfo: {}, // 案件详情
+      caseProStatus: [], // 案件进展列表
       activeTab: '1',
       tabs: [
         {
@@ -91,12 +93,28 @@ export default {
       this.caseInfoLoading = true
       httpGetCaseInfo(caseId).then(res => {
         this.caseInfo = res.data
+        this.getProStatus(res.data.caseStage, res.data.locusStand)
       }).finally(() => {
         this.caseInfoLoading = false
       })
     },
+    /**
+     * 获取案件进展字典
+     * @param {string} lawsuit 案件阶段
+     * @param {string} stage 诉讼地位
+     */
+    getProStatus(lawsuit, stage) {
+      httpGetProStatusDict({ lawsuit, stage }).then(res => {
+        this.caseProStatus = res.data
+      }).finally(() => {
+        this.proStatusLoading = false
+      })
+    },
     handleChangeFav(state) {
       this.caseFolderInfo.collect = state
+    },
+    handleReloadCaseInfo() {
+      this.getCaseInfo(this.chooseCaseId)
     }
   },
   created() {

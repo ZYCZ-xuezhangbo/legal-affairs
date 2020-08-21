@@ -3,11 +3,11 @@ import request from '@/utils/request'
 
 const api = '/generalMatter'
 
-export function create({ lammyCompany, lammyDept, name, opinion, recipient, recipientDepartment, resourceUrl, writer }) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: { lammyCompany, lammyDept, name, opinion, recipient, recipientDepartment, resourceUrl, writer }
+    data
   })
 }
 export function delete_(id) {
@@ -24,18 +24,18 @@ export function getById(id) {
   })
 }
 
-export function page({ pageNum = 1, pageSize = 10, name, startDate, endDate }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, name, startDate, endDate }
+    params
   })
 }
 
-export function update({ id, name, opinion, recipient, recipientDepartment, resourceUrl, writer }) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { id, name, opinion, recipient, recipientDepartment, resourceUrl, writer }
+    data
   })
 }

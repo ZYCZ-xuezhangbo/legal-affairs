@@ -3,11 +3,11 @@ import request from '@/utils/request'
 
 const api = '/outsideLawFirm'
 
-export function create({ address, lammyCompany, lammyDept, lawFirmDesc, lawFirmName, linkman, phone, photographs, resourceUrl, videos }) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: { address, lammyCompany, lammyDept, lawFirmDesc, lawFirmName, linkman, phone, photographs, resourceUrl, videos }
+    data
   })
 }
 
@@ -25,18 +25,18 @@ export function getById(id) {
   })
 }
 
-export function page({ pageNum = 1, pageSize = 10, address, lawFirmName, linkman }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, address, lawFirmName, linkman }
+    params
   })
 }
 
-export function update({ address, id, lawFirmDesc, lawFirmName, linkman, phone, photographs, resourceUrl, videos }) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { address, id, lawFirmDesc, lawFirmName, linkman, phone, photographs, resourceUrl, videos }
+    data
   })
 }

@@ -6,11 +6,11 @@ const api = '/material'
  * 新增资料
  * @param {object} param0
  */
-export function create({ name, resourceUrl = [], type }) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: { name, resourceUrl, type }
+    data
   })
 }
 
@@ -27,25 +27,25 @@ export function delete_(id = '') {
 
 /**
  * 分页查询
- * @param {object} param0
+ * @param {object} params
  */
-export function page({ name = '', pageNum = 1, pageSize = 10, releasePerson = '', type = '' }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { name, pageNum, pageSize, releasePerson, type }
+    params
   })
 }
 
 /**
  * 修改
- * @param {object} param0
+ * @param {object} data
  */
-export function update({ id, name = '', resourceUrl = [], type = '' }) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { id, name, resourceUrl, type }
+    data
   })
 }
 

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-// 案件终结模块
+// 案件进展模块
 
-const api = '/caseFinality'
+const api = '/caseProgress'
 
 export function create(data) {
   return request({
@@ -11,9 +11,10 @@ export function create(data) {
   })
 }
 
-export function getByCaseFolderId(id) {
+export function getProgressDictionary(params) {
   return request({
-    url: `${api}/getByCaseFolderId/${id}`,
-    method: 'get'
+    url: `${api}/getProgressDictionary`,
+    method: 'get',
+    params
   })
 }

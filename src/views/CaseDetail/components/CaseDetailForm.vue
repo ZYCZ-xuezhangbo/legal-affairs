@@ -16,7 +16,7 @@
         </a-col>
         <a-col v-bind="span">
           <a-form-model-item label="诉讼地位" prop="locusStand">
-            <a-select v-model="form.locusStand" :disabled="!isEdit" placeholder="诉讼地位">
+            <a-select v-model="form.locusStand" :disabled="!isEdit || (isEdit && !!caseInfo.locusStand)" placeholder="诉讼地位">
               <a-select-option v-for="(item,index) in dict.lawsuit" :key="index" :value="item.code">
                 {{ item.name }}
               </a-select-option>
@@ -53,7 +53,7 @@
         </a-col>
         <a-col v-bind="span">
           <a-form-model-item label="案件所处阶段" prop="caseStage">
-            <a-select v-model="form.caseStage" :disabled="!isEdit" placeholder="案件所处阶段">
+            <a-select v-model="form.caseStage" :disabled="!isEdit || (isEdit && !!caseInfo.caseStage)" placeholder="案件所处阶段">
               <a-select-option v-for="(item,index) in dict.caseStage" :key="index" :value="item.code">
                 {{ item.name }}
               </a-select-option>
@@ -96,11 +96,14 @@
           </div>
           <a-row :gutter="gutter" v-for="(item,index) in form.caseUsers" :key="item.key">
             <a-col v-bind="span">
-              <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="{
+              <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="[{
                 required: true,
                 message: '必填项',
                 trigger: 'blur'
-              }">
+              },{
+                validator: validateChineseFn,
+                trigger: 'blur'
+              }]">
                 <a-input v-model="item.adversary" :disabled="!isEdit" placeholder="对方当事人姓名">
                   <template v-if="isEdit" #addonAfter>
                     <a-popconfirm title="确定删除该当事人吗？" ok-text="删除" ok-type="danger" cancel-text="取消" @confirm="handleDelCaseUsers(item)">
@@ -172,7 +175,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="律所名称" prop="lawOfficeName">
-                <template v-if="form.lawOffice==='0'">
+                <template v-if="isKuNei">
                   <!-- 如果是库内，下拉框 -->
                   <a-select v-model="form.lawOfficeName" :disabled="!isEdit" placeholder="律所名称" @change="handleLawOfficeNameChange">
                     <a-select-option v-for="(item,index) in dict.lawFirmList" :key="index" :value="item.code">
@@ -188,7 +191,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="律师名称" prop="lawyerName">
-                <template v-if="form.lawOffice==='0'">
+                <template v-if="isKuNei">
                   <!-- 如果是库内，下拉框 -->
                   <a-select v-model="form.lawyerName" :disabled="!isEdit" :loading="lawyerListLoading" placeholder="律师名称">
                     <a-select-option v-for="(item,index) in lawyerList" :key="index" :value="item.code">
@@ -202,7 +205,7 @@
                 </template>
               </a-form-model-item>
             </a-col>
-            <a-col v-bind="span" v-if="form.lawOffice==='1'">
+            <a-col v-bind="span" v-if="!isKuNei">
               <a-form-model-item label="上传库外律师审批凭证" prop="layerCertificates" :rules="{
                 required: form.lawOffice==='1',
                 message: '必填项',
@@ -264,8 +267,29 @@
             </a-col>
           </a-row>
         </a-col>
-        <a-col :span="24">
-
+        <a-col v-if="form.caseProgressList && form.caseProgressList.length>0" :span="24">
+          <a-row :gutter="gutter" v-for="(item,index) in form.caseProgressList" :key="index">
+            <a-col :md="24" :lg="14">
+              <a-form-model-item label="案件进展" :prop="`caseProgressList.${index}.content`">
+                <a-textarea v-model="item.content" :disabled="!isEdit" :auto-size="{ minRows: 10, maxRows: 20}" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="24" :lg="10">
+              <a-form-model-item label="进展时间" :prop="`caseProgressList.${index}.progressTime`">
+                <a-date-picker v-model="item.progressTime" inputReadOnly @change="(e,str)=>form.progressTime=str" class="response" />
+              </a-form-model-item>
+              <a-form-model-item label="进展状态" :prop="`caseProgressList.${index}.progressStatus`">
+                <a-select v-model="item.progressStatus" placeholder="进展状态">
+                  <a-select-option v-for="(pItem,pIndex) in caseProStatus" :key="pIndex" :value="pItem.code">
+                    {{ pItem.value }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+              <a-form-model-item label="案件描述附件" :prop="`caseProgressList.${index}.resourceUrl`">
+                <UploadFile :value="item.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
         </a-col>
       </a-row>
     </a-form-model>
@@ -278,19 +302,26 @@
 <script>
 import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
+import test from '@/utils/test'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
-const validateLawyerPhone = (rule, value, callback) => {
+const validateLawyerPhoneFn = (rule, value, callback) => {
   if (value === '') {
     callback()
   } else {
-    if (!(/^1[3456789]\d{9}$/.test(value))) {
-      callback(new Error('手机号输入有误'))
-    } else {
-      callback()
-    }
+    if (test.mobile(value)) callback()
+    else callback(new Error('手机号格式不正确'))
   }
 }
+
+const validateChineseFn = (rule, value, callback) => {
+  if (test.chinese(value)) callback()
+  else callback(new Error('必须中文'))
+}
+
+const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validatePhone = { validator: validateLawyerPhoneFn, trigger: 'blur' }
+
 export default {
   components: {
     UploadFile
@@ -308,6 +339,12 @@ export default {
       type: Object,
       default() {
         return {}
+      }
+    },
+    caseProStatus: {
+      type: Array,
+      default() {
+        return []
       }
     }
   },
@@ -336,15 +373,7 @@ export default {
       briefList: [], // 案由列表
       lawyerList: [], // 律师名称
       lawyerListLoading: false,
-      uploadFileRecord: {
-        options: {
-          downloadWay: 'a',
-          limit: 1000,
-          fileName: 'file',
-          action: this.$uploadFileUrl,
-          disabled: !this.isEdit
-        }
-      },
+      progressStatus: [], // 进展状态列表
       form: {
         brief: undefined, // 案由
         caseAccessory: [],
@@ -380,43 +409,33 @@ export default {
         trialJudge: ''
       },
       rules: {
-        ourUnits: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        locusStand: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        brief: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        lawsuitTime: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        caseType: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        caseStage: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        importantCase: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ],
-        caseAmount: [
-          { required: true, message: '必填项', trigger: 'blur' }
-        ],
-        lawOfficeName: [
-          { required: true, message: '必填项', trigger: ['blur', 'change'] }
-        ],
+        ourUnits: [validateRequired],
+        locusStand: [validateRequired],
+        brief: [validateRequired],
+        lawsuitTime: [validateRequired],
+        caseType: [validateRequired],
+        caseStage: [validateRequired],
+        importantCase: [validateRequired],
+        caseAmount: [validateRequired],
+        lawOfficeName: [validateRequired],
         lawyerName: [
-          { required: true, message: '必填项', trigger: ['blur', 'change'] }
+          validateRequired,
+          {
+            validator: (rule, value, callback) => {
+              if (this.isKuNei) { // 库内
+                callback()
+              } else {
+                if (test.chinese(value)) callback()
+                else callback(new Error('必须中文'))
+              }
+            },
+            trigger: 'blur'
+          }
         ],
-        lawyerPhone: [
-          { validator: validateLawyerPhone, trigger: 'blur' }
-        ],
-        caseDescription: [
-          { required: true, message: '必填项', trigger: ['blur', 'change'] }
-        ]
-      }
+        lawyerPhone: [validatePhone],
+        caseDescription: [validateRequired]
+      },
+      validateChineseFn
     }
   },
   watch: {
@@ -430,6 +449,23 @@ export default {
           this.briefLoading = false
           this.handleSearchbriefList(res.data)
         })
+      }
+    }
+  },
+  computed: {
+    // 律所来源选择的是否为库内
+    isKuNei() {
+      return this.form.lawOffice === '0'
+    },
+    uploadFileRecord() {
+      return {
+        options: {
+          downloadWay: 'a',
+          limit: 1000,
+          fileName: 'file',
+          action: this.$uploadFileUrl,
+          disabled: !this.isEdit
+        }
       }
     }
   },

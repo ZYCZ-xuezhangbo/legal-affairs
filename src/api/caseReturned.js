@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-// 法律总顾问模块
+// 案件回款模块
 
-const api = '/legalCounsel'
+const api = '/caseReturned'
 
 export function create(data) {
   return request({
@@ -15,21 +15,6 @@ export function delete_(id) {
   return request({
     url: `${api}/delete/${id}`,
     method: 'post'
-  })
-}
-
-export function getById(id) {
-  return request({
-    url: `${api}/getById/${id}`,
-    method: 'get'
-  })
-}
-
-export function page(params) {
-  return request({
-    url: `${api}/page`,
-    method: 'get',
-    params
   })
 }
 

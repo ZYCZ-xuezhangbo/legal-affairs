@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '@/router'
 import store from '@/store'
 import storage from 'store'
-import { Notification } from 'ant-design-vue'
+import { Notification, Message } from 'ant-design-vue'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -43,25 +43,28 @@ request.interceptors.request.use(config => {
 // 响应拦截器
 request.interceptors.response.use((res) => {
   res = res.data
-  if (res.code.substring(0, 1) !== 'M') { // code不以M开头时，一律视为失败返回码
+
+  const codePrefix = res.code.substring(0, 1) // code前缀
+
+  if (codePrefix === 'M') {
+    Message.success(res.msg)
+  } else if (codePrefix === 'S') {
+    // 成功类code，不弹框
+  } else {
+    Notification.error({
+      message: res.code,
+      description: res.msg,
+      duration: 6
+    })
+  }
+  if (!['M', 'S'].includes(codePrefix)) { // code不以M或S开头时，一律视为失败返回码
     switch (res.code) {
       case 'ACCOUNT_006': // 用户未登录
-        Notification.error({
-          title: '警告',
-          message: status,
-          description: res.msg,
-          duration: 6
-        })
         store.dispatch('Logout').then(() => {
           router.push('/user/login')
         })
         break
       default:
-        Notification.error({
-          message: res.code,
-          description: res.msg,
-          duration: 6
-        })
         break
     }
     return Promise.reject(res)

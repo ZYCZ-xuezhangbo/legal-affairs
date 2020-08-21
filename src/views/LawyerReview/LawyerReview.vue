@@ -47,7 +47,7 @@
         <a-button type="primary" class="margin-right" @click="handleAdd">新建</a-button>
         <a-button type="primary">导出</a-button>
       </div>
-      <a-table :columns="columns" :data-source="data">
+      <a-table :columns="columns" :data-source="data" :row-key="e=>e.id">
         <template #action>
           <a>查看</a>
         </template>
@@ -62,6 +62,7 @@ import { mapState } from 'vuex'
 const data = []
 for (let i = 0; i < 10; i++) {
   data.push({
+    id: i,
     key: i,
     ssdw: `送审单位${i}`,
     fwlsuo: `服务律所${i}`,

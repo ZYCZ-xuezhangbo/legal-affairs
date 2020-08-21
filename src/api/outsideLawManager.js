@@ -3,11 +3,11 @@ import request from '@/utils/request'
 
 const api = '/outsideLawManager'
 
-export function create(parmas) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: parmas
+    data
   })
 }
 
@@ -25,19 +25,19 @@ export function getById(id) {
   })
 }
 
-export function page({ pageNum = 1, pageSize = 10, lawFirmName, lawName }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, lawFirmName, lawName }
+    params
   })
 }
 
-export function update(parmas) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: parmas
+    data
   })
 }
 

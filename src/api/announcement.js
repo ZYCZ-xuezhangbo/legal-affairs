@@ -6,11 +6,11 @@ const api = '/announcement'
  * 新增
  * @param {object} param0
  */
-export function create({ content = '', resourceUrl = [], title = '' }) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: { content, resourceUrl, title }
+    data
   })
 }
 
@@ -40,11 +40,11 @@ export function getById(id) {
  * 分页查询
  * @param {object} param0
  */
-export function page({ pageNum = 1, pageSize = 10, startDate = '', endDate = '', releasePerson = '', title = '' }) {
+export function page(params) {
   return request({
     url: `${api}/page`,
     method: 'get',
-    params: { pageNum, pageSize, startDate, endDate, releasePerson, title }
+    params
   })
 }
 
@@ -52,10 +52,10 @@ export function page({ pageNum = 1, pageSize = 10, startDate = '', endDate = '',
  * 修改
  * @param {object} param0
  */
-export function update({ id = '', content = '', resourceUrl = [], title = '' }) {
+export function update(data) {
   return request({
     url: `${api}/update`,
     method: 'post',
-    data: { id, resourceUrl, content, title }
+    data
   })
 }

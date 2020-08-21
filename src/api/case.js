@@ -39,11 +39,11 @@ export function getCaseDictionaries() {
  * 新建案件
  * @param {object} params
  */
-export function create(params) {
+export function create(data) {
   return request({
     url: `${api}/create`,
     method: 'post',
-    data: params
+    data
   })
 }
 /**
@@ -96,10 +96,10 @@ export function getCaseFolderById(id = '') {
  * 修改收藏状态
  * @param {object} params
  */
-export function changeFavoriteState(params) {
+export function changeFavoriteState(data) {
   return request({
     url: `${api}/changeFavoriteState`,
     method: 'post',
-    data: params
+    data
   })
 }

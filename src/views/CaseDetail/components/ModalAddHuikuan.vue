@@ -1,9 +1,26 @@
 <template>
   <div>
-    <a-modal title="新增回款" ok-text="提交" :visible="show" :confirm-loading="submitLoading" @ok="handleClose" @cancel="handleClose">
-      <a-table :columns="columns" :data-source="data" bordered>
-        <template #action>
-          <a>修改</a>
+    <Edit :show="showEdit" :info="info" :case-folder-id="caseFolderId" :is-edit="isEdit" @close="showEdit=false" @reload="handleReload" />
+
+    <a-modal title="回款情况" ok-text="提交" :visible="show" @cancel="handleClose">
+      <template #footer>
+        <a-button @click="handleClose">关闭</a-button>
+      </template>
+      <a-row class="margin-bottom" type="flex" align="middle" justify="space-between">
+        <a-col> 已回款总金额：{{ sumPayment }} </a-col>
+        <a-col>
+          <a-button type="primary" @click="handleShowAdd">新增</a-button>
+        </a-col>
+      </a-row>
+      <a-table :columns="columns" :data-source="list" size="middle" :pagination="false" :row-key="e=>e.id">
+        <template #action="item">
+          <a @click="handleShowEdit(item)">修改</a>
+          <a-divider type="vertical" />
+          <a-popconfirm title="确定删除吗？" ok-text="删除" ok-type="danger" cancel-text="取消" @confirm="handleDelete(item.id)">
+            <a>删除</a>
+          </a-popconfirm>
+          <a-divider type="vertical" />
+          <a>附件</a>
         </template>
       </a-table>
     </a-modal>
@@ -11,49 +28,79 @@
 </template>
 
 <script>
+import { delete_ as httpDelete } from '@/api/caseReturned'
+import Edit from './ModalAddHuikuanEdit'
+
 export default {
+  components: {
+    Edit
+  },
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    list: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    sumPayment: {
+      type: Number,
+      default: 0
+    },
+    caseFolderId: {
+      type: String,
+      default: ''
     }
   },
   data() {
-    const list = []
-    for (let i = 0; i < 100; i++) {
-      list.push({
-        key: i.toString(),
-        money: `1000 ${i}`,
-        date: '2020-01-02'
-      })
-    }
     return {
+      showEdit: false,
+      info: {},
+      isEdit: false,
       submitLoading: false,
       columns: [
         {
           title: '回款',
-          dataIndex: 'money',
-          width: '35%',
-          scopedSlots: { customRender: 'name' }
+          key: 'returnedMoney',
+          dataIndex: 'returnedMoney'
         },
         {
           title: '回款时间',
-          dataIndex: 'date',
-          width: '35%',
-          scopedSlots: { customRender: 'age' }
+          key: 'returnedTime',
+          dataIndex: 'returnedTime'
         },
         {
           title: '操作',
-          dataIndex: 'operation',
+          align: 'right',
+          key: 'action',
           scopedSlots: { customRender: 'action' }
         }
-      ],
-      data: list
+      ]
     }
   },
   methods: {
     handleClose() {
       this.$emit('close')
+    },
+    handleReload() {
+      this.$emit('reload')
+    },
+    handleShowAdd() {
+      this.isEdit = false
+      this.showEdit = true
+    },
+    handleShowEdit(item) {
+      this.info = item
+      this.isEdit = true
+      this.showEdit = true
+    },
+    handleDelete(id) {
+      httpDelete(id).then(() => {
+        this.handleReload()
+      })
     }
   }
 }
