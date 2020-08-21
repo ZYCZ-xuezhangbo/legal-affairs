@@ -1,17 +1,18 @@
 <template>
   <page-header-wrapper>
-    <Edit api="informant" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="informant" :is-edit="dialog.isEdit" :dict="dict" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
 
-    <Search :company-list="companyList" @search="handleSearch" />
+    <Search :company-list="dict.COMPANY" @search="handleSearch" />
 
     <List api="informant" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/informant'
+import { page as httpGetList, getInformantDictionary as httpGetDict } from '@/api/informant'
 import Search from './components/Search'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import Edit from './components/Edit'
+import { PageList as List } from '@/components'
 
 export default {
   components: {
@@ -26,23 +27,13 @@ export default {
         isEdit: false,
         showAdd: false
       },
-      formData: require('@/formBuilder/filledBy.json'),
       searchData: {},
       list: [],
-      companyList: [
-        {
-          code: '',
-          name: '不限'
-        },
-        {
-          code: 'com1',
-          name: '公司1'
-        },
-        {
-          code: 'com2',
-          name: '公司2'
-        }
-      ],
+      dict: {
+        USERNAME: [],
+        DEPT: [],
+        COMPANY: []
+      },
       columns: [
         {
           title: '公司',
@@ -89,6 +80,11 @@ export default {
       this.pagination.pageSize = pageSize
       this.getList()
     },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
+    },
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
@@ -112,6 +108,7 @@ export default {
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
   }
 }

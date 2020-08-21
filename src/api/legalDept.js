@@ -40,3 +40,9 @@ export function update(data) {
     data
   })
 }
+export function getDeptDictionary() {
+  return request({
+    url: `${api}/getDeptDictionary`,
+    method: 'get'
+  })
+}

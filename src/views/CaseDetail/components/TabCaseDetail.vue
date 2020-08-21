@@ -2,12 +2,13 @@
   <div>
     <a-skeleton v-show="loading" active />
     <div v-show="!loading">
-      <CaseDetailForm :case-info="caseInfo" :case-pro-status="caseProStatus" :is-edit="isEdit" :submitLoading="submitLoading" @submit="handleSubmit" />
+      <CaseDetailForm :case-info="caseInfo" :case-pro-status="caseProStatus" :act="act" :submitLoading="submitLoading" @submit="handleSubmit" />
     </div>
   </div>
 </template>
 
 <script>
+import { update as httpUpdate } from '@/api/case'
 import CaseDetailForm from './CaseDetailForm'
 
 export default {
@@ -31,9 +32,9 @@ export default {
         return []
       }
     },
-    isEdit: {
-      type: Boolean,
-      default: false
+    act: {
+      type: String,
+      default: 'detail'
     }
   },
   data() {
@@ -53,7 +54,12 @@ export default {
       this.isModify = true
     },
     handleSubmit(form) {
-      console.log(form)
+      this.submitLoading = true
+      httpUpdate(form).then(res => {
+        this.$emit('submit')
+      }).finally(() => {
+        this.submitLoading = false
+      })
     }
   }
 }

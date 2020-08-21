@@ -7,7 +7,7 @@
         <a-button @click="handleClose">关闭</a-button>
       </template>
       <a-row class="margin-bottom" type="flex" align="middle" justify="space-between">
-        <a-col> 已回款总金额：{{ sumPayment }} </a-col>
+        <a-col> 已回款总金额：{{ paymentReceived }} </a-col>
         <a-col>
           <a-button type="primary" @click="handleShowAdd">新增</a-button>
         </a-col>
@@ -46,7 +46,7 @@ export default {
         return []
       }
     },
-    sumPayment: {
+    paymentReceived: {
       type: Number,
       default: 0
     },

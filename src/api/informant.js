@@ -40,3 +40,14 @@ export function update(data) {
     data
   })
 }
+
+/**
+ * 获取相关字典
+ * @param {object} data
+ */
+export function getInformantDictionary() {
+  return request({
+    url: `${api}/getInformantDictionary`,
+    method: 'get'
+  })
+}

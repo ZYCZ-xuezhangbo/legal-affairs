@@ -25,6 +25,7 @@ export function getBriefLabelById(id) {
     method: 'get'
   })
 }
+
 /**
  * 获取案件相关字典
  */
@@ -46,6 +47,7 @@ export function create(data) {
     data
   })
 }
+
 /**
  * 获取案件关联的列表
  * @param {object} params
@@ -101,5 +103,28 @@ export function changeFavoriteState(data) {
     url: `${api}/changeFavoriteState`,
     method: 'post',
     data
+  })
+}
+
+/**
+ * 案件修改
+ * @param {object} data
+ */
+export function update(data) {
+  return request({
+    url: `${api}/update`,
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 获取案件修改记录
+ */
+export function getCaseLogList(params) {
+  return request({
+    url: `${api}/getCaseLogList`,
+    method: 'get',
+    params
   })
 }

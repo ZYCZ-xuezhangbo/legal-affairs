@@ -48,7 +48,8 @@ import {
   Rate,
   Collapse,
   Pagination,
-  FormModel
+  FormModel,
+  BackTop
 } from 'ant-design-vue'
 import Viser from 'viser-vue'
 
@@ -105,6 +106,7 @@ Vue.use(Rate)
 Vue.use(Collapse)
 Vue.use(Pagination)
 Vue.use(FormModel)
+Vue.use(BackTop)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

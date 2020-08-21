@@ -21,7 +21,7 @@
     <CaseRelation :show="dialog.caseRelationShow" :lawsuit="dict.lawsuit" @choose="handleCaseRelationChoose" @close="dialog.caseRelationShow=false" />
 
     <a-card :bordered="false">
-      <CaseDetailForm :submitLoading="submitLoading" @submit="handleSubmit" />
+      <CaseDetailForm :submitLoading="submitLoading" act="add" @submit="handleSubmit" />
     </a-card>
 
   </page-header-wrapper>

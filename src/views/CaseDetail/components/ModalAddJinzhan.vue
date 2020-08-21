@@ -120,6 +120,7 @@ export default {
     handleSubmit() {
       this.$refs.form.validate().then(() => {
         this.submitLoading = true
+
         httpCreate({ caseId: this.caseId, ...this.form }).then(() => {
           this.$emit('reload')
           this.handleClose()

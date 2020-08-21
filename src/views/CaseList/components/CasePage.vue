@@ -1,19 +1,24 @@
 <template>
   <div>
+    <ModalAddJinzhan :show="dialog.showAddJinzhan" :case-id="dialog.caseId" :case-pro-status="caseProStatus" @close="dialog.showAddJinzhan=false" @reload="handleReload" />
+
     <Search :dic-data="searchDictData" @search="handleSearch" />
-    <List api="user" :title="listTitle" :columns="columns" :actions="['edit','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="user" :title="listTitle" :columns="columns" :actions="['edit','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
   </div>
 </template>
 
 <script>
 import { page as httpGetCaseList } from '@/api/case'
-import Search from './Search'
+import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
 import { PageList as List } from '@/components'
+import Search from './Search'
+import ModalAddJinzhan from '../../CaseDetail/components/ModalAddJinzhan'
 
 export default {
   components: {
     Search,
-    List
+    List,
+    ModalAddJinzhan
   },
   props: {
     type: {
@@ -37,6 +42,10 @@ export default {
   },
   data() {
     return {
+      dialog: {
+        caseId: '',
+        showAddJinzhan: false
+      },
       searchForm: {},
       loading: false,
       pagination: {
@@ -96,7 +105,8 @@ export default {
           key: 'progressStatus'
         }
       ],
-      list: []
+      list: [],
+      caseProStatus: []
     }
   },
   methods: {
@@ -105,9 +115,11 @@ export default {
       this.searchForm = e
       this.getList()
     },
-    handleReload({ pageNum, pageSize }) {
-      this.pagination.pageNum = pageNum
-      this.pagination.pageSize = pageSize
+    handleReload(e) {
+      if (e) {
+        this.pagination.pageNum = e.pageNum
+        this.pagination.pageSize = e.pageSize
+      }
       this.getList()
     },
     getList() {
@@ -119,12 +131,19 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
+    handleCaseEntry() {
       this.$router.push('/case/caseEntry')
     },
     handleActClick({ act, item }) {
       if (act === 'edit') {
         this.$router.push(`/case/caseDetail/${item.id}/${item.caseFolderId}`)
+      } else if (act === 'caseProgress') {
+        this.caseProStatus = []
+        httpGetProStatusDict({ lawsuit: item.locusStandCode, stage: item.caseStageCode }).then(res => {
+          this.caseProStatus = res.data
+        })
+        this.dialog.caseId = item.id
+        this.dialog.showAddJinzhan = true
       }
     }
   },

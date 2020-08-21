@@ -1,31 +1,52 @@
 <template>
   <div>
-    <a-table :columns="columns" :data-source="list">
-      <template #action>
-        <a>修改</a>
+    <a-table :columns="columns" :data-source="list" :loading="loading" :pagination="false" :row-key="e=>e.id">
+      <template #contentList="list">
+        <a-tag v-for="(item,index) in list" :key="index">
+          {{ item }}
+        </a-tag>
       </template>
     </a-table>
+    <Pagination :page-num="pagination.pageNum" :page-size="pagination.pageSize" :total="pagination.pageTotal" @change="handlePageNumChange" @sizeChange="handlePageSizeChange" />
   </div>
 </template>
 
 <script>
-const list = [
-  {
-    key: '1',
-    date: '2020-01-02',
-    time: '11:01:01',
-    operator: '张三',
-    content: '案由'
-  }
-]
+import { Pagination } from '@/components'
+
 export default {
+  components: {
+    Pagination
+  },
+  props: {
+    list: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    pagination: {
+      type: Object,
+      default() {
+        return {
+          pageNum: 1,
+          pageSize: 10,
+          pageTotal: 0
+        }
+      }
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       columns: [
         {
           title: '日期',
-          dataIndex: 'date',
-          key: 'date'
+          dataIndex: 'dateTime',
+          key: 'dateTime'
         },
         {
           title: '时间',
@@ -34,21 +55,35 @@ export default {
         },
         {
           title: '操作人',
-          dataIndex: 'operator',
-          key: 'operator'
-        },
-        {
-          title: '内容',
-          dataIndex: 'content',
-          key: 'content'
+          dataIndex: 'author',
+          key: 'author'
         },
         {
           title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'action' }
+          dataIndex: 'operate',
+          key: 'operate'
+        },
+        {
+          title: '内容',
+          dataIndex: 'contentList',
+          key: 'contentList',
+          scopedSlots: { customRender: 'contentList' }
         }
-      ],
-      list
+      ]
+    }
+  },
+  methods: {
+    handlePageNumChange(e) {
+      this.$emit('reload', {
+        pageNum: e.page,
+        pageSize: e.pageSize
+      })
+    },
+    handlePageSizeChange(e) {
+      this.$emit('reload', {
+        pageNum: 1,
+        pageSize: e.size
+      })
     }
   }
 }

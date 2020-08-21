@@ -11,6 +11,10 @@ export function create(data) {
   })
 }
 
+/**
+ * 获取案件进展相关字典
+ * @param {object} params
+ */
 export function getProgressDictionary(params) {
   return request({
     url: `${api}/getProgressDictionary`,

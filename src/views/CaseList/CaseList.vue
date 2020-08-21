@@ -36,15 +36,7 @@ export default {
           tab: '收藏案件'
         }
       ],
-      ourUnits: [ // 涉案单位列表
-        {
-          code: '1',
-          name: '单位1'
-        }, {
-          code: '2',
-          name: '单位2'
-        }
-      ],
+      ourUnits: [], // 涉案单位列表
       caseTypeList: [], // 案件种类列表
       caseStageList: [] // 案件阶段列表
     }
@@ -65,6 +57,7 @@ export default {
     httpGetDict().then(res => {
       this.caseTypeList = res.data.CASETYPE
       this.caseStageList = res.data.STAGE
+      this.ourUnits = res.data.COMPANY
     })
   }
 }

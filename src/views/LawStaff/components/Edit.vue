@@ -7,6 +7,7 @@
           <a-row :gutter="gutter">
             <a-col v-bind="span">
               <a-form-model-item label="头像" prop="portrait">
+                <template #help> {{ $t('help.upload.avatar') }} </template>
                 <ImgUpload :record="portraitRecord" :value="form.portrait" @change="e=>form.portrait=e" />
               </a-form-model-item>
             </a-col>

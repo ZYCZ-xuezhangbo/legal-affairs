@@ -1,17 +1,22 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalDept" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="legalDept" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
 
-    <Search :company-list="companyList" :dept-list="deptList" @search="handleSearch" />
+    <Search :company-list="dict.COMPANY" :dept-list="dict.DEPT" @search="handleSearch" />
 
     <List api="legalDept" :columns="columns" :actions="['edit', 'detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/legalDept'
+import { page as httpGetList, getDeptDictionary as httpGetDict } from '@/api/legalDept'
 import Search from './components/Search'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import Edit from './components/Edit'
+import { PageList as List } from '@/components'
+
+const ADD = 'add'
+const EDIT = 'edit'
+const DETAIL = 'detail'
 
 export default {
   components: {
@@ -23,40 +28,15 @@ export default {
     return {
       dialog: {
         editId: 0,
-        isEdit: false,
+        act: '',
         showAdd: false
       },
-      formData: require('@/formBuilder/lawDept.json'),
       searchData: {},
       list: [],
-      companyList: [
-        {
-          code: '',
-          name: '不限'
-        },
-        {
-          code: 'com1',
-          name: '公司1'
-        },
-        {
-          code: 'com2',
-          name: '公司2'
-        }
-      ],
-      deptList: [
-        {
-          code: '',
-          name: '不限'
-        },
-        {
-          code: 'dept1',
-          name: '部门1'
-        },
-        {
-          code: 'dept2',
-          name: '部门2'
-        }
-      ],
+      dict: {
+        DEPT: [],
+        COMPANY: []
+      },
       loading: false,
       pagination: {
         pageNum: 1,
@@ -118,6 +98,11 @@ export default {
       this.pagination.pageSize = pageSize
       this.getList()
     },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
+    },
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
@@ -128,19 +113,22 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.isEdit = false
+      this.dialog.act = ADD
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === 'edit') {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
+
+      this.dialog.act = act
+      this.dialog.editId = id
+
+      if ([DETAIL, EDIT].includes(act)) {
         this.dialog.showAdd = true
       }
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
   }
 }

@@ -3,7 +3,7 @@
  -->
 <template>
   <div :style="{ width: record.options.width }" class="upload-img-box-9136076486841527">
-    <a-upload :name="config.uploadImageName || record.options.fileName" :headers="config.uploadImageHeaders || record.options.headers" :data="config.uploadImageData || optionsData" :action="config.uploadImage || record.options.action" :multiple="record.options.multiple" :listType="record.options.listType" :disabled="record.options.disabled || parentDisabled" :fileList="fileList" accept="image/gif, image/jpeg, image/png" @change="handleChange" @preview="handlePreview" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload :name="config.uploadImageName || record.options.fileName" :headers="config.uploadImageHeaders || record.options.headers" :data="config.uploadImageData || optionsData" :action="config.uploadImage || record.options.action" :multiple="record.options.multiple" :listType="record.options.listType" :disabled="record.options.disabled || parentDisabled" :fileList="fileList" accept="image/jpeg, image/png" @change="handleChange" @preview="handlePreview" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="record.options.listType !== 'picture-card' && fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
         <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
@@ -128,6 +128,20 @@ export default {
       if (files.length + this.fileList.length > this.record.options.limit) {
         this.$message.warning(`最大上传数量为${this.record.options.limit}`)
         files.splice(this.record.options.limit - this.fileList.length)
+      }
+
+      const isJpgOrPng = e.type === 'image/jpeg' || e.type === 'image/png'
+      if (!isJpgOrPng) this.$message.error('只可上传jpg或png格式的图片')
+
+      const maxSize = 2 // 单位：M
+      const isSize = e.size / 1024 / 1024 < maxSize
+      if (!isSize) this.$message.error(`图片大小不可大于${maxSize}MB!`)
+
+      const result = isJpgOrPng && isSize
+      if (result) {
+        return Promise.resolve()
+      } else {
+        return Promise.reject(new Error())
       }
     },
     handleChange(info) {

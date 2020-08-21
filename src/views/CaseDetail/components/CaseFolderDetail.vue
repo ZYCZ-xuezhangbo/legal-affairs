@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 新增回款 - 弹框 -->
-    <ModalAddHuikuan :show="dialog.showAddHuikuan" :case-folder-id="caseFolderId" :list="data.caseReturnedMoneyList" :sum-payment="sumPayment" @close="dialog.showAddHuikuan=false" @reload="handleReload" />
+    <ModalAddHuikuan :show="dialog.showAddHuikuan" :case-folder-id="caseFolderId" :list="data.caseReturnedMoneyList" :payment-received="paymentReceived" @close="dialog.showAddHuikuan=false" @reload="handleReload" />
     <!-- 终结 - 弹框 -->
     <ModalCaseFinality :show="dialog.showCaseFinality" :is-edit="caseFinalityIsEdit" :case-folder-id="caseFolderId" @close="dialog.showCaseFinality=false" @reload="handleReload" />
 

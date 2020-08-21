@@ -1,22 +1,24 @@
 <template>
   <page-header-wrapper :back="()=>$router.back()">
     <!-- 新增进展 - 弹框 -->
-    <ModalAddJinzhan :show="dialog.showAddJinzhan" :case-id="caseId" :case-pro-status="caseProStatus" @close="dialog.showAddJinzhan=false" @reload="handleReloadCaseInfo" />
+    <ModalAddJinzhan :show="dialog.showAddJinzhan" :case-id="caseId" :case-pro-status="caseProStatus" @close="dialog.showAddJinzhan=false" @reload="getCaseInfo" />
 
-    <CaseFolderDetail :loading="caseFolderLoading" :case-folder-id="caseFolderId" :case-id="chooseCaseId" :data="caseFolderInfo" @changeStep="handleChangeStep" @changeFav="handleChangeFav" @reload="getCaseFolderInfo" />
+    <CaseFolderDetail :loading="caseFolderLoading" :case-folder-id="caseFolderId" :case-id="caseId" :data="caseFolderInfo" @changeStep="handleChangeStep" @changeFav="handleChangeFav" @reload="getCaseFolderInfo" />
 
-    <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="e=>activeTab=e" class="margin-top-lg">
+    <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="handleTabChange" class="margin-top-lg">
       <template #tabBarExtraContent>
         <div v-show="activeTab=='1'">
           <a-button type="primary" @click="dialog.showAddJinzhan=true">新增进展</a-button>
-          <a-button type="primary" @click="isEdit=true">修改</a-button>
+          <a-button :type="isEdit?'':'primary'" @click="handleEditBtnClick">
+            {{ isEdit?'取消修改':'修改' }}
+          </a-button>
         </div>
       </template>
       <div v-show="activeTab=='1'">
-        <TabCaseDetail :loading="caseInfoLoading" :is-edit="isEdit" :case-info="caseInfo" :case-pro-status="caseProStatus" />
+        <TabCaseDetail :loading="caseInfoLoading" :act="formAct" :case-info="caseInfo" :case-pro-status="caseProStatus" @submit="handleCaseUpdate" />
       </div>
       <div v-show="activeTab=='2'">
-        <TabCaseModifyRecord />
+        <TabCaseModifyRecord :list="modifyRecord" :loading="modifyLoading" :pagination="modifyRecordPagination" @reload="handleModifyRecordReload" />
       </div>
     </a-card>
   </page-header-wrapper>
@@ -24,13 +26,20 @@
 
 <script>
 import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
-import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo } from '@/api/case'
+import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo, getCaseLogList as httpGetUpdateHistory } from '@/api/case'
 import CaseFolderDetail from './components/CaseFolderDetail'
 import TabCaseDetail from './components/TabCaseDetail'
 import TabCaseModifyRecord from './components/TabCaseModifyRecord'
 import ModalAddJinzhan from './components/ModalAddJinzhan'
 
 // const caseStageDict = ['FIRST_INSTANCE', 'SECOND_INSTANCE', 'EXECUTE', 'REVIEW_INSTANCE', 'ARBITRATION', 'NOT_LAWSUIT', 'FINALITY']
+const EDIT = 'edit'
+const DETAIL = 'detail'
+const paginatinoInit = {
+  pageNum: 1,
+  pageSize: 10,
+  pageTotal: 0
+}
 
 export default {
   components: {
@@ -43,8 +52,7 @@ export default {
     return {
       caseId: '', // 案件id
       caseFolderId: '', // 案件夹id
-      chooseCaseId: '',
-      isEdit: false,
+      formAct: DETAIL, // 表单状态：detail、edit、add
       caseFolderLoading: false, // 案件夹详情loading
       caseInfoLoading: false, // 案件详情loading
       dialog: {
@@ -59,6 +67,9 @@ export default {
       },
       caseInfo: {}, // 案件详情
       caseProStatus: [], // 案件进展列表
+      modifyLoading: false, // 案件修改记录loading
+      modifyRecord: [], // 案件修改记录
+      modifyRecordPagination: paginatinoInit,
       activeTab: '1',
       tabs: [
         {
@@ -72,11 +83,19 @@ export default {
       ]
     }
   },
+  computed: {
+    isEdit() {
+      return this.formAct === EDIT
+    }
+  },
   methods: {
     handleChangeStep(caseId) {
-      this.isEdit = false
-      this.chooseCaseId = caseId
-      this.getCaseInfo(caseId)
+      this.modifyRecord = []
+      this.modifyRecordPagination = paginatinoInit
+      this.activeTab = '1'
+      this.formAct = DETAIL
+      this.caseId = caseId
+      this.getCaseInfo()
     },
     getCaseFolderInfo() {
       this.caseFolderLoading = true
@@ -89,19 +108,30 @@ export default {
     /**
      * 获取案件详情
      */
-    getCaseInfo(caseId) {
+    getCaseInfo() {
       this.caseInfoLoading = true
-      httpGetCaseInfo(caseId).then(res => {
+      httpGetCaseInfo(this.caseId).then(res => {
         this.caseInfo = res.data
-        this.getProStatus(res.data.caseStage, res.data.locusStand)
+        this.getProStatus(res.data.locusStand, res.data.caseStage)
       }).finally(() => {
         this.caseInfoLoading = false
+      })
+
+      // this.getUpdateHistory()
+    },
+    getUpdateHistory() {
+      this.modifyLoading = true
+      httpGetUpdateHistory({ caseId: this.caseId, ...this.modifyRecordPagination }).then(res => {
+        this.modifyRecord = res.data.list
+        this.modifyRecordPagination.pageTotal = res.data.total
+      }).finally(() => {
+        this.modifyLoading = false
       })
     },
     /**
      * 获取案件进展字典
-     * @param {string} lawsuit 案件阶段
-     * @param {string} stage 诉讼地位
+     * @param {string} lawsuit 诉讼地位
+     * @param {string} stage 案件阶段
      */
     getProStatus(lawsuit, stage) {
       httpGetProStatusDict({ lawsuit, stage }).then(res => {
@@ -113,17 +143,38 @@ export default {
     handleChangeFav(state) {
       this.caseFolderInfo.collect = state
     },
-    handleReloadCaseInfo() {
-      this.getCaseInfo(this.chooseCaseId)
+    handleCaseUpdate() {
+      this.getCaseInfo()
+      this.modifyRecord = []
+      this.formAct = DETAIL
+      document.documentElement.scrollTop = 0
+    },
+    handleEditBtnClick() {
+      if (this.formAct === EDIT) {
+        this.formAct = DETAIL
+      } else {
+        this.formAct = EDIT
+      }
+    },
+    handleModifyRecordReload({ pageNum, pageSize }) {
+      this.modifyRecordPagination.pageNum = pageNum
+      this.modifyRecordPagination.pageSize = pageSize
+      this.getUpdateHistory()
+    },
+    handleTabChange(e) {
+      this.activeTab = e
+      if (this.modifyRecord.length <= 0) {
+        this.getUpdateHistory()
+      }
     }
   },
   created() {
-    this.caseId = this.chooseCaseId = this.$route.params.id
+    this.caseId = this.$route.params.id
     this.caseFolderId = this.$route.params.fId
   },
   mounted() {
     this.getCaseFolderInfo()
-    this.getCaseInfo(this.caseId)
+    this.getCaseInfo()
   }
 }
 </script>
