@@ -7,7 +7,10 @@
             <a-row :gutter="gutter">
               <a-col v-bind="span">
                 <a-form-model-item label="涉案单位" prop="ourUnits">
-                  <a-select v-model="searchForm.ourUnits" show-search allow-clear option-filter-prop="children" :filter-option="handleSearchOurUnits" placeholder="涉案单位">
+                  <a-select v-model="searchForm.ourUnits" show-search option-filter-prop="children" :filter-option="handleSearchOurUnits" placeholder="涉案单位">
+                    <a-select-option value="">
+                      {{ $t('select.search.all') }}
+                    </a-select-option>
                     <a-select-option v-for="(item,index) in dicData.ourUnits" :key="index" :value="item.code">
                       {{ item.name }}
                     </a-select-option>
@@ -27,7 +30,10 @@
                 </a-col>
                 <a-col v-bind="span">
                   <a-form-model-item label="案件种类" prop="caseType">
-                    <a-select v-model="searchForm.caseType" allow-clear placeholder="案件种类">
+                    <a-select v-model="searchForm.caseType" placeholder="案件种类">
+                      <a-select-option value="">
+                        {{ $t('select.search.all') }}
+                      </a-select-option>
                       <a-select-option v-for="(item,index) in dicData.caseTypeList" :key="index" :value="item.code">
                         {{ item.name }}
                       </a-select-option>
@@ -36,7 +42,10 @@
                 </a-col>
                 <a-col v-bind="span">
                   <a-form-model-item label="案件阶段" prop="caseStage">
-                    <a-select v-model="searchForm.caseStage" allow-clear placeholder="案件阶段">
+                    <a-select v-model="searchForm.caseStage" placeholder="案件阶段">
+                      <a-select-option value="">
+                        {{ $t('select.search.all') }}
+                      </a-select-option>
                       <a-select-option v-for="(item,index) in dicData.caseStageList" :key="index" :value="item.code">
                         {{ item.name }}
                       </a-select-option>
@@ -57,7 +66,7 @@
                   <a-form-model-item label="重大案件" prop="importantCase">
                     <a-select v-model="searchForm.importantCase">
                       <a-select-option value="">
-                        不限
+                        {{ $t('select.search.all') }}
                       </a-select-option>
                       <a-select-option value="1">
                         是
@@ -141,14 +150,14 @@ export default {
         caseAmountEnd: '', // 涉案金额（万元）结束
         caseAmountStart: '', // 涉案金额（万元）初始
         caseNo: '', // 案件号
-        caseStage: undefined, // 案件所处阶段
-        caseType: undefined, // 案件种类
+        caseStage: '', // 案件所处阶段
+        caseType: '', // 案件种类
         caseUser: '', // 对方当事人
         competentCourt: '', // 管辖法院
         startTime: '', // 开始时间
         endTime: '', // 结束时间
         importantCase: '', // 重大案件（0：否，1：是）
-        ourUnits: undefined, // 我方涉案单位
+        ourUnits: '', // 我方涉案单位
         progressStatus: ''// 进展状态
       }
     }

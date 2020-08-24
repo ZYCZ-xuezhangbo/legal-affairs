@@ -90,22 +90,9 @@ export default {
       },
       // 普法宣传平台
       indexPublicityDTO: {
-        // 法律制度
-        legalSystemList: [
-          {
-            id: '',
-            time: '',
-            title: ''
-          }
-        ],
-        // 公告列表
-        noticeList: [
-          {
-            id: '',
-            time: '',
-            title: ''
-          }
-        ]
+        legalSystemList: [], // 法律制度
+        noticeList: [], // 公告列表
+        policyList: []
       }
     }
   },

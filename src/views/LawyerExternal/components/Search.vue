@@ -5,8 +5,11 @@
         <a-form-model ref="searchForm" layout="inline" :model="searchForm">
           <a-row :gutter="searchTableGrid.gutter">
             <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="律所名称" prop="lawFirmName">
-                <a-select v-model="searchForm.lawFirmName">
+              <a-form-model-item label="律所名称" prop="outsideLawFirmName">
+                <a-select v-model="searchForm.outsideLawFirmName">
+                  <a-select-option value="">
+                    {{ $t('select.search.all') }}
+                  </a-select-option>
                   <a-select-option :value="item.code" v-for="(item,index) in lawFirmList" :key="index">
                     {{ item.name }}
                   </a-select-option>
@@ -44,8 +47,8 @@ export default {
   data() {
     return {
       searchForm: {
-        lawFirmName: '',
-        lawName: ''
+        outsideLawFirmName: '', // 律所id
+        lawName: '' // 律师名称
       }
     }
   },

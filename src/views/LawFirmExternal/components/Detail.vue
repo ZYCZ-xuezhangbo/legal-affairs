@@ -1,7 +1,9 @@
 <template>
   <div>
     <a-modal title="查看" :visible="show" @cancel="handleCancel" :width="1000">
-      <template #footer> </template>
+      <template #footer>
+        <a-button @click="handleCancel">取消</a-button>
+      </template>
       <a-skeleton v-if="pageLoading" active />
       <template v-else>
         <a-descriptions bordered layout="vertical">

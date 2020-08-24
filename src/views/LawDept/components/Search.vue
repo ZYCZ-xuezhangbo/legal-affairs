@@ -7,6 +7,9 @@
             <a-col v-bind="searchTableGrid.span">
               <a-form-model-item label="公司" prop="company">
                 <a-select v-model="searchForm.company">
+                  <a-select-option value="">
+                    {{ $t('select.search.all') }}
+                  </a-select-option>
                   <a-select-option v-for="(item,index) in companyList" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>
@@ -16,6 +19,9 @@
             <a-col v-bind="searchTableGrid.span">
               <a-form-model-item label="部门" prop="deptName">
                 <a-select v-model="searchForm.deptName">
+                  <a-select-option value="">
+                    {{ $t('select.search.all') }}
+                  </a-select-option>
                   <a-select-option v-for="(item,index) in deptList" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>

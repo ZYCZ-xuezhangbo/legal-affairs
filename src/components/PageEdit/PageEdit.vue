@@ -77,13 +77,13 @@ export default {
         this.confirmLoading = true
         if (this.isEdit) { // 修改
           this.API.update({ id: this.id, ...formData }).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
         } else { // 新增
           this.API.create(formData).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
@@ -102,8 +102,7 @@ export default {
       this.$emit('close')
       this.pageLoading = false
     },
-    requestSuccess(msg) {
-      // this.$message.success(msg)
+    requestSuccess() {
       this.$emit('success')
       this.$emit('close')
       this.$refs.form.reset()

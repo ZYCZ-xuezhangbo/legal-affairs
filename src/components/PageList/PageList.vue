@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { Pagination } from '@/components'
 
 export default {
@@ -94,19 +95,19 @@ export default {
         const code = this.actions[i]
         const item = { name: '', code }
         switch (code) {
-          case 'edit':
-            item.name = '修改'
-            break
-          case 'detail':
+          case ACTIONS.Detail:
             item.name = '查看'
             break
-          case 'caseProgress':
-            item.name = '案件进展'
+          case ACTIONS.Edit:
+            item.name = '修改'
             break
-          case 'delete':
+          case ACTIONS.Rate:
+            item.name = '评价'
+            break
+          case ACTIONS.Delete:
             item.name = '删除'
             break
-          case 'download':
+          case ACTIONS.Download:
             item.name = '下载'
             break
           default:
@@ -133,7 +134,7 @@ export default {
     },
     handleClick(act, item) {
       const id = item.id
-      if (act === 'delete') {
+      if (act === ACTIONS.Delete) {
         this.handleDelete(id)
       } else {
         this.$emit('actClick', { act, item })

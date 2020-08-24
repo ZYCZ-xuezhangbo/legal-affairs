@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
 import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo, getCaseLogList as httpGetUpdateHistory } from '@/api/case'
 import CaseFolderDetail from './components/CaseFolderDetail'
@@ -33,8 +34,7 @@ import TabCaseModifyRecord from './components/TabCaseModifyRecord'
 import ModalAddJinzhan from './components/ModalAddJinzhan'
 
 // const caseStageDict = ['FIRST_INSTANCE', 'SECOND_INSTANCE', 'EXECUTE', 'REVIEW_INSTANCE', 'ARBITRATION', 'NOT_LAWSUIT', 'FINALITY']
-const EDIT = 'edit'
-const DETAIL = 'detail'
+
 const paginatinoInit = {
   pageNum: 1,
   pageSize: 10,
@@ -52,7 +52,7 @@ export default {
     return {
       caseId: '', // 案件id
       caseFolderId: '', // 案件夹id
-      formAct: DETAIL, // 表单状态：detail、edit、add
+      formAct: ACTIONS.Detail, // 表单状态：detail、edit、add
       caseFolderLoading: false, // 案件夹详情loading
       caseInfoLoading: false, // 案件详情loading
       dialog: {
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     isEdit() {
-      return this.formAct === EDIT
+      return this.formAct === ACTIONS.Edit
     }
   },
   methods: {
@@ -93,7 +93,7 @@ export default {
       this.modifyRecord = []
       this.modifyRecordPagination = paginatinoInit
       this.activeTab = '1'
-      this.formAct = DETAIL
+      this.formAct = ACTIONS.Detail
       this.caseId = caseId
       this.getCaseInfo()
     },
@@ -146,14 +146,14 @@ export default {
     handleCaseUpdate() {
       this.getCaseInfo()
       this.modifyRecord = []
-      this.formAct = DETAIL
+      this.formAct = ACTIONS.Detail
       document.documentElement.scrollTop = 0
     },
     handleEditBtnClick() {
-      if (this.formAct === EDIT) {
-        this.formAct = DETAIL
+      if (this.formAct === ACTIONS.Edit) {
+        this.formAct = ACTIONS.Detail
       } else {
-        this.formAct = EDIT
+        this.formAct = ACTIONS.Edit
       }
     },
     handleModifyRecordReload({ pageNum, pageSize }) {
@@ -169,8 +169,9 @@ export default {
     }
   },
   created() {
-    this.caseId = this.$route.params.id
-    this.caseFolderId = this.$route.params.fId
+    this.caseId = this.$route.query.id
+    this.caseFolderId = this.$route.query.fId
+    this.formAct = this.$route.query.isEdit === '1' ? ACTIONS.Edit : ACTIONS.Detail
   },
   mounted() {
     this.getCaseFolderInfo()

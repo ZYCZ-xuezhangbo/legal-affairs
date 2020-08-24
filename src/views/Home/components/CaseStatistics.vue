@@ -18,7 +18,7 @@
           <ChartPie title="各阶段案件数量占比" is-ring :data="dataPie" />
         </a-col>
         <a-col :sm="24" :md="12">
-          <ChartBar title="各案件种类数量" is-direction :data="dataBar" />
+          <ChartBar title="各案件种类数量" :is-direction="false" :data="dataBar" />
         </a-col>
       </a-row>
       <a-table :columns="columns" :data-source="data.majorCaseDTOList" bordered :pagination="false" :row-key="e=>e.id">

@@ -13,6 +13,15 @@ export const TOGGLE_WEAK = 'weak'
 export const TOGGLE_MULTI_TAB = 'multi_tab'
 export const APP_LANGUAGE = 'app_language'
 
+export const ACTIONS = {
+  Edit: 'edit',
+  Detail: 'detail',
+  Add: 'add',
+  Delete: 'delete',
+  Download: 'download',
+  Rate: 'rate'
+}
+
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',
   Fixed: 'Fixed'

@@ -166,7 +166,12 @@ export default {
       }
     },
     handleGoCaseEntry() {
-      this.$router.push('/case/caseEntry')
+      this.$router.push({
+        path: '/case/caseEntry',
+        query: {
+          caseId: this.caseId
+        }
+      })
     },
     handleShowCaseFinality(isEdit = true) {
       this.caseFinalityIsEdit = isEdit

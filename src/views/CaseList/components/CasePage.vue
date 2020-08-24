@@ -1,29 +1,26 @@
 <template>
   <div>
-    <ModalAddJinzhan :show="dialog.showAddJinzhan" :case-id="dialog.caseId" :case-pro-status="caseProStatus" @close="dialog.showAddJinzhan=false" @reload="handleReload" />
-
     <Search :dic-data="searchDictData" @search="handleSearch" />
-    <List api="user" :title="listTitle" :columns="columns" :actions="['edit','caseProgress']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
+    <List api="user" :title="listTitle" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
   </div>
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { page as httpGetCaseList } from '@/api/case'
-import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
+// import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
 import { PageList as List } from '@/components'
 import Search from './Search'
-import ModalAddJinzhan from '../../CaseDetail/components/ModalAddJinzhan'
 
 export default {
   components: {
     Search,
-    List,
-    ModalAddJinzhan
+    List
   },
   props: {
     type: {
       type: String,
-      default: ''
+      default: '0'
     },
     listTitle: {
       type: String,
@@ -42,6 +39,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
         caseId: '',
         showAddJinzhan: false
@@ -135,15 +133,31 @@ export default {
       this.$router.push('/case/caseEntry')
     },
     handleActClick({ act, item }) {
-      if (act === 'edit') {
-        this.$router.push(`/case/caseDetail/${item.id}/${item.caseFolderId}`)
-      } else if (act === 'caseProgress') {
-        this.caseProStatus = []
-        httpGetProStatusDict({ lawsuit: item.locusStandCode, stage: item.caseStageCode }).then(res => {
-          this.caseProStatus = res.data
+      if (act === ACTIONS.Edit) {
+        this.$router.push({
+          path: '/case/caseDetail',
+          query: {
+            id: item.id,
+            fId: item.caseFolderId,
+            isEdit: 1
+          }
         })
-        this.dialog.caseId = item.id
-        this.dialog.showAddJinzhan = true
+      } else if (act === 'caseProgress') {
+        // this.caseProStatus = []
+        // httpGetProStatusDict({ lawsuit: item.locusStandCode, stage: item.caseStageCode }).then(res => {
+        //   this.caseProStatus = res.data
+        // })
+        // this.dialog.caseId = item.id
+        // this.dialog.showAddJinzhan = true
+      } else if (act === ACTIONS.Detail) {
+        this.$router.push({
+          path: '/case/caseDetail',
+          query: {
+            id: item.id,
+            fId: item.caseFolderId,
+            isEdit: 0
+          }
+        })
       }
     }
   },

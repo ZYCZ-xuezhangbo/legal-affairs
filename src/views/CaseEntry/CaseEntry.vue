@@ -56,10 +56,6 @@ export default {
 
       this.submitLoading = true
       httpCreate({ caseFolderId, ...form }).then(res => {
-        this.$notification.success({
-          message: '案件录入成功',
-          description: ''
-        })
         this.$router.push('/case/caseList')
       }).finally(() => {
         this.submitLoading = false
@@ -72,6 +68,9 @@ export default {
       this.dialog.caseRelationShow = false
       this.relationCase = item
     }
+  },
+  created () {
+    console.log(this.$route.query.caseId)
   },
   mounted() {
     httpGetDict().then(res => {

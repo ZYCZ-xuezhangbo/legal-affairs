@@ -13,7 +13,7 @@
               <a-form-model-item label="法学类专业" prop="legalMajor">
                 <a-select v-model="searchForm.legalMajor">
                   <a-select-option value="">
-                    不限
+                    {{ $t('select.search.all') }}
                   </a-select-option>
                   <a-select-option value="1">
                     是
@@ -28,7 +28,7 @@
               <a-form-model-item label="法律职业资格" prop="legalProfession">
                 <a-select v-model="searchForm.legalProfession">
                   <a-select-option value="">
-                    不限
+                    {{ $t('select.search.all') }}
                   </a-select-option>
                   <a-select-option value="1">
                     是
@@ -43,7 +43,7 @@
               <a-form-model-item label="企业法律顾问职业资格" prop="enterpriseProfession">
                 <a-select v-model="searchForm.enterpriseProfession">
                   <a-select-option value="">
-                    不限
+                    {{ $t('select.search.all') }}
                   </a-select-option>
                   <a-select-option value="1">
                     是

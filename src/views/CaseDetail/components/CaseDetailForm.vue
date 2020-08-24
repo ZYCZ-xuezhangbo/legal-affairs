@@ -85,7 +85,7 @@
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
-          <div v-if="isEdit">
+          <div v-if="isEdit || isAdd">
             <a @click="handleAddCaseUsers">
               <a-icon type="plus-circle" class="margin-right-sm" />
               添加对方当事人
@@ -102,7 +102,7 @@
                 trigger: 'blur'
               }]">
                 <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人姓名">
-                  <template v-if="isEdit" #addonAfter>
+                  <template v-if="isEdit || isAdd" #addonAfter>
                     <a-popconfirm title="确定删除该当事人吗？" ok-text="删除" ok-type="danger" cancel-text="取消" @confirm="handleDelCaseUsers(item)">
                       <a class="text-red">删除</a>
                     </a-popconfirm>
@@ -435,12 +435,10 @@ export default {
         caseStage: [validateRequired],
         importantCase: [validateRequired],
         caseAmount: [validateRequired],
-        lawOfficeName: [validateRequired],
         lawyerName: [
-          validateRequired,
           {
             validator: (rule, value, callback) => {
-              if (this.isKuNei) { // 库内
+              if (!value || value === '' || this.isKuNei) {
                 callback()
               } else {
                 if (test.chinese(value)) callback()
@@ -571,7 +569,6 @@ export default {
     */
     getDict() {
       httpGetDict().then(res => {
-        console.log(res)
         this.dict.caseType = res.data.CASETYPE
         this.dict.caseStage = res.data.STAGE
         this.dict.lawsuit = res.data.LAWSUIT

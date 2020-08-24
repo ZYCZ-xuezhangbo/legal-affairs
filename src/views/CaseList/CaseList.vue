@@ -1,9 +1,9 @@
 <template>
   <page-header-wrapper :tab-list="tabList" :tab-active-key="activeTab" @tabChange="e => activeTab = e">
-    <CasePage v-show="activeTab === '0'" type="0" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '1'" type="1" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '2'" type="2" :list-title="listTitle" :search-dict-data="searchDictData" />
-    <CasePage v-show="activeTab === '3'" type="3" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === ZAISU" :type="ZAISU" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === YEAR" :type="YEAR" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === ALL" :type="ALL" :list-title="listTitle" :search-dict-data="searchDictData" />
+    <CasePage v-show="activeTab === FAV" :type="FAV" :list-title="listTitle" :search-dict-data="searchDictData" />
   </page-header-wrapper>
 </template>
 
@@ -11,28 +11,37 @@
 import { getCaseDictionaries as httpGetDict } from '@/api/case'
 import CasePage from './components/CasePage'
 
+const ZAISU = '0'
+const YEAR = '1'
+const ALL = '2'
+const FAV = '3'
+
 export default {
   components: {
     CasePage
   },
   data() {
     return {
-      activeTab: '0',
+      ZAISU,
+      YEAR,
+      ALL,
+      FAV,
+      activeTab: ZAISU,
       tabList: [
         {
-          key: '0',
+          key: ZAISU,
           tab: '在诉案件'
         },
         {
-          key: '1',
+          key: YEAR,
           tab: '年度结案'
         },
         {
-          key: '2',
+          key: ALL,
           tab: '全部案件'
         },
         {
-          key: '3',
+          key: FAV,
           tab: '收藏案件'
         }
       ],

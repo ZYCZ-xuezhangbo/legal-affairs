@@ -66,7 +66,7 @@ export default {
           { required: true, message: '必填项', trigger: 'blur' }
         ],
         returnedTime: [
-          { required: true, message: '必填项', trigger: 'blur' }
+          { required: true, message: '必填项', trigger: ['blur', 'change'] }
         ]
       }
     }

@@ -19,11 +19,11 @@
                 <a-input v-model="searchForm.lawName" placeholder="律师名称" />
               </a-form-model-item>
             </a-col>
-            <!-- <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="评价状态" prop="lawFirmName">
-                <a-select v-model="searchForm.lawFirmName">
+            <a-col v-bind="searchTableGrid.span">
+              <a-form-model-item label="评价状态" prop="scoreStatus">
+                <a-select v-model="searchForm.scoreStatus">
                   <a-select-option value="">
-                    不限
+                    {{ $t('select.search.all') }}
                   </a-select-option>
                   <a-select-option value="1">
                     已评价
@@ -33,10 +33,23 @@
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
-            </a-col> -->
+            </a-col>
             <a-col v-bind="searchTableGrid.span">
               <a-form-model-item label="律师类型" prop="serviceType">
-                <a-input v-model="searchForm.serviceType" placeholder="律师名称" />
+                <a-select v-model="searchForm.serviceType">
+                  <a-select-option value="">
+                    {{ $t('select.search.all') }}
+                  </a-select-option>
+                  <a-select-option value="0">
+                    常年
+                  </a-select-option>
+                  <a-select-option value="1">
+                    代理
+                  </a-select-option>
+                  <a-select-option value="2">
+                    专项
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
@@ -80,7 +93,8 @@ export default {
         lawFirmName: '',
         lawName: '',
         serviceType: '',
-        startTime: ''
+        startTime: '',
+        scoreStatus: ''
       }
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="value>0 && show">
+  <div v-if="total>0 && show">
     <v-chart :forceFit="true" height="200" :data="data" padding="0">
       <!-- <v-tooltip /> -->
       <v-facet type="rect" :showTitle="false" :eachView="eachView" />

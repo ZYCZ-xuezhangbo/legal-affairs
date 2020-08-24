@@ -6,7 +6,10 @@
         <a-statistic title="占比" :value="pro"> </a-statistic>
       </a-col>
       <a-col :span="18">
-        <ChartRingSimple :total="total" :value="value" />
+        <div v-if="total>0">
+          <ChartRingSimple :total="total" :value="value" />
+        </div>
+        <div v-else class="text-center text-gray"> 暂无数据 </div>
       </a-col>
     </a-row>
   </div>

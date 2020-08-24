@@ -1,16 +1,16 @@
 <template>
   <page-header-wrapper>
-    <Edit api="lawFirmWork" :act="dialog.act" :show="dialog.showAdd" :id="dialog.id" :law-firm-list="lawFirmList" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="lawFirmWork" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.id" :law-firm-list="lawFirmList" @close="dialog.showAdd=false" @success="getList" />
 
     <Search @search="handleSearch" />
 
-    <List api="lawFirmWork" :columns="columns" :actions="['edit', 'detail']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
-
+    <List api="lawFirmWork" :columns="columns" :actions="[ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Rate]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/lawFirmWork'
+import { ACTIONS } from '@/store/mutation-types'
+import { page as httpGetList, getDict as httpGetDict } from '@/api/lawFirmWork'
 import { getLawFirmName as httpGetLawFirmList } from '@/api/outsideLawManager'
 import Search from './components/Search'
 import Edit from './components/Edit'
@@ -24,6 +24,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
         id: 0,
         act: '',
@@ -70,21 +71,17 @@ export default {
           key: 'serviceTimeEnd'
         },
         {
-          title: '选聘方式',
-          dataIndex: 'xpfs',
-          key: 'xpfs'
-        },
-        {
           title: '服务费',
           dataIndex: 'serviceCharge',
           key: 'serviceCharge'
         },
         {
           title: '评分',
-          dataIndex: 'score',
-          key: 'score'
+          dataIndex: 'scoreCount',
+          key: 'scoreCount'
         }
-      ]
+      ],
+      dict: {}
     }
   },
   methods: {
@@ -108,7 +105,7 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.act = 'add'
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
@@ -122,9 +119,15 @@ export default {
       httpGetLawFirmList().then(res => {
         this.lawFirmList = res.data
       })
+    },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
     this.getLawFirmList()
   }

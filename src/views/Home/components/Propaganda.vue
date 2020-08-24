@@ -8,14 +8,21 @@
           </a-radio-button>
         </a-radio-group>
       </template>
-      <div v-show="radioVal===1">
+      <div v-show="radioVal===LAW">
         <a-table :columns="columns" :data-source="data.legalSystemList" :bordered="false" :pagination="false" :row-key="e=>e.id">
           <template #title>
             {{ tableTitle }}
           </template>
         </a-table>
       </div>
-      <div v-show="radioVal===2">
+      <div v-show="radioVal===POLICY">
+        <a-table :columns="columns" :data-source="data.policyList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+          <template #title>
+            {{ tableTitle }}
+          </template>
+        </a-table>
+      </div>
+      <div v-show="radioVal===NOTICE">
         <a-table :columns="columns" :data-source="data.noticeList" :bordered="false" :pagination="false" :row-key="e=>e.id">
           <template #title>
             {{ tableTitle }}
@@ -27,6 +34,10 @@
 </template>
 
 <script>
+const LAW = '1'
+const POLICY = '2'
+const NOTICE = '3'
+
 export default {
   props: {
     data: {
@@ -38,14 +49,21 @@ export default {
   },
   data() {
     return {
-      radioVal: 1,
+      LAW,
+      POLICY,
+      NOTICE,
+      radioVal: LAW,
       radios: [
         {
-          key: 1,
+          key: LAW,
           name: '法律制度'
         },
         {
-          key: 2,
+          key: POLICY,
+          name: '国资政策'
+        },
+        {
+          key: NOTICE,
           name: '公告'
         }
       ],
@@ -56,7 +74,7 @@ export default {
         },
         {
           title: '日期',
-          dataIndex: 'time'
+          dataIndex: 'createTime'
         }
       ]
     }

@@ -189,13 +189,13 @@ export default {
         this.confirmLoading = true
         if (this.act === EDIT) { // 修改
           this.API.update({ id: this.id, ...this.form }).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
         } else if (this.act === ADD) { // 新增
           this.API.create(this.form).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
@@ -214,7 +214,7 @@ export default {
       this.$emit('close')
       this.pageLoading = false
     },
-    requestSuccess(msg) {
+    requestSuccess() {
       this.$emit('success')
       this.$emit('close')
       this.$refs.form.resetFields()

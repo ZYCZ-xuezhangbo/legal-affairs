@@ -3,16 +3,16 @@
     <a-card :bordered="false" title="法律审核">
       <a-row :gutter="50">
         <a-col :xs="24" :sm="12" :md="8" :lg="6" :class="isMobile?'padding-bottom-lg':''">
-          <Statistics :values="statistics.systemReview" title="规章制度审核" jump-url="https://www.baidu.com" />
+          <Statistics :values="statistics.systemReview" title="规章制度审核" jump-url="" />
         </a-col>
         <a-col :xs="24" :sm="12" :md="8" :lg="6" :class="isMobile?'padding-bottom-lg':''">
-          <Statistics :values="statistics.contractReview" title="合同审核" />
+          <Statistics :values="statistics.contractReview" title="合同审核" jump-url="" />
         </a-col>
         <a-col :xs="24" :sm="12" :md="8" :lg="6" :class="isMobile?'padding-bottom-lg':''">
-          <Statistics :values="statistics.decisionReview" title="重大经营决策审核" />
+          <Statistics :values="statistics.decisionReview" title="重大经营决策审核" jump-url="" />
         </a-col>
         <a-col :xs="24" :sm="12" :md="8" :lg="6" :class="isMobile?'padding-bottom-lg':''">
-          <Statistics :values="statistics.countersignatureReview" title="一般事项会签审核" />
+          <Statistics :values="statistics.countersignatureReview" title="一般事项会签审核" jump-url="" />
         </a-col>
       </a-row>
     </a-card>

@@ -40,8 +40,8 @@ export default {
       columns: [
         {
           title: '律所名称',
-          dataIndex: 'lawFirmName',
-          key: 'lawFirmName'
+          dataIndex: 'outsideLawFirmName',
+          key: 'outsideLawFirmName'
         },
         {
           title: '服务律师',

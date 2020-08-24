@@ -1,9 +1,13 @@
 <template>
   <div>
     <a-modal v-bind="editModal" :title="modalTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
+      <template #footer>
+        <a-button @click="handleCancel">取消</a-button>
+        <a-button v-if="act!==ACTIONS.Detail" type="primary" :loading="confirmLoading" @click="handleOk">确定</a-button>
+      </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
-        <a-form-model ref="form" :model="form">
+        <a-form-model ref="form" :rules="rules" :model="form">
           <a-row :gutter="gutter">
             <a-col v-bind="span">
               <a-form-model-item label="律师名称" prop="lawName">
@@ -48,8 +52,8 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="所属律所" prop="lawFirmName">
-                <a-select v-model="form.lawFirmName" :disabled="disabled">
+              <a-form-model-item label="所属律所" prop="outsideLawFirmName">
+                <a-select v-model="form.outsideLawFirmName" :disabled="disabled">
                   <a-select-option :value="item.code" v-for="(item,index) in lawFirmList" :key="index">
                     {{ item.name }}
                   </a-select-option>
@@ -84,6 +88,8 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
+import test from '@/utils/test'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
@@ -183,6 +189,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       gutter: 48,
       span: {
         xs: 24,
@@ -199,13 +206,28 @@ export default {
         lawName: '',
         legalProfession: '',
         major: '',
-        lawFirmName: '',
+        outsideLawFirmName: '',
         phone: '',
         photographs: [],
         professionalLife: 0,
         resourceUrl: [],
         serviceContent: '',
         videos: []
+      },
+      rules: {
+        phone: [
+          {
+            validator: (rule, value, callback) => {
+              if (!value || value === '') {
+                callback()
+              } else {
+                if (test.mobile(value)) callback()
+                else callback(new Error(this.$t('message.form.validate.mobile.fail')))
+              }
+            },
+            trigger: 'blur'
+          }
+        ]
       },
       pageLoading: false,
       confirmLoading: false,
@@ -216,15 +238,15 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
-        if (this.act === 'edit') { // 修改
+        if (this.act === ACTIONS.Edit) { // 修改
           this.API.update({ id: this.id, ...this.form }).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
-        } else { // 新增
+        } else if (this.act === ACTIONS.Add) { // 新增
           this.API.create(this.form).then(res => {
-            this.requestSuccess(res.msg)
+            this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
@@ -243,8 +265,7 @@ export default {
       this.$emit('close')
       this.pageLoading = false
     },
-    requestSuccess(msg) {
-      this.$message.success(msg)
+    requestSuccess() {
       this.$emit('success')
       this.$emit('close')
       this.$refs.form.resetFields()
