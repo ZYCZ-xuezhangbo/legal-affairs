@@ -39,3 +39,13 @@ export function update(data) {
     data
   })
 }
+
+/**
+ * 获取相关字典
+ */
+export function getDict() {
+  return request({
+    url: `${api}/getDictionaries`,
+    method: 'get'
+  })
+}

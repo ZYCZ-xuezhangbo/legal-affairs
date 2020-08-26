@@ -152,7 +152,6 @@ export default {
         okText: '确定',
         onOk: () => {
           return this.API.delete_(id).then(res => {
-            this.$message.success(res.msg)
             this.$emit('reload', {
               pageNum: this.pagination.pageNum,
               pageSize: this.pagination.pageSize

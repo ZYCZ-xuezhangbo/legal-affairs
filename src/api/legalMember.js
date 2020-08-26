@@ -40,3 +40,9 @@ export function update(data) {
     data
   })
 }
+export function getDict() {
+  return request({
+    url: `${api}/getMemberDictionary`,
+    method: 'get'
+  })
+}

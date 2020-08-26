@@ -16,17 +16,8 @@
             <a-col v-bind="span">
               <a-form-model-item label="公司" prop="company">
                 <a-select v-model="form.company" :disabled="disabled">
-                  <a-select-option value="0">
-                    公司0
-                  </a-select-option>
-                  <a-select-option value="1">
-                    公司1
-                  </a-select-option>
-                  <a-select-option value="2">
-                    公司2
-                  </a-select-option>
-                  <a-select-option value="3">
-                    公司3
+                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -34,17 +25,8 @@
             <a-col v-bind="span">
               <a-form-model-item label="部门" prop="dept">
                 <a-select v-model="form.dept" :disabled="disabled">
-                  <a-select-option value="0">
-                    部门0
-                  </a-select-option>
-                  <a-select-option value="1">
-                    部门1
-                  </a-select-option>
-                  <a-select-option value="2">
-                    部门2
-                  </a-select-option>
-                  <a-select-option value="3">
-                    部门3
+                  <a-select-option v-for="(item,index) in dict.DEPT" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -52,14 +34,8 @@
             <a-col v-bind="span">
               <a-form-model-item label="用户名" prop="userName">
                 <a-select v-model="form.userName" :disabled="disabled">
-                  <a-select-option value="0">
-                    用户名0
-                  </a-select-option>
-                  <a-select-option value="1">
-                    用户名1
-                  </a-select-option>
-                  <a-select-option value="2">
-                    用户名2
+                  <a-select-option v-for="(item,index) in dict.USERNAME" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -89,11 +65,8 @@
             <a-col v-bind="span">
               <a-form-model-item label="顾问类别" prop="counselorType">
                 <a-select v-model="form.counselorType" :disabled="disabled">
-                  <a-select-option value="1">
-                    总法律顾问
-                  </a-select-option>
-                  <a-select-option value="2">
-                    副总法律顾问
+                  <a-select-option v-for="(item,index) in dict.LAW" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -179,11 +152,8 @@
             <a-col v-bind="span">
               <a-form-model-item label="顾问职业岗位等级资格" prop="professionGrade">
                 <a-select v-model="form.professionGrade" :disabled="disabled">
-                  <a-select-option value="0">
-                    岗位等级
-                  </a-select-option>
-                  <a-select-option value="1">
-                    岗位等级1
+                  <a-select-option v-for="(item,index) in dict.POST" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -194,7 +164,7 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
-              <a-form-model-item label="附件">
+              <a-form-model-item label="附件" prop="resourceUrl">
                 <FileUpload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
               </a-form-model-item>
             </a-col>
@@ -208,6 +178,8 @@
 <script>
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+
+const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
 
 export default {
   props: {
@@ -226,6 +198,12 @@ export default {
     api: {
       type: String,
       default: ''
+    },
+    dict: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   components: {
@@ -238,7 +216,7 @@ export default {
         this.getDetail()
       } else if (newVal && this.act === 'add') {
         this.$nextTick(() => {
-          this.form = {}
+          this.$refs.form.resetFields()
         })
       }
     }
@@ -332,9 +310,28 @@ export default {
         work: ''
       },
       rules: {
-        company: [
-          { required: true, message: '必填项', trigger: ['change', 'blur'] }
-        ]
+        birthDate: [validateRequired],
+        certificateNumber: [validateRequired],
+        company: [validateRequired],
+        counselorType: [validateRequired],
+        dept: [validateRequired],
+        duty: [validateRequired],
+        fullTime: [validateRequired],
+        gender: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        legalCertificateNumber: [validateRequired],
+        legalMajor: [validateRequired],
+        legalProfession: [validateRequired],
+        majorName: [validateRequired],
+        name: [validateRequired],
+        officePhone: [validateRequired],
+        portrait: [validateRequired],
+        professionGrade: [validateRequired],
+        professionStatus: [validateRequired],
+        school: [validateRequired],
+        userName: [validateRequired],
+        work: [validateRequired]
       },
       pageLoading: false,
       confirmLoading: false,

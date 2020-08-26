@@ -1,7 +1,7 @@
 <template>
   <div v-if="show">
     <div v-if="title" class="text-center text-gray padding-bottom-lg">{{ title }}</div>
-    <v-chart :forceFit="true" :height="400" :data="list" :scale="scale">
+    <v-chart :forceFit="true" :height="350" :data="list" :scale="scale">
       <v-tooltip :showTitle="false" />
       <v-axis />
       <v-legend dataKey="k" />

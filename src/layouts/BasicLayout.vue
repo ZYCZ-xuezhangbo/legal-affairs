@@ -88,6 +88,10 @@ export default {
 
     // first update color
     // updateTheme(this.settings.primaryColor)
+
+    // const box = document.getElementsByClassName('ant-pro-grid-content')
+    // console.log(box)
+    // console.log(box[0].clientWidth)
   },
   methods: {
     i18nRender(key) {

@@ -17,3 +17,11 @@ export function getByCaseFolderId(id) {
     method: 'get'
   })
 }
+
+export function update(data) {
+  return request({
+    url: `${api}/update`,
+    method: 'post',
+    data
+  })
+}

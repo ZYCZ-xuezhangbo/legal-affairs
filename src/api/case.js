@@ -128,3 +128,14 @@ export function getCaseLogList(params) {
     params
   })
 }
+
+/**
+ * 获取案件基本详情
+ * @param {string} caseId
+ */
+export function getBasicInfoById(caseId) {
+  return request({
+    url: `${api}/getBasicInfoById/${caseId}`,
+    method: 'get'
+  })
+}

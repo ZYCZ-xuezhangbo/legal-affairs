@@ -44,7 +44,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="联系电话" prop="phone">
-                <a-input v-model="form.phone" />
+                <a-input v-model="form.phone" class="response" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -55,6 +55,17 @@
 </template>
 
 <script>
+import test from '@/utils/test'
+
+const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validatePhone = {
+  validator: (rule, value, callback) => {
+    if (test.mobile(value)) callback()
+    else callback(new Error('手机号格式不正确'))
+  },
+  trigger: 'blur'
+}
+
 export default {
   props: {
     isEdit: {
@@ -125,7 +136,16 @@ export default {
         phone: '',
         userName: ''
       },
-      rules: {}
+      rules: {
+        company: [validateRequired],
+        deptName: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        name: [validateRequired],
+        officePhone: [validateRequired],
+        phone: [validateRequired, validatePhone],
+        userName: [validateRequired]
+      }
     }
   },
   methods: {

@@ -1,17 +1,19 @@
 <template>
   <page-header-wrapper>
-    <Edit api="outsideLawFirm" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="outsideLawFirm" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
     <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" />
     <Search @search="handleSearch" />
 
-    <List api="outsideLawFirm" :columns="columns" :actions="['edit', 'detail']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="outsideLawFirm" :columns="columns" :actions="['detail','edit']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
 
   </page-header-wrapper>
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { page as httpGetList } from '@/api/outsideLawFirm'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import { PageList as List } from '@/components'
+import Edit from './components/Edit'
 import Search from './components/Search'
 import Detail from './components/Detail'
 
@@ -26,11 +28,10 @@ export default {
     return {
       dialog: {
         editId: 0,
-        isEdit: false,
+        act: '',
         showAdd: false,
         showDetail: false
       },
-      formData: require('@/formBuilder/lawFirmExternal.json'),
       searchData: {},
       list: [],
       loading: false,
@@ -84,18 +85,18 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.isEdit = false
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === 'edit') {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
-      } else if (act === 'detail') {
-        this.dialog.editId = id
+      this.dialog.editId = id
+      this.dialog.act = act
+
+      if (act === ACTIONS.Detail) {
         this.dialog.showDetail = true
+      } else if (act === ACTIONS.Edit) {
+        this.dialog.showAdd = true
       }
     }
   },

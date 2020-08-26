@@ -77,7 +77,7 @@ export default {
     },
     isEdit(val) {
       if (!val) {
-        this.form = {}
+       this.$refs.form.resetFields()
       }
     }
   },

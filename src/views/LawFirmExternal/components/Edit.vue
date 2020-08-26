@@ -10,52 +10,18 @@
         <a-form-model ref="form" :rules="rules" :model="form">
           <a-row :gutter="gutter">
             <a-col v-bind="span">
-              <a-form-model-item label="律师名称" prop="lawName">
-                <a-input v-model="form.lawName" :disabled="disabled" placeholder="请输入" />
+              <a-form-model-item label="律所名称" prop="lawFirmName">
+                <a-input v-model="form.lawFirmName" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="性别" prop="gender">
-                <a-radio-group name="gender" :disabled="disabled" v-model="form.gender">
-                  <a-radio value="1">
-                    男
-                  </a-radio>
-                  <a-radio value="0">
-                    女
-                  </a-radio>
-                </a-radio-group>
+              <a-form-model-item label="地址" prop="address">
+                <a-input v-model="form.address" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="年龄" prop="age">
-                <a-input-number v-model="form.age" :disabled="disabled" placeholder="请输入" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="学历" prop="educationBackground">
-                <a-input v-model="form.educationBackground" :disabled="disabled" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="执业年限" prop="professionalLife">
-                <a-input-number v-model="form.professionalLife" :disabled="disabled" placeholder="请输入" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="是否具有企业法律职业资格" prop="legalProfession">
-                <a-radio-group name="radioGroup" v-model="form.legalProfession">
-                  <a-radio value="1">
-                    是
-                  </a-radio>
-                  <a-radio value="0">
-                    否
-                  </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="专业特长" prop="major">
-                <a-input v-model="form.major" :disabled="disabled" placeholder="请输入" />
+              <a-form-model-item label="联系人" prop="linkman">
+                <a-input v-model="form.linkman" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -63,33 +29,24 @@
                 <a-input-number v-model="form.phone" :disabled="disabled" placeholder="请输入" class="response" />
               </a-form-model-item>
             </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="所属律所" prop="outsideLawFirmName">
-                <a-select v-model="form.outsideLawFirmName" :disabled="disabled">
-                  <a-select-option :value="item.code" v-for="(item,index) in lawFirmList" :key="index">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
             <a-col :span="24">
-              <a-form-model-item label="主要服务内容" prop="serviceContent">
-                <a-textarea placeholder="主要服务内容" :disabled="disabled" v-model="form.serviceContent" :auto-size="{ minRows: 2, maxRows: 6 }" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-model-item label="展示视频" prop="videos">
-                <FileUpload :record="fileRecord" :value="form.videos" @change="e=>form.videos=e" />
+              <a-form-model-item label="律所简介" prop="lawFirmDesc">
+                <a-textarea placeholder="律所简介" :disabled="disabled" v-model="form.lawFirmDesc" :auto-size="{ minRows: 5, maxRows: 15 }" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
               <a-form-model-item label="展示图片" prop="photographs">
-                <ImgUpload :record="portraitRecord" :value="form.photographs" @change="e=>form.photographs=e" />
+                <img-upload :record="imgRecord" :value="form.photographs" @change="e=>form.photographs=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
-              <a-form-model-item label="文件" prop="resourceUrl">
-                <FileUpload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
+              <a-form-model-item label="展示视频" prop="videos">
+                <file-upload :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-model-item label="附件" prop="resourceUrl">
+                <file-upload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -158,7 +115,7 @@ export default {
       }
       return ''
     },
-    portraitRecord() {
+    imgRecord() {
       return {
         key: new Date().getTime(),
         model: 'upload',
@@ -166,9 +123,22 @@ export default {
           action: this.$uploadImageUrl,
           defaultValue: [],
           fileName: 'image',
-          limit: 1,
+          limit: 3,
           listType: 'picture-card',
           width: '100%',
+          disabled: this.disabled
+        }
+      }
+    },
+    videoRecord() {
+      return {
+        options: {
+          defaultValue: [],
+          downloadWay: 'a',
+          width: '100%',
+          limit: 1,
+          fileName: 'file',
+          action: this.$uploadFileUrl,
           disabled: this.disabled
         }
       }
@@ -212,44 +182,28 @@ export default {
         lg: 6
       },
       form: {
-        age: 0,
-        educationBackground: '',
-        gender: '1',
+        address: '',
         lammyCompany: '',
         lammyDept: '',
-        lawName: '',
-        legalProfession: '',
-        major: '',
-        outsideLawFirmName: '',
+        lawFirmDesc: '',
+        lawFirmName: '',
+        linkman: '',
         phone: '',
         photographs: [],
-        professionalLife: 0,
         resourceUrl: [],
-        serviceContent: '',
         videos: []
       },
       rules: {
-        age: [validateRequired],
-        educationBackground: [validateRequired],
-        gender: [validateRequired],
-        lammyCompany: [validateRequired],
-        lammyDept: [validateRequired],
-        lawName: [validateRequired],
-        legalProfession: [validateRequired],
-        major: [validateRequired],
-        outsideLawFirmName: [validateRequired],
-        professionalLife: [validateRequired],
-        serviceContent: [validateRequired],
+        lawFirmName: [validateRequired],
+        address: [validateRequired],
+        linkman: [validateRequired],
+        lawFirmDesc: [validateRequired],
         phone: [
           validateRequired,
           {
             validator: (rule, value, callback) => {
-              if (!value || value === '') {
-                callback()
-              } else {
-                if (test.mobile(value)) callback()
-                else callback(new Error(this.$t('message.form.validate.mobile.fail')))
-              }
+              if (test.mobile(value)) callback()
+              else callback(new Error(this.$t('message.form.validate.mobile.fail')))
             },
             trigger: 'blur'
           }

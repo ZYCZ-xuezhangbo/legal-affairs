@@ -107,6 +107,9 @@ export default {
         pageTotal: 0,
         showQuickJumper: true,
         showSizeChanger: true,
+        showTotal: (total, range) => {
+          return `共${total}条`
+        },
         onChange: ({ page, pageSize }) => {
           this.pagination.pageNum = page
           this.pagination.pageSize = pageSize

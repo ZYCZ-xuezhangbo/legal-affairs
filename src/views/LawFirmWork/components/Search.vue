@@ -35,19 +35,13 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="律师类型" prop="serviceType">
+              <a-form-model-item label="服务类型" prop="serviceType">
                 <a-select v-model="searchForm.serviceType">
                   <a-select-option value="">
                     {{ $t('select.search.all') }}
                   </a-select-option>
-                  <a-select-option value="0">
-                    常年
-                  </a-select-option>
-                  <a-select-option value="1">
-                    代理
-                  </a-select-option>
-                  <a-select-option value="2">
-                    专项
+                  <a-select-option v-for="(item,index) in dict.LAYERTYPE" :key="index" :value="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -78,10 +72,10 @@
 <script>
 export default {
   props: {
-    lawFirmList: {
-      type: Array,
+    dict: {
+      type: Object,
       default() {
-        return []
+        return {}
       }
     }
   },

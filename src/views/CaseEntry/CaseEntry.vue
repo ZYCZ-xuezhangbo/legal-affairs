@@ -3,7 +3,7 @@
     <template #content>
       <a-row type="flex">
         <a-col class="margin-bottom">
-          <a-button type="primary" class="margin-right-lg" @click="dialog.caseRelationShow=true">选择关联案件</a-button>
+          <a-button v-show="!relationCase" type="primary" class="margin-right-lg" @click="dialog.caseRelationShow=true">选择关联案件</a-button>
         </a-col>
         <a-col :flex="1">
           <template v-if="relationCase">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { create as httpCreate, getCaseDictionaries as httpGetDict } from '@/api/case'
+import { create as httpCreate, getCaseDictionaries as httpGetDict, getBasicInfoById as httpGetBasicInfoById } from '@/api/case'
 import CaseRelation from './components/CaseRelation'
 import CaseDetailForm from '../CaseDetail/components/CaseDetailForm'
 
@@ -39,6 +39,7 @@ export default {
   },
   data() {
     return {
+      isDefaultRelationCase: false,
       submitLoading: false,
       dialog: {
         caseRelationShow: false
@@ -55,6 +56,9 @@ export default {
       const caseFolderId = (this.relationCase && this.relationCase.caseFolderId) || ''
 
       this.submitLoading = true
+
+      if (form.caseNo === '') form.caseNo = '暂无案号'
+
       httpCreate({ caseFolderId, ...form }).then(res => {
         this.$router.push('/case/caseList')
       }).finally(() => {
@@ -67,15 +71,27 @@ export default {
     handleCaseRelationChoose(item) {
       this.dialog.caseRelationShow = false
       this.relationCase = item
+    },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict.lawsuit = res.data.LAWSUIT
+      })
+    },
+    getCaseBasicInfo(caseId) {
+      httpGetBasicInfoById(caseId).then(res => {
+        this.relationCase = res.data
+      })
     }
   },
-  created () {
-    console.log(this.$route.query.caseId)
+  created() {
+    const caseId = this.$route.query.caseId
+    if (caseId) {
+      this.isDefaultRelationCase = true
+      this.getCaseBasicInfo(caseId)
+    }
   },
   mounted() {
-    httpGetDict().then(res => {
-      this.dict.lawsuit = res.data.LAWSUIT
-    })
+    this.getDict()
   }
 }
 </script>

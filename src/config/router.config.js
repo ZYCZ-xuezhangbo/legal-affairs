@@ -29,12 +29,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/Home/Home'),
         meta: { title: '主页', icon: homeSvg, keepAlive: false, permission: [] }
       },
-      {
-        path: '/formDesign',
-        name: 'FormDesign',
-        component: () => import('@/views/FormDesign/FormDesign'),
-        meta: { title: '表单设计器', icon: designerSvg, keepAlive: false, permission: [] }
-      },
+      // {
+      //   path: '/formDesign',
+      //   name: 'FormDesign',
+      //   component: () => import('@/views/FormDesign/FormDesign'),
+      //   meta: { title: '表单设计器', icon: designerSvg, keepAlive: false, permission: [] }
+      // },
       {
         path: '/case',
         redirect: '/case/caseList',
@@ -100,6 +100,12 @@ export const asyncRouterMap = [
             meta: { title: '法务人员', keepAlive: false, permission: [] }
           },
           {
+            path: '/propaganda/legalSystem',
+            name: 'LegalSystem',
+            component: () => import('@/views/LegalSystem/LegalSystem'),
+            meta: { title: '法律制度', keepAlive: false, permission: [] }
+          },
+          {
             path: '/staff/Portrait',
             name: 'Portrait',
             component: () => import('@/views/Portrait/Portrait'),
@@ -118,7 +124,7 @@ export const asyncRouterMap = [
             path: '/lawFirm/work',
             name: 'Work',
             component: () => import('@/views/LawFirmWork/LawFirmWork'),
-            meta: { title: '律所工作', keepAlive: false, permission: [] }
+            meta: { title: '律所服务', keepAlive: false, permission: [] }
           },
           {
             path: '/lawFirm/externalLawFirm',
@@ -179,12 +185,6 @@ export const asyncRouterMap = [
             name: 'DataDownload',
             component: () => import('@/views/DataDownload/DataDownload'),
             meta: { title: '资料下载', keepAlive: false, permission: [] }
-          },
-          {
-            path: '/propaganda/legalSystem',
-            name: 'LegalSystem',
-            component: () => import('@/views/LegalSystem/LegalSystem'),
-            meta: { title: '法律制度', keepAlive: false, permission: [] }
           },
           {
             path: '/propaganda/notice',

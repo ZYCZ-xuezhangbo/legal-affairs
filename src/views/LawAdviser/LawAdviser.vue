@@ -1,14 +1,18 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalCounsel" :act="dialog.act" :show="dialog.showAdd" :id="dialog.id" @close="dialog.showAdd=false" @success="getList" />
-    <Search @search="handleSearch" />
+
+    <Edit api="legalCounsel" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.id" @close="dialog.showAdd=false" @success="getList" />
+
+    <Search :dict="dict" @search="handleSearch" />
 
     <List api="legalCounsel" :columns="columns" :actions="['edit', 'detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/legalCounsel'
+import { ACTIONS } from '@/store/mutation-types'
+import { page as httpGetList, getDict as httpGetDict } from '@/api/legalCounsel'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
@@ -26,7 +30,6 @@ export default {
         act: '',
         showAdd: false
       },
-      formData: require('@/formBuilder/lawAdviser.json'),
       searchData: {},
       list: [],
       loading: false,
@@ -37,32 +40,22 @@ export default {
       },
       columns: [
         {
+          title: '公司',
+          dataIndex: 'company',
+          key: 'company'
+        },
+        {
           title: '姓名',
           dataIndex: 'name',
           key: 'name'
         },
         {
-          title: '性别',
-          dataIndex: 'gender',
-          key: 'gender'
-        },
-        {
-          title: '类别',
+          title: '类型',
           dataIndex: 'counselorType',
           key: 'counselorType'
         },
         {
-          title: '出生日期',
-          dataIndex: 'birthDate',
-          key: 'birthDate'
-        },
-        {
-          title: '是否法学类专业',
-          dataIndex: 'legalMajor',
-          key: 'legalMajor'
-        },
-        {
-          title: '专业名称',
+          title: '专业',
           dataIndex: 'majorName',
           key: 'majorName'
         },
@@ -72,16 +65,12 @@ export default {
           key: 'duty'
         },
         {
-          title: '是否专职',
-          dataIndex: 'fullTime',
-          key: 'fullTime'
-        },
-        {
           title: '办公室电话',
           dataIndex: 'officePhone',
           key: 'officePhone'
         }
-      ]
+      ],
+      dict: {}
     }
   },
   methods: {
@@ -94,6 +83,11 @@ export default {
       this.pagination.pageNum = pageNum
       this.pagination.pageSize = pageSize
       this.getList()
+    },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
     },
     getList() {
       this.loading = true
@@ -110,7 +104,7 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.act = 'add'
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
@@ -121,6 +115,7 @@ export default {
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
   }
 }

@@ -25,7 +25,11 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="部门类型" prop="deptType">
-                <a-input v-model="form.deptType" :disabled="disabled" />
+                <a-select v-model="form.deptType" :disabled="disabled">
+                  <a-select-option v-for="(item,index) in dict.DEPTTYPE" :key="index" :value="item.code">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -76,6 +80,8 @@ import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 const ADD = 'add'
 const EDIT = 'edit'
 const DETAIL = 'detail'
+const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validataMax30 = { max: 30, message: '最大长度30位', trigger: 'blur' }
 
 export default {
   components: {
@@ -101,7 +107,11 @@ export default {
     dict: {
       type: Object,
       default() {
-        return {}
+        return {
+          DEPTTYPE: [], // 部门类型
+          DEPT: [], // 部门列表
+          COMPANY: [] // 公司列表
+        }
       }
     }
   },
@@ -180,7 +190,19 @@ export default {
         principal: '',
         resourceUrl: []
       },
-      rules: {}
+      rules: {
+        company: [validateRequired],
+        contactOfficePhone: [validateRequired, validataMax30],
+        contactPerson: [validateRequired, validataMax30],
+        contactPhone: [validateRequired, validataMax30],
+        deptName: [validateRequired],
+        deptObligation: [validateRequired],
+        deptPhone: [validateRequired, validataMax30],
+        deptType: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        principal: [validateRequired, validataMax30]
+      }
     }
   },
   methods: {

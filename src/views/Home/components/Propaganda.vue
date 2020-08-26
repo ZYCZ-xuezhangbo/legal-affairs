@@ -8,8 +8,8 @@
           </a-radio-button>
         </a-radio-group>
       </template>
-      <div v-show="radioVal===LAW">
-        <a-table :columns="columns" :data-source="data.legalSystemList" :bordered="false" :pagination="false" :row-key="e=>e.id">
+      <div v-show="radioVal===WORK">
+        <a-table :columns="columns" :data-source="data.workTrendList" :bordered="false" :pagination="false" :row-key="e=>e.id">
           <template #title>
             {{ tableTitle }}
           </template>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-const LAW = '1'
+const WORK = '1'
 const POLICY = '2'
 const NOTICE = '3'
 
@@ -49,14 +49,14 @@ export default {
   },
   data() {
     return {
-      LAW,
+      WORK,
       POLICY,
       NOTICE,
-      radioVal: LAW,
+      radioVal: WORK,
       radios: [
         {
-          key: LAW,
-          name: '法律制度'
+          key: WORK,
+          name: '工作动态'
         },
         {
           key: POLICY,

@@ -2,13 +2,12 @@
   <div v-if="show">
     <div v-if="title" class="text-center text-gray padding-bottom">{{ title }}</div>
     <v-chart :height="400" :data="newData" :forceFit="true">
-      <v-coord type="rect" direction="LT" />
+      <!-- <v-coord type="rect" direction="LT" /> -->
       <v-tooltip />
       <v-legend />
       <v-axis dataKey="value" position="right" :show="false" />
       <v-axis dataKey="x" :label="label" />
       <v-bar position="x*value" color="type" :adjust="adjust" />
-      <!-- <v-interval position="x*value" opacity="1" :label="barLabel" /> -->
     </v-chart>
   </div>
 </template>
@@ -37,7 +36,7 @@ export default {
     },
     y2Text: {
       type: String,
-      default: '金额(万元)'
+      default: '金额(元)'
     }
   },
   data() {

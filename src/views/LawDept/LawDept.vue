@@ -60,9 +60,9 @@ export default {
           key: 'deptType'
         },
         {
-          title: '办公电话',
-          dataIndex: 'contactOfficePhone',
-          key: 'contactOfficePhone'
+          title: '部门电话',
+          dataIndex: 'deptPhone',
+          key: 'deptPhone'
         },
         {
           title: '负责人',

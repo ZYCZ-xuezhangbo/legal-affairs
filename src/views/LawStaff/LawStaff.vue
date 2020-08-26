@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalMember" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="legalMember" :dict="dict" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
     <Search :company-list="companyList" @search="handleSearch" />
 
     <List api="legalMember" :columns="columns" :actions="['edit','detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/legalMember'
+import { page as httpGetList, getDict as httpGetDict } from '@/api/legalMember'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
@@ -26,7 +26,6 @@ export default {
         isEdit: false,
         showAdd: false
       },
-      formData: require('@/formBuilder/filledBy.json'),
       searchData: {},
       list: [],
       companyList: [
@@ -85,7 +84,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         pageTotal: 0
-      }
+      },
+      dict: {}
     }
   },
   methods: {
@@ -98,6 +98,11 @@ export default {
       this.pagination.pageNum = pageNum
       this.pagination.pageSize = pageSize
       this.getList()
+    },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
     },
     getList() {
       this.loading = true
@@ -125,6 +130,7 @@ export default {
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
   }
 }

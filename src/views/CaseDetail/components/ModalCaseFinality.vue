@@ -2,15 +2,15 @@
   <div>
     <a-modal title="终结" :visible="show" @cancel="handleClose">
       <template #footer>
-        <a-button v-if="isEdit" type="primary" :loading="submitLoading" @click="handleSubmit">保存</a-button>
         <a-button @click="handleClose">取消</a-button>
+        <a-button type="primary" :loading="submitLoading" @click="handleSubmit">保存</a-button>
       </template>
 
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
         <a-form-model ref="form" :model="form">
           <a-form-model-item label="" prop="content">
-            <a-textarea v-model="form.content" :disabled="!isEdit" :auto-size="{ minRows: 5, maxRows: 10 }" />
+            <a-textarea v-model="form.content" :auto-size="{ minRows: 5, maxRows: 10 }" />
           </a-form-model-item>
           <a-form-model-item label="附件" prop="resourceUrl">
             <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { create as httpCreate, getByCaseFolderId as httpGetInfo } from '@/api/caseFinality'
+import { update as httpUpdate, getByCaseFolderId as httpGetInfo } from '@/api/caseFinality'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
 export default {
@@ -40,13 +40,14 @@ export default {
     },
     isEdit: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
     return {
       pageLoading: false,
       form: {
+        id: '',
         content: '',
         resourceUrl: []
       },
@@ -62,15 +63,14 @@ export default {
           downloadWay: 'a',
           limit: 1000,
           fileName: 'file',
-          action: this.$uploadFileUrl,
-          disabled: !this.isEdit
+          action: this.$uploadFileUrl
         }
       }
     }
   },
   watch: {
     show(val) {
-      if (val && !this.isEdit) {
+      if (val && this.isEdit) {
         this.pageLoading = true
         httpGetInfo(this.caseFolderId).then(res => {
           this.form = res.data
@@ -87,7 +87,7 @@ export default {
     },
     handleSubmit() {
       this.submitLoading = true
-      httpCreate({ caseFolderId: this.caseFolderId, ...this.form }).then(res => {
+      httpUpdate({ caseFolderId: this.caseFolderId, ...this.form }).then(res => {
         this.handleClose()
         this.$emit('reload')
       }).finally(() => {

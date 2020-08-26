@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="generalMatter" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="generalMatter" :dict="dict" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
 
     <Search @search="handleSearch" />
 
@@ -9,9 +9,11 @@
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/generalMatter'
+import { ACTIONS } from '@/store/mutation-types'
+import { page as httpGetList, getDict as httpGetDict } from '@/api/generalMatter'
 import Search from './components/Search'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import Edit from './components/Edit'
+import { PageList as List } from '@/components'
 
 export default {
   components: {
@@ -22,11 +24,10 @@ export default {
   data() {
     return {
       dialog: {
-        editId: 0,
-        isEdit: false,
+        editId: '',
+        act: '',
         showAdd: false
       },
-      formData: require('@/formBuilder/countersign.json'),
       searchData: {},
       list: [],
       loading: false,
@@ -61,7 +62,8 @@ export default {
           dataIndex: 'recipient',
           key: 'recipient'
         }
-      ]
+      ],
+      dict: {}
     }
   },
   methods: {
@@ -75,6 +77,11 @@ export default {
       this.pagination.pageSize = pageSize
       this.getList()
     },
+    getDict() {
+      httpGetDict().then(res => {
+        this.dict = res.data
+      })
+    },
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
@@ -85,19 +92,19 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.isEdit = false
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === 'edit') {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
-      }
+      this.dialog.act = act
+      this.dialog.editId = id
+
+      if (act === ACTIONS.Edit) this.dialog.showAdd = true
     }
   },
   mounted() {
+    this.getDict()
     this.getList()
   }
 }

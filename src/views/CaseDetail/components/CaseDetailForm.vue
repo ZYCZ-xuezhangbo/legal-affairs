@@ -75,13 +75,13 @@
           </a-form-model-item>
         </a-col>
         <a-col v-bind="span">
-          <a-form-model-item label="管辖法院" prop="competentCourt">
-            <a-input v-model="form.competentCourt" :disabled="disabled" placeholder="管辖法院" />
+          <a-form-model-item :label="courtName" prop="competentCourt">
+            <a-input v-model="form.competentCourt" :disabled="disabled" :placeholder="courtName" />
           </a-form-model-item>
         </a-col>
         <a-col v-bind="span">
-          <a-form-model-item label="主管法官" prop="trialJudge">
-            <a-input v-model="form.trialJudge" :disabled="disabled" placeholder="主管法官" />
+          <a-form-model-item :label="judgeName" prop="trialJudge">
+            <a-input v-model="form.trialJudge" :disabled="disabled" :placeholder="judgeName" />
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
@@ -96,9 +96,6 @@
               <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="[{
                 required: true,
                 message: '必填项',
-                trigger: 'blur'
-              },{
-                validator: validateChineseFn,
                 trigger: 'blur'
               }]">
                 <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人姓名">
@@ -143,7 +140,7 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="是否已进行事前协调" prop="adjust">
+              <a-form-model-item v-if="form.caseUsers[index].cityPipe==='1'" label="是否已进行事前协调" prop="adjust">
                 <a-select v-model="item.adjust" :disabled="disabled">
                   <a-select-option value="1">
                     是
@@ -313,6 +310,7 @@
 </template>
 
 <script>
+import { CASE_STAGE } from '@/store/mutation-types'
 import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
 import test from '@/utils/test'
@@ -481,6 +479,12 @@ export default {
     // 律所来源选择的是否为库内
     isKuNei() {
       return this.form.lawOffice === '0'
+    },
+    courtName() {
+      return CASE_STAGE.仲裁 === this.form.caseStage ? '仲裁委员会' : '审理法院'
+    },
+    judgeName() {
+      return CASE_STAGE.仲裁 === this.form.caseStage ? '仲裁员' : '主管法官'
     },
     uploadFileRecord() {
       return {

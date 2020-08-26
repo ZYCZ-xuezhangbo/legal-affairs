@@ -25,7 +25,7 @@
           <a-col :sm="24" :md="12" :class="!isMobile?'text-right':''">
             <a-button type="primary" :disabled="btnAddHuikuanDisabled" @click="dialog.showAddHuikuan=true">新增回款</a-button>
             <a-button type="primary" @click="handleGoCaseEntry">新增案件</a-button>
-            <a-button type="primary" :disabled="btnCaseFinalityDisabled" @click="handleShowCaseFinality(true)">终结</a-button>
+            <a-button type="primary" :disabled="btnCaseFinalityDisabled" @click="handleShowCaseFinality(false)">终结</a-button>
             <a-button :type="isFav?'primary':''" :loading="favLoading" @click="handleChangeFav">
               <a-icon v-if="!favLoading && isFav" theme="filled" type="star"></a-icon>
               {{ isFav?'已收藏':'收藏' }}
@@ -50,13 +50,12 @@
 </template>
 
 <script>
+import { CASE_STAGE } from '@/store/mutation-types'
 import { changeFavoriteState as httpChangeFav } from '@/api/case'
 import NP from 'number-precision'
 import ModalAddHuikuan from './ModalAddHuikuan'
 import ModalCaseFinality from './ModalCaseFinality'
 
-const FINALITY = 'FINALITY'
-const EXECUTE = 'EXECUTE'
 export default {
   components: {
     ModalAddHuikuan,
@@ -123,12 +122,12 @@ export default {
     // “新增回款”按钮是否可点击
     btnAddHuikuanDisabled() {
       // 如果案件阶段列表中没有“执行”阶段，则不可点击
-      return this.data.caseStageList.findIndex(v => v.caseStage === EXECUTE) <= -1
+      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE.执行) <= -1
     },
     // “终结”按钮是否可点击
     btnCaseFinalityDisabled() {
       // 如果案件阶段列表中存在“终结”阶段，则不可点击
-      return this.data.caseStageList.findIndex(v => v.caseStage === FINALITY) > -1
+      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE.终结) > -1
     },
     // 执行金额
     sumPayment() {
@@ -159,8 +158,8 @@ export default {
     handleStepChange(e) {
       const chooseCaseId = this.data.caseStageList[e].id
       const caseCode = this.data.caseStageList[e].caseStage
-      if (caseCode === FINALITY) {
-        this.handleShowCaseFinality(false)
+      if (caseCode === CASE_STAGE.终结) {
+        this.handleShowCaseFinality(true)
       } else {
         this.$emit('changeStep', chooseCaseId)
       }

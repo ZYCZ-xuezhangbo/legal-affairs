@@ -21,6 +21,15 @@ export const ACTIONS = {
   Download: 'download',
   Rate: 'rate'
 }
+export const CASE_STAGE = {
+  一审: 'FIRST_INSTANCE', // 一审
+  二审: 'SECOND_INSTANCE', // 二审
+  执行: 'EXECUTE', // 执行
+  再审: 'REVIEW_INSTANCE', // 再审
+  仲裁: 'ARBITRATION', // 仲裁
+  非诉: 'NOT_LAWSUIT', // 非诉
+  终结: 'FINALITY' // 终结
+}
 
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',

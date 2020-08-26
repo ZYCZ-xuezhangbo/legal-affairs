@@ -7,7 +7,7 @@
       </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
-        <a-form-model ref="form" :model="form">
+        <a-form-model ref="form" :rules="rules" :model="form">
           <a-row :gutter="gutter">
             <a-col v-bind="span">
               <a-form-model-item label="律师来源" prop="lawSource">
@@ -33,12 +33,18 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="律师姓名" prop="lawName">
-                <a-select v-show="isKuNei" v-model="form.lawName" :disabled="disabled || isRate" :loading="layerLoading">
-                  <a-select-option v-for="(item,index) in layerList" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-                <a-input v-show="!isKuNei" v-model="form.lawName" :disabled="disabled || isRate" placeholder="律师姓名" />
+                <template v-if="isKuNei">
+                  <!-- 如果是库内，下拉框 -->
+                  <a-select v-model="form.lawName" :disabled="disabled || isRate" :loading="layerLoading" placeholder="律师姓名">
+                    <a-select-option v-for="(item,index) in layerList" :key="index" :value="item.code">
+                      {{ item.name }}
+                    </a-select-option>
+                  </a-select>
+                </template>
+                <template v-else>
+                  <!-- 如果是库外，输入框 -->
+                  <a-input v-model="form.lawName" :disabled="disabled || isRate" placeholder="律师名称" />
+                </template>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -76,7 +82,7 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
-              <a-form-model-item label="附件">
+              <a-form-model-item label="附件" prop="resourceUrl">
                 <FileUpload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
               </a-form-model-item>
             </a-col>
@@ -85,10 +91,10 @@
                 <a-table :columns="columns" :data-source="form.scoreList" :pagination="false" :rowKey="e=>e.id">
                   <template #desc="item">
                     {{ item.description }}
-                    <span class="text-gray padding-left-sm">({{ item.score }}分)</span>
+                    <span class="text-gray padding-left-sm">({{ item.score * scoreScale }}分)</span>
                   </template>
                   <template #score="item">
-                    <a-rate :value="item.score" :disabled="act===ACTIONS.Detail" @change="handleRateChange($event,item)" />
+                    <a-rate :value="item.score" :allowClear="false" :disabled="act===ACTIONS.Detail" @change="handleRateChange($event,item)" />
                   </template>
                 </a-table>
               </a-form-model-item>
@@ -105,6 +111,8 @@ import { ACTIONS } from '@/store/mutation-types'
 import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawManager'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+
+const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
 
 export default {
   props: {
@@ -149,7 +157,7 @@ export default {
         this.getDetail()
       } else if (newVal && this.act === ACTIONS.Add) {
         this.$nextTick(() => {
-          this.form = {}
+          this.$refs.form.resetFields()
         })
       }
     }
@@ -164,6 +172,7 @@ export default {
         md: 8,
         lg: 6
       },
+      scoreScale: 5,
       form: {
         chargeDesc: '',
         fillUnit: '',
@@ -181,23 +190,27 @@ export default {
         serviceType: '',
         scoreList: []
       },
+      rules: {
+        chargeDesc: [validateRequired],
+        fillUnit: [validateRequired],
+        informant: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        lawFirmName: [validateRequired],
+        lawName: [validateRequired],
+        lawSource: [validateRequired],
+        serviceCharge: [validateRequired],
+        serviceMatter: [validateRequired],
+        serviceTimeEnd: [validateRequired],
+        serviceTimeStart: [validateRequired],
+        serviceType: [validateRequired],
+        scoreList: [validateRequired]
+      },
       layerLoading: false,
       layerList: [], // 律师列表
       pageLoading: false,
       confirmLoading: false,
-      columns: [
-        {
-          title: '描述',
-          key: 'title',
-          scopedSlots: { customRender: 'desc' }
-        },
-        {
-          title: '评分',
-          align: 'right',
-          key: 'score',
-          scopedSlots: { customRender: 'score' }
-        }
-      ],
+
       API: require(`@/api/${this.api}`)
     }
   },
@@ -211,6 +224,23 @@ export default {
         }
       }
       return ''
+    },
+    columns() {
+      // 每颗星代表5分
+      const sum = this.form.scoreList.reduce((total, cur) => total + cur.score, 0) * this.scoreScale
+      return [
+        {
+          title: '描述',
+          key: 'title',
+          scopedSlots: { customRender: 'desc' }
+        },
+        {
+          title: `当前总分:${sum}`,
+          align: 'right',
+          key: 'score',
+          scopedSlots: { customRender: 'score' }
+        }
+      ]
     },
     fileRecord() {
       return {
@@ -250,17 +280,25 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
+        const form = this.form
+
+        // 分数需要乘5再保存
+        const scoreList = form.scoreList.map(v => {
+          v.score = v.score * this.scoreScale
+          return v
+        })
+        form.scoreList = scoreList
 
         if ([ACTIONS.Edit, ACTIONS.Rate].includes(this.act)) { // 修改/评分
           const isUpdate = this.act === ACTIONS.Edit ? '1' : '0'
 
-          this.API.update({ id: this.id, isUpdate, ...this.form }).then(res => {
+          this.API.update({ id: this.id, isUpdate, ...form }).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
         } else if (this.act === ACTIONS.Add) { // 新增
-          this.API.create(this.form).then(res => {
+          this.API.create(form).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
@@ -271,6 +309,12 @@ export default {
     getDetail() {
       this.pageLoading = true
       this.API.getById(this.id).then(res => {
+        // 分数需要除5再赋值
+        const scoreList = res.data.scoreList.map(v => {
+          if (v.score > 0) v.score = v.score / this.scoreScale
+          return v
+        })
+        res.data.scoreList = scoreList
         this.form = res.data
         this.getLayerListByFirmId(res.data.lawFirmName)
       }).finally(() => {

@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <Edit api="lawFirmWork" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.id" :law-firm-list="lawFirmList" @close="dialog.showAdd=false" @success="getList" />
 
-    <Search @search="handleSearch" />
+    <Search :dict="dict" @search="handleSearch" />
 
     <List api="lawFirmWork" :columns="columns" :actions="[ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Rate]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
@@ -56,7 +56,7 @@ export default {
           key: 'lawName'
         },
         {
-          title: '律师类型',
+          title: '服务类型',
           dataIndex: 'serviceType',
           key: 'serviceType'
         },

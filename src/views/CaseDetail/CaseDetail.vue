@@ -116,8 +116,6 @@ export default {
       }).finally(() => {
         this.caseInfoLoading = false
       })
-
-      // this.getUpdateHistory()
     },
     getUpdateHistory() {
       this.modifyLoading = true
@@ -145,6 +143,7 @@ export default {
     },
     handleCaseUpdate() {
       this.getCaseInfo()
+      this.getCaseFolderInfo()
       this.modifyRecord = []
       this.formAct = ACTIONS.Detail
       document.documentElement.scrollTop = 0
@@ -163,9 +162,7 @@ export default {
     },
     handleTabChange(e) {
       this.activeTab = e
-      if (this.modifyRecord.length <= 0) {
-        this.getUpdateHistory()
-      }
+      if (this.modifyRecord.length <= 0) this.getUpdateHistory()
     }
   },
   created() {
