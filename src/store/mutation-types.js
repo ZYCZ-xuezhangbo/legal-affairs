@@ -13,6 +13,17 @@ export const TOGGLE_WEAK = 'weak'
 export const TOGGLE_MULTI_TAB = 'multi_tab'
 export const APP_LANGUAGE = 'app_language'
 
+/**
+ * 响应码
+ */
+export const RESPONSE_CODE = {
+  S0000: 'S0000',
+  ACCOUNT_006: 'ACCOUNT_006'
+}
+
+/**
+ * 列表页的操作项
+ */
 export const ACTIONS = {
   Edit: 'edit',
   Detail: 'detail',
@@ -21,6 +32,10 @@ export const ACTIONS = {
   Download: 'download',
   Rate: 'rate'
 }
+
+/**
+ * 案件阶段
+ */
 export const CASE_STAGE = {
   一审: 'FIRST_INSTANCE', // 一审
   二审: 'SECOND_INSTANCE', // 二审

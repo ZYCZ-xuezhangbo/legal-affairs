@@ -62,8 +62,7 @@ export default {
           title: '上传',
           downloadWay: 'a',
           limit: 1000,
-          fileName: 'file',
-          action: this.$uploadFileUrl
+          fileName: 'file'
         }
       }
     }

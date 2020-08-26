@@ -57,7 +57,7 @@ export default {
         this.editorContent = html
         this.$emit('change', this.editorContent)
       }
-      this.editor.customConfig.uploadImgServer = this.$uploadImageUrl
+      this.editor.customConfig.uploadImgServer = this.$uploadFileUrl
       this.editor.customConfig.zIndex = 1
       this.editor.create()
     }

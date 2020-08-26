@@ -161,7 +161,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="法律职业资格证书编号" prop="certificateNumber">
-                <a-input v-model="form.certificateNumber" :disabled="disabled" placeholder="请输入" />
+                <a-input v-model="form.certificateNumber" :disabled="disabled || form.legalProfession==='0'" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -178,12 +178,12 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="企业法律顾问职业资格证书编号" prop="enterpriseNumber">
-                <a-input v-model="form.enterpriseNumber" :disabled="disabled" placeholder="请输入" />
+                <a-input v-model="form.enterpriseNumber" :disabled="disabled || form.enterpriseProfession==='0'" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="顾问职业岗位等级资格" prop="professionGrade">
-                <a-select v-model="form.professionGrade" :disabled="disabled">
+                <a-select v-model="form.professionGrade" :disabled="disabled || form.enterpriseProfession==='0'">
                   <a-select-option v-for="(item,index) in dict.GRADE" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>
@@ -265,7 +265,6 @@ export default {
         key: new Date().getTime(),
         model: 'upload',
         options: {
-          action: this.$uploadImageUrl,
           defaultValue: [],
           fileName: 'image',
           limit: 1,
@@ -283,7 +282,6 @@ export default {
           width: '100%',
           limit: 1000,
           fileName: 'file',
-          action: this.$uploadFileUrl,
           disabled: this.disabled
         }
       }
@@ -301,6 +299,37 @@ export default {
         title = '新增'
       }
       return title
+    },
+    rules() {
+      return {
+        birthDate: [validateRequired],
+        certificateNumber: [this.form.legalProfession === '0' ? {} : validateRequired],
+        enterpriseNumber: [this.form.enterpriseProfession === '0' ? {} : validateRequired],
+        professionGrade: [this.form.enterpriseProfession === '0' ? {} : validateRequired],
+        company: [validateRequired],
+        dept: [validateRequired],
+        educationBackground: [validateRequired],
+        educationalSystem: [validateRequired],
+        employmentPeriod: [validateRequired],
+        enterpriseProfession: [validateRequired],
+        fullTime: [validateRequired],
+        gender: [validateRequired],
+        joinWork: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        legalMajor: [validateRequired],
+        legalProfession: [validateRequired],
+        majorName: [validateRequired],
+        name: [validateRequired],
+        officePhone: [validateRequired],
+        phone: [validateRequired],
+        portrait: [validateRequired],
+        postLevel: [validateRequired],
+        postName: [validateRequired],
+        school: [validateRequired],
+        userName: [validateRequired],
+        work: [validateRequired]
+      }
     }
   },
   data() {
@@ -343,35 +372,7 @@ export default {
         userName: '',
         work: ''
       },
-      rules: {
-        birthDate: [validateRequired],
-        certificateNumber: [validateRequired],
-        company: [validateRequired],
-        dept: [validateRequired],
-        educationBackground: [validateRequired],
-        educationalSystem: [validateRequired],
-        employmentPeriod: [validateRequired],
-        enterpriseNumber: [validateRequired],
-        enterpriseProfession: [validateRequired],
-        fullTime: [validateRequired],
-        gender: [validateRequired],
-        joinWork: [validateRequired],
-        lammyCompany: [validateRequired],
-        lammyDept: [validateRequired],
-        legalMajor: [validateRequired],
-        legalProfession: [validateRequired],
-        majorName: [validateRequired],
-        name: [validateRequired],
-        officePhone: [validateRequired],
-        phone: [validateRequired],
-        portrait: [validateRequired],
-        postLevel: [validateRequired],
-        postName: [validateRequired],
-        professionGrade: [validateRequired],
-        school: [validateRequired],
-        userName: [validateRequired],
-        work: [validateRequired]
-      },
+
       pageLoading: false,
       confirmLoading: false,
       API: require(`@/api/${this.api}`)

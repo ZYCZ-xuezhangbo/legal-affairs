@@ -9,18 +9,18 @@
       </div>
     </a-modal>
 
-    <a-modal v-model="previewVisible" :footer="null">
+    <a-modal v-model="previewVisible" :footer="null" style="height:99vh;">
       <img v-if="perviewType==='img'" alt="" style="width: 100%" :src="previewUrl" />
-      <video v-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
+      <video id="video" v-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
     </a-modal>
 
-    <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
         <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
     </a-upload>
 
-    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <p class="ant-upload-drag-icon">
         <a-icon type="cloud-upload" />
       </p>
@@ -31,9 +31,12 @@
 </template>
 
 <script>
+import { RESPONSE_CODE } from '@/store/mutation-types'
+// import { download as httpDownload } from '@/api/download'
 const IMG_TYPE = ['jpg', 'png', 'jpeg']
 const VIDEO_TYPE = ['mp4', 'rmvb']
 
+let video = null
 export default {
   name: 'KUploadFile',
   props: {
@@ -81,6 +84,15 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    previewVisible(val) {
+      if (!val && this.perviewType === 'video') {
+        video.pause()
+      } else {
+        this.$nextTick(() => {
+          if (!video) video = document.getElementById('video')
+        })
+      }
     }
   },
   computed: {
@@ -141,16 +153,14 @@ export default {
       if (IMG_TYPE.includes(suffix)) {
         // 如果是视频、图片
         this.previewUrl = file.url
-        // this.previewUrl = 'http://cdn.kcz66.com/%E5%A4%B4%E5%83%8F.jpg'
         this.visible = true
         this.perviewType = 'img'
       } else if (VIDEO_TYPE.includes(suffix)) {
         this.previewUrl = file.url
-        this.previewUrl = 'https://www.runoob.com/try/demo_source/movie.mp4'
         this.visible = true
         this.perviewType = 'video'
       } else {
-        this.download(file)
+        this.download()
       }
     },
     handlePreviewOnModal() {
@@ -159,22 +169,22 @@ export default {
     download() {
       // 下载文件
       const file = this.downloadFile
-      const downloadWay = this.record.options.downloadWay || 'a'
-      const dynamicFun = this.record.options.dynamicFun
+      const downloadWay = 'a'
+
       if (downloadWay === 'a') {
         // 使用a标签下载
         const a = document.createElement('a')
-        a.href = file.url || file.thumbUrl
+
+        const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`
+        a.href = encodeURIComponent(href)
         a.download = file.name
+        a.target = '_blank'
         a.click()
       } else if (downloadWay === 'ajax') {
         // 使用ajax获取文件blob，并保持到本地
         this.getBlob(file.url || file.thumbUrl).then(blob => {
           this.saveAs(blob, file.name)
         })
-      } else if (downloadWay === 'dynamic') {
-        // 触发动态函数
-        this.dynamicData[dynamicFun](file)
       }
     },
     /**
@@ -232,7 +242,7 @@ export default {
       this.fileList = info.fileList
       if (info.file.status === 'done') {
         const res = info.file.response
-        if (res.code === 0) {
+        if (res.code === RESPONSE_CODE.S0000) {
           this.handleSelectChange()
         } else {
           this.fileList.pop()

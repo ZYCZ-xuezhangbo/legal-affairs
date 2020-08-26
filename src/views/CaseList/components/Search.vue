@@ -161,6 +161,8 @@ export default {
   methods: {
     resetForm() {
       this.$refs.searchForm.resetFields()
+      this.searchForm.endTime = ''
+      this.searchForm.caseAmountEnd = ''
     },
     handleSearch() {
       let searchData = null

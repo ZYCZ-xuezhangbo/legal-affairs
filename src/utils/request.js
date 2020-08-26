@@ -4,7 +4,7 @@ import store from '@/store'
 import storage from 'store'
 import { Notification, Message } from 'ant-design-vue'
 import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, RESPONSE_CODE } from '@/store/mutation-types'
 
 const request = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
@@ -59,7 +59,7 @@ request.interceptors.response.use((res) => {
   }
   if (!['M', 'S'].includes(codePrefix)) { // code不以M或S开头时，一律视为失败返回码
     switch (res.code) {
-      case 'ACCOUNT_006': // 用户未登录
+      case RESPONSE_CODE.ACCOUNT_006: // 用户未登录
         store.dispatch('Logout').then(() => {
           router.push('/user/login')
         })

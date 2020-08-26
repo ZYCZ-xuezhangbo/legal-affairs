@@ -251,7 +251,6 @@ export default {
           width: '100%',
           limit: 1000,
           fileName: 'file',
-          action: this.$uploadFileUrl,
           disabled: this.disabled || this.act === ACTIONS.Rate
         }
       }

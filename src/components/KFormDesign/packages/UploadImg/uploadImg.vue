@@ -3,7 +3,7 @@
  -->
 <template>
   <div :style="{ width: record.options.width }" class="upload-img-box-9136076486841527">
-    <a-upload :name="config.uploadImageName || record.options.fileName" :headers="config.uploadImageHeaders || record.options.headers" :data="config.uploadImageData || optionsData" :action="config.uploadImage || record.options.action" :multiple="record.options.multiple" :listType="record.options.listType" :disabled="record.options.disabled || parentDisabled" :fileList="fileList" accept="image/jpeg, image/png" @change="handleChange" @preview="handlePreview" :remove="remove" :beforeUpload="beforeUpload">
+    <a-upload name="file" :headers="config.uploadImageHeaders || record.options.headers" :data="config.uploadImageData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :listType="record.options.listType" :disabled="record.options.disabled || parentDisabled" :fileList="fileList" accept="image/jpeg, image/png" @change="handleChange" @preview="handlePreview" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="record.options.listType !== 'picture-card' && fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
         <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
@@ -17,7 +17,9 @@
     </a-modal>
   </div>
 </template>
+
 <script>
+import { RESPONSE_CODE } from '@/store/mutation-types'
 
 export default {
   name: 'KUploadImg',
@@ -135,7 +137,7 @@ export default {
 
       const maxSize = 2 // 单位：M
       const isSize = e.size / 1024 / 1024 < maxSize
-      if (!isSize) this.$message.error(`图片大小不可大于${maxSize}MB!`)
+      if (!isSize) this.$message.error(`图片大小不可大于${maxSize}MB`)
 
       const result = isJpgOrPng && isSize
       if (result) {
@@ -149,7 +151,7 @@ export default {
       this.fileList = info.fileList
       if (info.file.status === 'done') {
         const res = info.file.response
-        if (res.code === 0) {
+        if (res.code === RESPONSE_CODE.S0000) {
           this.handleSelectChange()
         } else {
           this.fileList.pop()

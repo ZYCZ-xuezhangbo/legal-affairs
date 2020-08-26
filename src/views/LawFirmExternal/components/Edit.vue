@@ -120,7 +120,6 @@ export default {
         key: new Date().getTime(),
         model: 'upload',
         options: {
-          action: this.$uploadImageUrl,
           defaultValue: [],
           fileName: 'image',
           limit: 3,
@@ -138,7 +137,6 @@ export default {
           width: '100%',
           limit: 1,
           fileName: 'file',
-          action: this.$uploadFileUrl,
           disabled: this.disabled
         }
       }
@@ -151,7 +149,6 @@ export default {
           width: '100%',
           limit: 1000,
           fileName: 'file',
-          action: this.$uploadFileUrl,
           disabled: this.disabled
         }
       }
