@@ -111,6 +111,7 @@ import { ACTIONS } from '@/store/mutation-types'
 import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawManager'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+import deepClone from '@/utils/deepClone'
 
 const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
 
@@ -280,7 +281,7 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
-        const form = this.form
+        const form = deepClone(this.form)
 
         // 分数需要乘5再保存
         const scoreList = form.scoreList.map(v => {

@@ -47,13 +47,13 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="开始时间" prop="startTime">
-                <a-date-picker v-model="searchForm.startTime" inputReadOnly @change="(e,str)=>searchForm.startTime=str" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="结束时间" prop="endTime">
-                <a-date-picker v-model="searchForm.endTime" inputReadOnly @change="(e,str)=>searchForm.endTime=str" class="response" />
+              <a-form-model-item label="时间" prop="startTime">
+                <a-date-picker v-model="searchForm.startTime" inputReadOnly placeholder="开始时间" @change="(e,str)=>searchForm.startTime=str" class="response" style="width:50%">
+                  <template #suffixIcon></template>
+                </a-date-picker>
+                <a-date-picker v-model="searchForm.endTime" inputReadOnly placeholder="结束时间" @change="(e,str)=>searchForm.endTime=str" class="response" style="width:50%">
+                  <template #suffixIcon></template>
+                </a-date-picker>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">

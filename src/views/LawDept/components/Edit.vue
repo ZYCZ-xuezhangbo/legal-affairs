@@ -1,6 +1,10 @@
 <template>
   <div>
     <a-modal v-bind="editModal" :title="title" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
+      <template #footer>
+        <a-button @click="handleCancel">{{ act===ACTIONS.Detail?'关闭':'取消' }}</a-button>
+        <a-button v-if="!disabled" type="primary" :loading="confirmLoading" @click="handleOk">确定</a-button>
+      </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
         <a-form-model ref="form" :rules="rules" :model="form">
@@ -75,11 +79,9 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
-const ADD = 'add'
-const EDIT = 'edit'
-const DETAIL = 'detail'
 const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
 const validataMax30 = { max: 30, message: '最大长度30位', trigger: 'blur' }
 
@@ -117,9 +119,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
-      if (newVal && this.act === DETAIL || this.act === EDIT) {
+      if (newVal && this.act === ACTIONS.Detail || this.act === ACTIONS.Edit) {
         this.getDetail()
-      } else if (newVal && this.act === ADD) {
+      } else if (newVal && this.act === ACTIONS.Add) {
         this.$nextTick(() => {
           this.$refs.form.resetFields()
         })
@@ -128,17 +130,17 @@ export default {
   },
   computed: {
     title() {
-      if (this.act === DETAIL) {
+      if (this.act === ACTIONS.Detail) {
         return '详情'
-      } else if (this.act === ADD) {
+      } else if (this.act === ACTIONS.Add) {
         return '新增'
-      } else if (this.act === EDIT) {
+      } else if (this.act === ACTIONS.Edit) {
         return '修改'
       }
       return ''
     },
     disabled() {
-      return this.act === DETAIL
+      return this.act === ACTIONS.Detail
     },
     editModal() {
       if (this.confirmLoading) {
@@ -166,6 +168,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       gutter: 48,
       span: {
         xs: 24,
@@ -209,13 +212,13 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(() => {
         this.confirmLoading = true
-        if (this.act === EDIT) { // 修改
+        if (this.act === ACTIONS.Edit) { // 修改
           this.API.update({ id: this.id, ...this.form }).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
-        } else if (this.act === ADD) { // 新增
+        } else if (this.act === ACTIONS.Add) { // 新增
           this.API.create(this.form).then(res => {
             this.requestSuccess()
           }).finally(() => {

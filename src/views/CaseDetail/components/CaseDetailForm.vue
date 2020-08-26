@@ -22,7 +22,12 @@
         </a-col>
         <a-col v-bind="span">
           <a-form-model-item label="案由" prop="brief">
-            <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
+            <!-- <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
+              <template #suffixIcon>
+                <a-icon v-show="briefLoading" type="loading" />
+              </template>
+            </a-tree-select> -->
+            <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :load-data="handleLoadBriefData" :tree-data="briefList" :treeDefaultExpandAll="false" placeholder="案由" @change="handleBriefChange" @search="handleSearchbriefList">
               <template #suffixIcon>
                 <a-icon v-show="briefLoading" type="loading" />
               </template>
@@ -200,11 +205,7 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span" v-if="!isKuNei">
-              <a-form-model-item label="上传库外律师审批凭证" prop="layerCertificates" :rules="{
-                required: form.lawOffice==='1',
-                message: '必填项',
-                trigger: ['blur','change']
-              }">
+              <a-form-model-item label="上传库外律师审批凭证" prop="layerCertificates">
                 <UploadFile :value="form.layerCertificates" :record="uploadFileRecord" @change="e=>form.layerCertificates=e" />
               </a-form-model-item>
             </a-col>
@@ -310,8 +311,8 @@
 </template>
 
 <script>
-import { CASE_STAGE } from '@/store/mutation-types'
-import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
+import { ACTIONS, CASE_STAGE } from '@/store/mutation-types'
+import { getBrief as httpGetBriefList, getBriefById as httpGetBriefListById, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
 import test from '@/utils/test'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
@@ -333,9 +334,9 @@ const validateChineseFn = (rule, value, callback) => {
 const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
 const validatePhone = { validator: validateLawyerPhoneFn, trigger: 'blur' }
 
-const EDIT = 'edit'
-const DETAIL = 'detail'
-const ADD = 'add'
+const EDIT = ACTIONS.Edit
+const DETAIL = ACTIONS.Detail
+const ADD = ACTIONS.Add
 
 export default {
   components: {
@@ -505,6 +506,9 @@ export default {
     handleSearchOurUnits(input, option) {
       return option.componentOptions.children[0].text.indexOf(input) >= 0
     },
+    handleBriefChange(value, label, extra) {
+      this.briefSearchValue = label[0]
+    },
     /**
      * 搜索案由列表
      */
@@ -515,17 +519,40 @@ export default {
         if (this.briefTimer) clearTimeout(this.briefTimer)
         this.briefTimer = setTimeout(() => {
           this.briefLoading = true
+          this.briefList = []
+
           httpGetBriefList(keyword).then(res => {
             const list = res.data.map(v => {
               v.pId = v.pid
               return v
             })
+
             this.briefList = list
           }).finally(() => {
             this.briefLoading = false
           })
         }, 800)
       }
+    },
+    handleLoadBriefData(treeNode) {
+      return new Promise((resolve, reject) => {
+        const { id } = treeNode.dataRef
+        httpGetBriefListById(id).then(res => {
+          const list = res.data.map(v => {
+            v.pId = v.pid
+            return v
+          })
+
+          // 合并数组并将id去重
+          const sumList = [...this.briefList, ...list]
+          const newList = sumList.filter((item, index) => {
+            const arrids = sumList.map(v => v.id)
+            return arrids.indexOf(item.id) === index
+          })
+          this.briefList = newList
+          resolve()
+        })
+      })
     },
     /**
      * 添加一条当事人输入框

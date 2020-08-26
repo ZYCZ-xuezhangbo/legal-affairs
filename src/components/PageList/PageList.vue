@@ -116,6 +116,11 @@ export default {
 
         list.push(item)
       }
+      // 按固定顺序排序
+      list.sort((a, b) => {
+        const order = ['查看', '修改', '评价', '下载', '删除']
+        return order.indexOf(a.name) - order.indexOf(b.name)
+      })
       return list
     }
   },

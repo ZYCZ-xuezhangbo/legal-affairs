@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalMember" :dict="dict" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="legalMember" :dict="dict" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
     <Search :company-list="companyList" @search="handleSearch" />
 
     <List api="legalMember" :columns="columns" :actions="['edit','detail', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { page as httpGetList, getDict as httpGetDict } from '@/api/legalMember'
 import Search from './components/Search'
 import Edit from './components/Edit'
@@ -23,7 +24,7 @@ export default {
     return {
       dialog: {
         editId: 0,
-        isEdit: false,
+        act: '',
         showAdd: false
       },
       searchData: {},
@@ -117,16 +118,14 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.isEdit = false
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === 'edit') {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
-      }
+      this.dialog.act = act
+      this.dialog.editId = id
+      this.dialog.showAdd = true
     }
   },
   mounted() {

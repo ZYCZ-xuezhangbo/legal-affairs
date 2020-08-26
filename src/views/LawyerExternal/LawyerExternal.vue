@@ -59,7 +59,7 @@ export default {
           key: 'educationBackground'
         },
         {
-          title: '专业类别',
+          title: '专业',
           dataIndex: 'major',
           key: 'major'
         },

@@ -129,7 +129,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="法律职业资格证书编号" prop="legalCertificateNumber">
-                <a-input v-model="form.legalCertificateNumber" :disabled="disabled" placeholder="请输入" />
+                <a-input v-model="form.legalCertificateNumber" :disabled="disabled || form.professionStatus==='0'" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -146,12 +146,12 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="企业法律顾问职业资格证书编号" prop="certificateNumber">
-                <a-input v-model="form.certificateNumber" :disabled="disabled" placeholder="请输入" />
+                <a-input v-model="form.certificateNumber" :disabled="disabled || form.legalProfession==='0'" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="顾问职业岗位等级资格" prop="professionGrade">
-                <a-select v-model="form.professionGrade" :disabled="disabled">
+                <a-select v-model="form.professionGrade" :disabled="disabled || form.legalProfession==='0'">
                   <a-select-option v-for="(item,index) in dict.POST" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>
@@ -176,6 +176,7 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
@@ -212,9 +213,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
-      if (newVal && ['edit', 'detail'].includes(this.act)) {
+      if (newVal && [ACTIONS.Edit, ACTIONS.Detail].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === 'add') {
+      } else if (newVal && this.act === ACTIONS.Add) {
         this.$nextTick(() => {
           this.$refs.form.resetFields()
         })
@@ -262,17 +263,42 @@ export default {
     },
     modalTitle() {
       let title = ''
-      if (this.act === 'edit') {
+      if (this.act === ACTIONS.Edit) {
         title = '修改'
-      } else if (this.act === 'detail') {
+      } else if (this.act === ACTIONS.Detail) {
         title = '查看'
-      } else if (this.act === 'add') {
+      } else if (this.act === ACTIONS.Add) {
         title = '新增'
       }
       return title
     },
     disabled() {
-      return this.act === 'detail' && this.id !== ''
+      return this.act === ACTIONS.Detail && this.id !== ''
+    },
+    rules() {
+      return {
+        birthDate: [validateRequired],
+        certificateNumber: [this.form.legalProfession === '0' ? {} : validateRequired],
+        professionGrade: [this.form.legalProfession === '0' ? {} : validateRequired],
+        company: [validateRequired],
+        counselorType: [validateRequired],
+        dept: [validateRequired],
+        duty: [validateRequired],
+        fullTime: [validateRequired],
+        gender: [validateRequired],
+        lammyCompany: [validateRequired],
+        lammyDept: [validateRequired],
+        legalCertificateNumber: [this.form.professionStatus === '0' ? {} : validateRequired],
+        legalMajor: [validateRequired],
+        legalProfession: [validateRequired],
+        majorName: [validateRequired],
+        name: [validateRequired],
+        officePhone: [validateRequired],
+        professionStatus: [validateRequired],
+        school: [validateRequired],
+        userName: [validateRequired],
+        work: [validateRequired]
+      }
     }
   },
   data() {
@@ -297,42 +323,19 @@ export default {
         lammyDept: '',
         legalCertificateNumber: '',
         legalMajor: '',
-        legalProfession: '',
+        legalProfession: '0',
         majorName: '',
         name: '',
         officePhone: '',
         portrait: [],
         professionGrade: '',
-        professionStatus: '',
+        professionStatus: '0',
         resourceUrl: [],
         school: '',
         userName: '',
         work: ''
       },
-      rules: {
-        birthDate: [validateRequired],
-        certificateNumber: [validateRequired],
-        company: [validateRequired],
-        counselorType: [validateRequired],
-        dept: [validateRequired],
-        duty: [validateRequired],
-        fullTime: [validateRequired],
-        gender: [validateRequired],
-        lammyCompany: [validateRequired],
-        lammyDept: [validateRequired],
-        legalCertificateNumber: [validateRequired],
-        legalMajor: [validateRequired],
-        legalProfession: [validateRequired],
-        majorName: [validateRequired],
-        name: [validateRequired],
-        officePhone: [validateRequired],
-        portrait: [validateRequired],
-        professionGrade: [validateRequired],
-        professionStatus: [validateRequired],
-        school: [validateRequired],
-        userName: [validateRequired],
-        work: [validateRequired]
-      },
+
       pageLoading: false,
       confirmLoading: false,
       API: require(`@/api/${this.api}`)
@@ -342,13 +345,13 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
-        if (this.act === 'edit') { // 修改
+        if (this.act === ACTIONS.Edit) { // 修改
           this.API.update({ id: this.id, ...this.form }).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false
           })
-        } else { // 新增
+        } else if (this.act === ACTIONS.Add) { // 新增
           this.API.create(this.form).then(res => {
             this.requestSuccess()
           }).finally(() => {

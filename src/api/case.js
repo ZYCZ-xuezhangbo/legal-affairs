@@ -4,7 +4,7 @@ import request from '@/utils/request'
 const api = '/case'
 
 /**
- * 案由列表
+ * 案由列表，根据关键字查询所有上级案由
  * @param {string} keyword
  */
 export function getBrief(keyword) {
@@ -12,6 +12,17 @@ export function getBrief(keyword) {
     url: `${api}/getBrief`,
     method: 'get',
     params: { label: keyword }
+  })
+}
+
+/**
+ * 根据id向下查询案由
+ * @param {string} id
+ */
+export function getBriefById(id) {
+  return request({
+    url: `${api}/getBriefById/${id}`,
+    method: 'get'
   })
 }
 

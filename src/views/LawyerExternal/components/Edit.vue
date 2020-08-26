@@ -54,7 +54,7 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="专业特长" prop="major">
+              <a-form-model-item label="专业" prop="major">
                 <a-input v-model="form.major" :disabled="disabled" placeholder="请输入" />
               </a-form-model-item>
             </a-col>

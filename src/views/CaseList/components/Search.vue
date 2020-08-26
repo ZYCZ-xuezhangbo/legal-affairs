@@ -79,22 +79,18 @@
                 </a-col>
                 <a-col v-bind="span">
                   <a-form-model-item label="成诉时间" prop="startTime">
-                    <a-date-picker v-model="searchForm.startTime" inputReadOnly placeholder="开始时间" @change="(e,str)=>searchForm.startTime=str" class="response" />
-                  </a-form-model-item>
-                </a-col>
-                <a-col v-bind="span">
-                  <a-form-model-item label="成诉时间" prop="endTime">
-                    <a-date-picker v-model="searchForm.endTime" inputReadOnly placeholder="结束时间" @change="(e,str)=>searchForm.endTime=str" class="response" />
+                    <a-date-picker v-model="searchForm.startTime" inputReadOnly placeholder="开始时间" @change="(e,str)=>searchForm.startTime=str" style="width:50%">
+                      <template #suffixIcon></template>
+                    </a-date-picker>
+                    <a-date-picker v-model="searchForm.endTime" inputReadOnly placeholder="结束时间" @change="(e,str)=>searchForm.endTime=str" style="width:50%">
+                      <template #suffixIcon></template>
+                    </a-date-picker>
                   </a-form-model-item>
                 </a-col>
                 <a-col v-bind="span">
                   <a-form-model-item label="涉案金额" prop="caseAmountStart">
-                    <a-input-number v-model="searchForm.caseAmountStart" class="response" :min="0" placeholder="最小金额" />
-                  </a-form-model-item>
-                </a-col>
-                <a-col v-bind="span">
-                  <a-form-model-item label="涉案金额" prop="caseAmountEnd">
-                    <a-input-number v-model="searchForm.caseAmountEnd" class="response" placeholder="最大金额" />
+                    <a-input-number v-model="searchForm.caseAmountStart" class="response" :min="0" placeholder="最小金额" style="width:50%" />
+                    <a-input-number v-model="searchForm.caseAmountEnd" class="response" placeholder="最大金额" style="width:50%" />
                   </a-form-model-item>
                 </a-col>
               </template>

@@ -1,22 +1,38 @@
-<!--
- * @Description: 对上传文件组件进行封装
- -->
+<!-- 对上传文件组件进行封装 -->
 <template>
   <div :style="{ width: record.options.width }">
+
+    <a-modal v-model="visible" title="请选择操作" :footer="null">
+      <div class="text-center">
+        <a-button type="primary" icon="download" @click="download">下载</a-button>
+        <a-button type="primary" icon="eye" @click="handlePreviewOnModal">预览</a-button>
+      </div>
+    </a-modal>
+
+    <a-modal v-model="previewVisible" :footer="null">
+      <img v-if="perviewType==='img'" alt="" style="width: 100%" :src="previewUrl" />
+      <video v-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
+    </a-modal>
+
     <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <a-button v-if="fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
         <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
       </a-button>
     </a-upload>
+
     <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" :name="config.uploadFileName || record.options.fileName" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="config.uploadFile || record.options.action" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
       <p class="ant-upload-drag-icon">
         <a-icon type="cloud-upload" />
       </p>
       <p class="ant-upload-text">单击或拖动文件到此区域</p>
     </a-upload-dragger>
+
   </div>
 </template>
+
 <script>
+const IMG_TYPE = ['jpg', 'png', 'jpeg']
+const VIDEO_TYPE = ['mp4', 'rmvb']
 
 export default {
   name: 'KUploadFile',
@@ -47,6 +63,11 @@ export default {
   },
   data() {
     return {
+      visible: false,
+      previewVisible: false,
+      downloadFile: undefined,
+      previewUrl: '',
+      perviewType: '',
       fileList: []
     }
   },
@@ -112,10 +133,34 @@ export default {
       }, 10)
     },
     handlePreview(file) {
+      this.downloadFile = file
+
+      const fileName = file.name
+      const suffix = fileName.substr(fileName.lastIndexOf('.') + 1)
+
+      if (IMG_TYPE.includes(suffix)) {
+        // 如果是视频、图片
+        this.previewUrl = file.url
+        // this.previewUrl = 'http://cdn.kcz66.com/%E5%A4%B4%E5%83%8F.jpg'
+        this.visible = true
+        this.perviewType = 'img'
+      } else if (VIDEO_TYPE.includes(suffix)) {
+        this.previewUrl = file.url
+        this.previewUrl = 'https://www.runoob.com/try/demo_source/movie.mp4'
+        this.visible = true
+        this.perviewType = 'video'
+      } else {
+        this.download(file)
+      }
+    },
+    handlePreviewOnModal() {
+      this.previewVisible = true
+    },
+    download() {
       // 下载文件
+      const file = this.downloadFile
       const downloadWay = this.record.options.downloadWay || 'a'
       const dynamicFun = this.record.options.dynamicFun
-
       if (downloadWay === 'a') {
         // 使用a标签下载
         const a = document.createElement('a')
@@ -204,5 +249,11 @@ export default {
 <style lang="less" scoped>
 /deep/ .ant-upload-list-item-name {
   cursor: pointer;
+}
+/deep/ .ant-btn + .ant-btn {
+  margin-left: 8px;
+}
+.text-center {
+  text-align: center;
 }
 </style>
