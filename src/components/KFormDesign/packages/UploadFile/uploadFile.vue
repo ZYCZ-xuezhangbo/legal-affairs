@@ -4,7 +4,7 @@
 
     <a-modal v-model="visible" title="请选择操作" :footer="null">
       <div class="text-center">
-        <a-button type="primary" icon="download" @click="download">下载</a-button>
+        <a-button type="primary" icon="download" :loading="downloadLoading" @click="download">下载</a-button>
         <a-button type="primary" icon="eye" @click="handlePreviewOnModal">预览</a-button>
       </div>
     </a-modal>
@@ -71,7 +71,8 @@ export default {
       downloadFile: undefined,
       previewUrl: '',
       perviewType: '',
-      fileList: []
+      fileList: [],
+      downloadLoading: false
     }
   },
   watch: {
@@ -169,21 +170,24 @@ export default {
     download() {
       // 下载文件
       const file = this.downloadFile
-      const downloadWay = 'a'
+      const downloadWay = 'ajax'
+      const href = encodeURIComponent(`${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`)
 
       if (downloadWay === 'a') {
         // 使用a标签下载
         const a = document.createElement('a')
 
-        const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`
-        a.href = encodeURIComponent(href)
+        a.href = href
         a.download = file.name
         a.target = '_blank'
         a.click()
       } else if (downloadWay === 'ajax') {
         // 使用ajax获取文件blob，并保持到本地
-        this.getBlob(file.url || file.thumbUrl).then(blob => {
+        this.downloadLoading = true
+        this.getBlob(href).then(blob => {
           this.saveAs(blob, file.name)
+        }).finally(() => {
+          this.downloadLoading = false
         })
       }
     },

@@ -20,6 +20,7 @@ import './permission'
 import './utils/filter'
 import './global.less'
 
+// 自定义字体文件
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1957392_fuhqlam5lqk.js'
 })
@@ -31,9 +32,7 @@ KFormDesign.setConfig({
   uploadFile: uploadFileUrl, // 上传文件地址
   uploadImage: uploadFileUrl // 上传图片地址
 })
-
-Vue.prototype.$uploadFileUrl = process.env.NODE_ENV === 'production' ? '' : uploadFileUrl
-// Vue.prototype.$uploadImageUrl = process.env.NODE_ENV === 'production' ? '' : 'http://cdn.kcz66.com/upload-img.txt'
+Vue.prototype.$uploadFileUrl = uploadFileUrl
 
 Vue.config.productionTip = false
 

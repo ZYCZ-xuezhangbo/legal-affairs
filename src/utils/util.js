@@ -60,3 +60,25 @@ export function removeLoadingAnimate(id = '', timeout = 1500) {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
 }
+
+// 将同级数据转化为树形结构
+export function listToTree(list) {
+  const temp = {}
+  const tree = {}
+  for (const i in list) {
+    temp[list[i].id] = list[i]
+  }
+  for (const i in temp) {
+    const pId = temp[i].pId
+
+    if (pId) {
+      if (!temp[pId].children) {
+        temp[pId].children = {}
+      }
+      temp[pId].children[temp[i].id] = temp[i]
+    } else {
+      tree[temp[i].id] = temp[i]
+    }
+  }
+  return tree
+}

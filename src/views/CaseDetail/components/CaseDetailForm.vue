@@ -25,7 +25,7 @@
         <a-col v-bind="span">
           <a-form-model-item label="案由" prop="brief">
             <!-- <div @click="showBrief=true">选择</div> -->
-            <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
+            <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList" @change="handleBriefChange">
               <template #suffixIcon>
                 <a-icon v-show="briefLoading" type="loading" />
               </template>
