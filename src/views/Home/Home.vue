@@ -1,10 +1,10 @@
 <template>
   <div>
-    <LegalSystem :data="indexLegalSystemDTO" />
-    <CaseStatistics class="margin-top-lg" :data="indexCaseDTO" />
-    <LegalReview class="margin-top-lg" :data="indexLegalReviewDTO" />
-    <FirmExternal class="margin-top-lg" :data="indexOutsideLawFirmDTO" />
-    <Propaganda class="margin-top-lg" :data="indexPublicityDTO" />
+    <LegalSystem :data="indexLegalSystemDTO" :loading="loading" />
+    <CaseStatistics class="margin-top-lg" :data="indexCaseDTO" :loading="loading" />
+    <LegalReview class="margin-top-lg" :data="indexLegalReviewDTO" :loading="loading" />
+    <FirmExternal class="margin-top-lg" :data="indexOutsideLawFirmDTO" :loading="loading" />
+    <Propaganda class="margin-top-lg" :data="indexPublicityDTO" :loading="loading" />
   </div>
 </template>
 
@@ -26,6 +26,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       // 案件统计
       indexCaseDTO: {
         // 各阶段案件数量占比
@@ -98,12 +99,15 @@ export default {
   },
   methods: {
     getData() {
+      this.loading = true
       httpGetData().then(res => {
         this.indexCaseDTO = res.data.indexCaseDTO
         this.indexLegalReviewDTO = res.data.indexLegalReviewDTO
         this.indexLegalSystemDTO = res.data.indexLegalSystemDTO
         this.indexOutsideLawFirmDTO = res.data.indexOutsideLawFirmDTO
         this.indexPublicityDTO = res.data.indexPublicityDTO
+      }).finally(() => {
+        this.loading = false
       })
     }
   },

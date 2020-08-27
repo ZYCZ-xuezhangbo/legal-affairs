@@ -8,11 +8,16 @@
         <a-col :flex="1">
           <template v-if="relationCase">
             <span class="margin-right-lg margin-bottom" style="display:inline-block">
-              我方涉案单位：{{ relationCase.ourUnits }}，诉讼地位：{{ relationCase.locusStand }}，案号：{{ relationCase.caseNo }}
+              <span class="text-gray">我方涉案单位：</span>{{ relationCase.ourUnits }}
+              <a-divider type="vertical" />
+              <span class="text-gray">诉讼地位：</span>{{ relationCase.locusStand }}
+              <a-divider type="vertical" />
+              <span class="text-gray">案号：</span>{{ relationCase.caseNo }}
             </span>
-            <a class="text-red margin-bottom" style="display:inline-block" @click="relationCase=null">
+            <!-- <a class="text-red margin-bottom" style="display:inline-block" @click="relationCase=null">
               取消关联 <a-icon type="close-circle"></a-icon>
-            </a>
+            </a> -->
+            <a-button class="text-red margin-bottom" type="dashed" icon="close-circle" @click="relationCase=null">取消关联</a-button>
           </template>
         </a-col>
       </a-row>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false" title="外部律所服务">
+    <a-card :loading="loading" :bordered="false" title="外部律所服务">
       <a-row>
         <a-col :sm="24" :md="12">
           <ChartPie :data="dataPie" title="律所服务类型" />
@@ -22,6 +22,10 @@ export default {
     ChartBarGroup
   },
   props: {
+     loading: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default() {

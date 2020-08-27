@@ -1,8 +1,8 @@
 <template>
   <div>
     <a-modal title="案由" :visible="show" @ok="handleOk" @cancel="handleCancel">
-      <a-input-search style="margin-bottom: 8px" placeholder="Search" @change="onChange" />
-      <a-tree :expanded-keys="expandedKeys" blockNode :auto-expand-parent="true" :tree-data="gData" @expand="onExpand">
+      <a-input-search style="margin-bottom: 8px" placeholder="搜索" :loading="searchLoading" @change="onChange" />
+      <a-tree :expanded-keys="expandedKeys" blockNode :auto-expand-parent="true" :tree-data="gData" @expand="onExpand" @select="handleSelect">
         <template #title="{ title }">
           <span v-if="title.indexOf(searchValue) > -1">
             {{ title.substr(0, title.indexOf(searchValue)) }}
@@ -17,9 +17,10 @@
 </template>
 
 <script>
-import { list as mockList } from '@/mock/temp'
+import { getBrief as httpGetBriefByKeyword } from '@/api/case'
 
-const dataList = []
+let searchTimer = null
+let dataList = []
 
 const getParentKey = (key, tree) => {
   let parentKey
@@ -36,6 +37,16 @@ const getParentKey = (key, tree) => {
   return parentKey
 }
 
+const generateList = data => {
+  for (let i = 0; i < data.length; i++) {
+    const node = data[i]
+    const key = node.key
+    dataList.push({ key, title: node.title })
+    if (node.children) {
+      generateList(node.children)
+    }
+  }
+}
 export default {
   props: {
     show: {
@@ -45,10 +56,13 @@ export default {
   },
   data() {
     return {
+      searchLoading: false,
       expandedKeys: [],
       searchValue: '',
       autoExpandParent: true,
-      gData: mockList
+      gData: [],
+      id: '',
+      title: ''
     }
   },
   methods: {
@@ -58,36 +72,44 @@ export default {
     },
     onChange(e) {
       const value = e.target.value
-      const expandedKeys = dataList.map(item => {
-        if (item.title.indexOf(value) > -1) return getParentKey(item.key, this.gData)
-        return null
-      }).filter((item, i, self) => item && self.indexOf(item) === i)
 
-      Object.assign(this, {
-        expandedKeys,
-        searchValue: value,
-        autoExpandParent: true
-      })
+      if (searchTimer) clearTimeout(searchTimer)
+      if (value === '') return
+
+      searchTimer = setTimeout(() => {
+        this.searchLoading = true
+        httpGetBriefByKeyword(value).then(res => {
+          dataList = []
+          this.gData = res.data
+          generateList(this.gData)
+          const expandedKeys = dataList.map(item => {
+            if (item.title.indexOf(value) > -1) return getParentKey(item.key, this.gData)
+            return null
+          }).filter((item, i, self) => item && self.indexOf(item) === i)
+
+          Object.assign(this, {
+            expandedKeys,
+            searchValue: value,
+            autoExpandParent: true
+          })
+        }).finally(() => {
+          this.searchLoading = false
+        })
+      }, 800)
     },
     handleOk() {
-      console.log('ok')
+      this.$emit('choose', { id: this.id, title: this.title })
+      this.handleCancel()
     },
     handleCancel() {
       this.$emit('close')
+    },
+    handleSelect(selectedKeys, e) {
+      this.id = selectedKeys[0]
+      this.title = e.node.dataRef.title
     }
   },
   mounted() {
-    const generateList = data => {
-      for (let i = 0; i < data.length; i++) {
-        const node = data[i]
-        const key = node.key
-        dataList.push({ key, title: node.title })
-        if (node.children) {
-          generateList(node.children)
-        }
-      }
-    }
-    generateList(this.gData)
   }
 }
 </script>

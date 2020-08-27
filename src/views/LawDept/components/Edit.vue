@@ -119,12 +119,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && this.act === ACTIONS.Detail || this.act === ACTIONS.Edit) {
         this.getDetail()
-      } else if (newVal && this.act === ACTIONS.Add) {
-        this.$nextTick(() => {
-          this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -156,10 +153,7 @@ export default {
       return {
         options: {
           defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }

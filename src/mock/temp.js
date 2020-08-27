@@ -13,7 +13,8 @@ export const list = [
           {
             'title': '王五',
             'key': '3',
-            'scopedSlots': { 'title': 'title' }
+            'scopedSlots': { 'title': 'title' },
+            'children': []
           },
           {
             'title': '赵六',

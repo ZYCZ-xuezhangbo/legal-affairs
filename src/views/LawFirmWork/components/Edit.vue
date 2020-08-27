@@ -10,6 +10,15 @@
         <a-form-model ref="form" :rules="rules" :model="form">
           <a-row :gutter="gutter">
             <a-col v-bind="span">
+              <a-form-model-item label="公司" prop="lammyCompany">
+                <a-select v-model="form.lammyCompany" :disabled="disabled || isRate">
+                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col v-bind="span">
               <a-form-model-item label="律师来源" prop="lawSource">
                 <a-select v-model="form.lawSource" :disabled="disabled || isRate" @change="handleLawSourceChange">
                   <a-select-option value="0">
@@ -57,18 +66,18 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="服务开始时间" prop="serviceTimeStart">
-                <a-date-picker v-model="form.serviceTimeStart" :disabled="disabled || isRate" inputReadOnly @change="(e,str)=>form.serviceTimeStart=str" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="服务结束时间" prop="major">
-                <a-date-picker v-model="form.serviceTimeEnd" :disabled="disabled || isRate" inputReadOnly @change="(e,str)=>form.serviceTimeEnd=str" />
+              <a-form-model-item label="服务时间" prop="serviceTime">
+                <a-range-picker v-model="form.serviceTime" :disabled="disabled || isRate" :allow-clear="false" input-read-only @change="handleServiceTimeChange" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="服务费用（请上传费用凭证）" prop="serviceCharge">
                 <a-input-number v-model="form.serviceCharge" :disabled="disabled || isRate" placeholder="请输入" class="response" />
+              </a-form-model-item>
+            </a-col>
+            <a-col v-if="!isKuNei" v-bind="span">
+              <a-form-model-item label="库外律师审批凭证" prop="certificate">
+                <FileUpload :record="fileRecord" :value="form.certificate" @change="e=>form.certificate=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -154,12 +163,9 @@ export default {
   },
   watch: {
     show(newVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && [ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Rate].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === ACTIONS.Add) {
-        this.$nextTick(() => {
-          this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -184,8 +190,10 @@ export default {
         lawName: '',
         lawSource: '0',
         resourceUrl: [],
+        certificate: [],
         serviceCharge: 0,
         serviceMatter: '',
+        serviceTime: [],
         serviceTimeEnd: '',
         serviceTimeStart: '',
         serviceType: '',
@@ -202,8 +210,7 @@ export default {
         lawSource: [validateRequired],
         serviceCharge: [validateRequired],
         serviceMatter: [validateRequired],
-        serviceTimeEnd: [validateRequired],
-        serviceTimeStart: [validateRequired],
+        serviceTime: [validateRequired],
         serviceType: [validateRequired],
         scoreList: [validateRequired]
       },
@@ -246,11 +253,7 @@ export default {
     fileRecord() {
       return {
         options: {
-          defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled || this.act === ACTIONS.Rate
         }
       }
@@ -288,6 +291,7 @@ export default {
           return v
         })
         form.scoreList = scoreList
+        if (this.isKuNei) delete form.certificate
 
         if ([ACTIONS.Edit, ACTIONS.Rate].includes(this.act)) { // 修改/评分
           const isUpdate = this.act === ACTIONS.Edit ? '1' : '0'
@@ -316,6 +320,7 @@ export default {
         })
         res.data.scoreList = scoreList
         this.form = res.data
+        this.form.serviceTime = [res.data.serviceTimeStart, res.data.serviceTimeEnd]
         this.getLayerListByFirmId(res.data.lawFirmName)
       }).finally(() => {
         this.pageLoading = false
@@ -349,6 +354,11 @@ export default {
     },
     handleRateChange(e, item) {
       this.form.scoreList[this.form.scoreList.findIndex(v => v.id === item.id)].score = e
+    },
+    handleServiceTimeChange(e, str) {
+      this.form.serviceTime = str
+      this.form.serviceTimeStart = str[0]
+      this.form.serviceTimeEnd = str[1]
     }
   }
 }

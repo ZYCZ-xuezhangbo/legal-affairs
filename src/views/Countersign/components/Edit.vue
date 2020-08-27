@@ -87,12 +87,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && [ACTIONS.Edit].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === ACTIONS.Add) {
-        this.$nextTick(() => {
-          this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -110,11 +107,7 @@ export default {
     fileRecord() {
       return {
         options: {
-          defaultValue: this.form.resourceUrl,
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }

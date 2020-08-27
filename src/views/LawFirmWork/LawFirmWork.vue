@@ -42,8 +42,8 @@ export default {
       columns: [
         {
           title: '公司',
-          dataIndex: 'fillUnit',
-          key: 'fillUnit'
+          dataIndex: 'lammyCompany',
+          key: 'lammyCompany'
         },
         {
           title: '服务律所',

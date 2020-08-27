@@ -55,9 +55,7 @@ export default {
       },
       uploadFileRecord: {
         options: {
-          downloadWay: 'a',
-          limit: 1000,
-          fileName: 'file'
+          limit: 1000
         }
       },
       rules: {

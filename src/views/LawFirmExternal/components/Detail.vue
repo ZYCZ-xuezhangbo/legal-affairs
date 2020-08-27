@@ -80,8 +80,7 @@ export default {
       },
       resourceUrlRecord: {
         options: {
-          disabled: true,
-          downloadWay: 'a'
+          disabled: true
         }
       },
       pageLoading: false,

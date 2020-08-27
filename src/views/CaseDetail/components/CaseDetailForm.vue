@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- <ModalBriefTree :show="showBrief" @close="showBrief=false" /> -->
-
     <a-form-model ref="form" :model="form" :rules="rules">
       <a-row :gutter="gutter">
         <a-col v-bind="span">
@@ -24,17 +22,11 @@
         </a-col>
         <a-col v-bind="span">
           <a-form-model-item label="案由" prop="brief">
-            <!-- <div @click="showBrief=true">选择</div> -->
             <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList" @change="handleBriefChange">
               <template #suffixIcon>
                 <a-icon v-show="briefLoading" type="loading" />
               </template>
             </a-tree-select>
-            <!-- <a-tree-select v-model="form.brief" style="width: 100%" :disabled="disabled" :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" tree-data-simple-mode show-search tree-node-filter-prop="label" :load-data="handleLoadBriefData" :tree-data="briefList" :treeDefaultExpandAll="false" placeholder="案由" @change="handleBriefChange" @search="handleSearchbriefList">
-              <template #suffixIcon>
-                <a-icon v-show="briefLoading" type="loading" />
-              </template>
-            </a-tree-select> -->
           </a-form-model-item>
         </a-col>
         <a-col v-bind="span">
@@ -315,10 +307,9 @@
 
 <script>
 import { ACTIONS, CASE_STAGE } from '@/store/mutation-types'
-import { getBrief as httpGetBriefList, getBriefById as httpGetBriefListById, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
+import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
 import test from '@/utils/test'
-// import ModalBriefTree from './ModalBriefTree'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
 const validateLawyerPhoneFn = (rule, value, callback) => {
@@ -345,7 +336,6 @@ const ADD = ACTIONS.Add
 export default {
   components: {
     UploadFile
-    // ModalBriefTree
   },
   props: {
     submitLoading: {
@@ -389,7 +379,6 @@ export default {
         lawFirmList: [], // 律所列表
         ourUnits: [] // 涉案单位列表
       },
-      showBrief: false, // 显示案由弹框
       briefTimer: null,
       briefLoading: false, // 案由搜索loading
       briefSearchValue: '', // 案由的搜索框值
@@ -496,9 +485,7 @@ export default {
     uploadFileRecord() {
       return {
         options: {
-          downloadWay: 'a',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }
@@ -538,28 +525,6 @@ export default {
           })
         }, 800)
       }
-    },
-    handleLoadBriefData(treeNode) {
-      return new Promise((resolve, reject) => {
-        const { id } = treeNode.dataRef
-        httpGetBriefListById(id).then(res => {
-          const list = res.data.map(v => {
-            v.pId = v.pid
-            return v
-          })
-
-          // 合并数组并将id去重
-          const sumList = [...this.briefList, ...list]
-          const newList = sumList.filter((item, index) => {
-            const arrids = sumList.map(v => v.id)
-            return arrids.indexOf(item.id) === index
-          })
-          this.briefList = newList
-          resolve()
-        }).catch(() => {
-          reject(new Error())
-        })
-      })
     },
     /**
      * 添加一条当事人输入框

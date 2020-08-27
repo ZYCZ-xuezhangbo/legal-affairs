@@ -93,12 +93,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && this.isEdit) {
         this.getDetail()
-      } else if (newVal && !this.isEdit) {
-        this.$nextTick(() => {
-          this.$refs.form.resetFields()
-        })
       }
     }
   },

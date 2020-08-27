@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false" title="普法宣传平台">
+    <a-card :loading="loading" :bordered="false" title="普法宣传平台">
       <template #extra>
         <a-radio-group v-model="radioVal">
           <a-radio-button v-for="(item,index) in radios" :key="index" :value="item.key">
@@ -40,6 +40,10 @@ const NOTICE = '3'
 
 export default {
   props: {
+     loading: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default() {

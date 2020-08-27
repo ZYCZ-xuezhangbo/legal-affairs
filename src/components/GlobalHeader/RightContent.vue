@@ -1,6 +1,8 @@
 <template>
   <div :class="wrpCls">
-    <mail-icon :class="prefixCls" />
+    <a-tooltip placement="bottomRight" title="站内信">
+      <mail-icon :class="prefixCls" />
+    </a-tooltip>
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
   </div>
 </template>

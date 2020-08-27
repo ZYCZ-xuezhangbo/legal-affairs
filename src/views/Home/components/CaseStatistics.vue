@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false" title="案件统计">
+    <a-card :loading="loading" :bordered="false" title="案件统计">
       <a-row :gutter="50">
         <a-col :sm="24" :md="6">
           <a-card class="margin-bottom-lg">
@@ -39,6 +39,10 @@ export default {
     ChartBar
   },
   props: {
+     loading: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default() {

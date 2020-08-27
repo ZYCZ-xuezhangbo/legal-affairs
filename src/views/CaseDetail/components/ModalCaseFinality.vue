@@ -59,10 +59,7 @@ export default {
     uploadFileRecord() {
       return {
         options: {
-          title: '上传',
-          downloadWay: 'a',
-          limit: 1000,
-          fileName: 'file'
+          limit: 1000
         }
       }
     }

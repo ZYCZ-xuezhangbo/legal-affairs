@@ -95,12 +95,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && ['edit', 'detail'].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === 'add') {
-        this.$nextTick(() => {
-         this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -120,11 +117,8 @@ export default {
         key: new Date().getTime(),
         model: 'upload',
         options: {
-          defaultValue: [],
-          fileName: 'image',
           limit: 3,
           listType: 'picture-card',
-          width: '100%',
           disabled: this.disabled
         }
       }
@@ -132,11 +126,7 @@ export default {
     videoRecord() {
       return {
         options: {
-          defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1,
-          fileName: 'file',
           disabled: this.disabled
         }
       }
@@ -144,11 +134,7 @@ export default {
     fileRecord() {
       return {
         options: {
-          defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }

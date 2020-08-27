@@ -6,7 +6,14 @@
           <a-row :gutter="searchTableGrid.gutter">
             <a-col v-bind="searchTableGrid.span">
               <a-form-model-item label="公司" prop="company">
-                <a-input v-model="searchForm.company" />
+                <a-select v-model="searchForm.company">
+                  <a-select-option value="">
+                    {{ $t('select.search.all') }}
+                  </a-select-option>
+                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col v-bind="searchTableGrid.span">
@@ -100,6 +107,7 @@ export default {
   methods: {
     resetForm() {
       this.$refs.searchForm.resetFields()
+      this.searchForm.endTime = ''
     },
     handleSearch() {
       this.$emit('search', this.searchForm)

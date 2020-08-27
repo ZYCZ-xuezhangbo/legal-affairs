@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false" title="法律审核">
+    <a-card :loading="loading" :bordered="false" title="法律审核">
       <a-row :gutter="50">
         <a-col :xs="24" :sm="12" :md="8" :lg="6" :class="isMobile?'padding-bottom-lg':''">
           <Statistics :values="statistics.systemReview" title="规章制度审核" jump-url="" />
@@ -27,6 +27,10 @@ export default {
     Statistics
   },
   props: {
+     loading: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default() {

@@ -36,7 +36,7 @@
           </a-col>
           <a-col :md="24" :lg="12">
             <a-form-model-item label="提醒时间" prop="remindTime">
-              <a-date-picker v-model="form.remindTime" inputReadOnly @change="(e,str)=>form.remindTime=str" class="response" />
+              <a-date-picker v-model="form.remindTime" inputReadOnly :disabled="!form.remind" @change="(e,str)=>form.remindTime=str" class="response" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -84,9 +84,7 @@ export default {
       },
       uploadFileRecord: {
         options: {
-          downloadWay: 'a',
-          limit: 1000,
-          fileName: 'file'
+          limit: 1000
         }
       }
     }
@@ -97,6 +95,11 @@ export default {
         this.$nextTick(() => {
           this.$refs.form.resetFields()
         })
+      }
+    },
+    'form.remind'(val) {
+      if (!val) {
+        this.form.remindTime = ''
       }
     }
   },

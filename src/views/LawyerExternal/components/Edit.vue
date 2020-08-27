@@ -78,13 +78,13 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
-              <a-form-model-item label="展示视频" prop="videos">
-                <FileUpload :record="fileRecord" :value="form.videos" @change="e=>form.videos=e" />
+              <a-form-model-item label="展示图片" prop="photographs">
+                <ImgUpload :record="imgRecord" :value="form.photographs" @change="e=>form.photographs=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
-              <a-form-model-item label="展示图片" prop="photographs">
-                <ImgUpload :record="portraitRecord" :value="form.photographs" @change="e=>form.photographs=e" />
+              <a-form-model-item label="展示视频" prop="videos">
+                <FileUpload :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -138,12 +138,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && ['edit', 'detail'].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === 'add') {
-        this.$nextTick(() => {
-         this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -158,16 +155,19 @@ export default {
       }
       return ''
     },
-    portraitRecord() {
+    imgRecord() {
       return {
-        key: new Date().getTime(),
-        model: 'upload',
         options: {
-          defaultValue: [],
-          fileName: 'image',
-          limit: 1,
+          limit: 3,
           listType: 'picture-card',
-          width: '100%',
+          disabled: this.disabled
+        }
+      }
+    },
+    videoRecord() {
+      return {
+        options: {
+          limit: 1,
           disabled: this.disabled
         }
       }
@@ -175,11 +175,7 @@ export default {
     fileRecord() {
       return {
         options: {
-          defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }

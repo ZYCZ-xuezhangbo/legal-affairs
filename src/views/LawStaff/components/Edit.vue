@@ -66,7 +66,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="开始参加工作时间" prop="joinWork">
-                <a-date-picker v-model="form.joinWork" :disabled="disabled" @change="(e,str)=>form.joinWork=str" />
+                <a-date-picker v-model="form.joinWork" :disabled="disabled" inputReadOnly @change="(e,str)=>form.joinWork=str" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -240,12 +240,9 @@ export default {
   },
   watch: {
     show(newVal, oldVal) {
+      this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && [ACTIONS.Detail, ACTIONS.Edit].includes(this.act)) {
         this.getDetail()
-      } else if (newVal && this.act === ACTIONS.Add) {
-        this.$nextTick(() => {
-          this.$refs.form.resetFields()
-        })
       }
     }
   },
@@ -265,11 +262,8 @@ export default {
         key: new Date().getTime(),
         model: 'upload',
         options: {
-          defaultValue: [],
-          fileName: 'image',
           limit: 1,
           listType: 'picture-card',
-          width: '100%',
           disabled: this.disabled
         }
       }
@@ -277,11 +271,7 @@ export default {
     fileRecord() {
       return {
         options: {
-          defaultValue: [],
-          downloadWay: 'a',
-          width: '100%',
           limit: 1000,
-          fileName: 'file',
           disabled: this.disabled
         }
       }

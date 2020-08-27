@@ -1,5 +1,5 @@
 <template>
-  <a-card :bordered="false" title="法律体系">
+  <a-card :loading="loading" :bordered="false" title="法律体系">
     <a-row :gutter="50">
       <a-col :sm="24" :md="8">
         <a-card class="margin-bottom-lg">
@@ -42,6 +42,10 @@ export default {
     LegalSystemChart
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default() {
