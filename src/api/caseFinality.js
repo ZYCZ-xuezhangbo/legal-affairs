@@ -3,14 +3,6 @@ import request from '@/utils/request'
 
 const api = '/caseFinality'
 
-export function create(data) {
-  return request({
-    url: `${api}/create`,
-    method: 'post',
-    data
-  })
-}
-
 export function getByCaseFolderId(id) {
   return request({
     url: `${api}/getByCaseFolderId/${id}`,

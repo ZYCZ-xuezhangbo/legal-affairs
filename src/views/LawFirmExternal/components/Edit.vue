@@ -234,7 +234,7 @@ export default {
 
 <style>
 .video {
-  max-width: 100%;
+  max-width: 50%;
   border-radius: 5px;
   overflow: hidden;
 }

@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     handleChangeStep(caseId) {
-      this.modifyRecord = []
       this.modifyRecordPagination = paginatinoInit
       this.activeTab = '1'
       this.formAct = ACTIONS.Detail
@@ -109,6 +108,7 @@ export default {
      * 获取案件详情
      */
     getCaseInfo() {
+      this.modifyRecord = []
       this.caseInfoLoading = true
       httpGetCaseInfo(this.caseId).then(res => {
         this.caseInfo = res.data

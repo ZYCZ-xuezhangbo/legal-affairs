@@ -48,12 +48,12 @@ export default {
           key: 'title'
         },
         {
-          title: '发送单位',
+          title: '发布单位',
           dataIndex: 'releaseCompany',
           key: 'releaseCompany'
         },
         {
-          title: '发送人',
+          title: '发布人',
           dataIndex: 'releasePerson',
           key: 'releasePerson'
         }

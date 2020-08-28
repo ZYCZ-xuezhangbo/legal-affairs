@@ -2,7 +2,7 @@
   <div>
     <a-modal :title="title" ok-text="提交" :visible="show" :confirm-loading="confirmLoading" @ok="handleSubmit" @cancel="handleClose">
       <a-form-model ref="form" :model="form" :rules="rules">
-        <a-form-model-item label="回款金额" prop="returnedMoney">
+        <a-form-model-item label="回款金额(万元)" prop="returnedMoney">
           <a-input-number v-model="form.returnedMoney" :precision="2" :min="0" placeholder="回款金额" class="response" />
         </a-form-model-item>
         <a-form-model-item label="回款日期" prop="returnedTime">

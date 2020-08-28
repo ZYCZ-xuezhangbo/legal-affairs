@@ -14,18 +14,19 @@
       <video id="video" v-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
     </a-modal>
 
-    <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
-      <a-button v-if="fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
-        <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
-      </a-button>
-    </a-upload>
-
-    <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
-      <p class="ant-upload-drag-icon">
-        <a-icon type="cloud-upload" />
-      </p>
-      <p class="ant-upload-text">单击或拖动文件到此区域</p>
-    </a-upload-dragger>
+    <a-spin :spinning="spinning">
+      <a-upload v-if="!record.options.drag" :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+        <a-button v-if="fileList.length < record.options.limit" :disabled="record.options.disabled || parentDisabled">
+          <a-icon type="upload" /> {{ record.options.placeholder || '上传' }}
+        </a-button>
+      </a-upload>
+      <a-upload-dragger v-else :disabled="record.options.disabled || parentDisabled" name="file" :headers="config.uploadFileHeaders || record.options.headers" :data="config.uploadFileData || optionsData" :action="$uploadFileUrl" :multiple="record.options.multiple" :fileList="fileList" @preview="handlePreview" @change="handleChange" :remove="remove" :beforeUpload="beforeUpload">
+        <p class="ant-upload-drag-icon">
+          <a-icon type="cloud-upload" />
+        </p>
+        <p class="ant-upload-text">单击或拖动文件到此区域</p>
+      </a-upload-dragger>
+    </a-spin>
 
   </div>
 </template>
@@ -66,6 +67,7 @@ export default {
   },
   data() {
     return {
+      spinning: false,
       visible: false,
       previewVisible: false,
       downloadFile: undefined,
@@ -171,7 +173,10 @@ export default {
       // 下载文件
       const file = this.downloadFile
       const downloadWay = 'ajax'
-      const href = encodeURIComponent(`${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`)
+      const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`
+
+      // 测试文件路径
+      // const href = 'http://47.98.58.218:8082/%2Fapi%2Ffile%2Fdownload%3Furl%3Dhttp%3A%2F%2F47.98.58.218%3A8083%2F20200827%2F1598502127476003.png%26name%3Dimg_153797686856810530.png'
 
       if (downloadWay === 'a') {
         // 使用a标签下载
@@ -183,11 +188,19 @@ export default {
         a.click()
       } else if (downloadWay === 'ajax') {
         // 使用ajax获取文件blob，并保持到本地
+        this.spinning = true
         this.downloadLoading = true
+
         this.getBlob(href).then(blob => {
           this.saveAs(blob, file.name)
+        }).catch((e) => {
+          this.$notification.error({
+            message: '请求出错',
+            description: e
+          })
         }).finally(() => {
           this.downloadLoading = false
+          this.spinning = false
         })
       }
     },
@@ -196,17 +209,21 @@ export default {
      * url 目标文件地址
      */
     getBlob(url) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
 
         xhr.open('GET', url, true)
         xhr.responseType = 'blob'
-        xhr.onload = () => {
-          if (xhr.status === 200) {
+        xhr.onload = (e) => {
+          if (xhr.status === 200 || String(xhr.status).substring(0, 1) === '2') {
             resolve(xhr.response)
+          } else {
+            reject(xhr.response)
           }
         }
-
+        xhr.onerror = (e) => {
+          reject(new Error(e))
+        }
         xhr.send()
       })
     },

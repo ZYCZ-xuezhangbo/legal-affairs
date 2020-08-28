@@ -43,7 +43,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="是否具有企业法律职业资格" prop="legalProfession">
-                <a-radio-group name="radioGroup" v-model="form.legalProfession">
+                <a-radio-group name="radioGroup" :disabled="disabled" v-model="form.legalProfession">
                   <a-radio value="1">
                     是
                   </a-radio>
@@ -287,7 +287,7 @@ export default {
 
 <style>
 .video {
-  max-width: 100%;
+  max-width: 50%;
   border-radius: 5px;
   overflow: hidden;
 }

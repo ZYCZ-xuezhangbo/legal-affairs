@@ -6,6 +6,7 @@
 
 <script>
 import WEditor from 'wangeditor'
+import { upload } from '@/api/file'
 
 export default {
   name: 'WangEditor',
@@ -47,18 +48,26 @@ export default {
     }
   },
   mounted() {
-    this.initEditor()
+    this.$nextTick(() => {
+      this.initEditor()
+    })
   },
   methods: {
     initEditor() {
       this.editor = new WEditor(this.$refs.editor)
-      // this.editor.onchangeTimeout = 200
+      this.editor.customConfig.zIndex = 1
       this.editor.customConfig.onchange = (html) => {
         this.editorContent = html
         this.$emit('change', this.editorContent)
       }
-      this.editor.customConfig.uploadImgServer = this.$uploadFileUrl
-      this.editor.customConfig.zIndex = 1
+      this.editor.customConfig.customUploadImg = (files, insert) => {
+        const formData = new FormData()
+        formData.append('file', files[0], files[0].name)
+        upload(formData).then(res => {
+          const url = res.data.url
+          insert(url)
+        })
+      }
       this.editor.create()
     }
   }
@@ -71,7 +80,7 @@ export default {
     text-align: left;
     /deep/ .w-e-toolbar {
       border-radius: 5px 5px 0 0;
-      background-color: rgba(225, 225, 225, .1);
+      background-color: rgba(225, 225, 225, 0.1);
     }
     /deep/ .w-e-text-container {
       border-radius: 0 0 5px 5px;

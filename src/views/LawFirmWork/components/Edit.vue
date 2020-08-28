@@ -67,7 +67,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="服务时间" prop="serviceTime">
-                <a-range-picker v-model="form.serviceTime" :disabled="disabled || isRate" :allow-clear="false" input-read-only @change="handleServiceTimeChange" />
+                <a-range-picker :value="form.serviceTime" :disabled="disabled || isRate" :allow-clear="false" input-read-only @change="handleServiceTimeChange" />
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
@@ -220,7 +220,6 @@ export default {
       layerList: [], // 律师列表
       pageLoading: false,
       confirmLoading: false,
-
       API: require(`@/api/${this.api}`)
     }
   },
@@ -358,7 +357,8 @@ export default {
       this.form.scoreList[this.form.scoreList.findIndex(v => v.id === item.id)].score = e
     },
     handleServiceTimeChange(e, str) {
-      this.form.serviceTime = str
+      this.form.serviceTime = e
+
       this.form.serviceTimeStart = str[0]
       this.form.serviceTimeEnd = str[1]
     }
