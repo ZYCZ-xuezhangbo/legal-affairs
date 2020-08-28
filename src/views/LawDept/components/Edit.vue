@@ -81,9 +81,10 @@
 <script>
 import { ACTIONS } from '@/store/mutation-types'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+import formValidate from '@/utils/formValidate'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
-const validataMax30 = { max: 30, message: '最大长度30位', trigger: 'blur' }
+const validateRequired = formValidate.required
+const validataMax30 = formValidate.max30Str
 
 export default {
   components: {
@@ -190,7 +191,7 @@ export default {
         company: [validateRequired],
         contactOfficePhone: [validateRequired, validataMax30],
         contactPerson: [validateRequired, validataMax30],
-        contactPhone: [validateRequired, validataMax30],
+        contactPhone: [validateRequired, formValidate.phone, validataMax30],
         deptName: [validateRequired],
         deptObligation: [validateRequired],
         deptPhone: [validateRequired, validataMax30],

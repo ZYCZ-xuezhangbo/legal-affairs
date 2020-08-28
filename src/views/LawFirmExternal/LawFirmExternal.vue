@@ -1,10 +1,10 @@
 <template>
   <page-header-wrapper>
-    <Edit api="outsideLawFirm" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-    <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" />
-    <Search @search="handleSearch" />
+    <!-- <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" /> -->
 
-    <List api="outsideLawFirm" :columns="columns" :actions="['detail','edit']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <Edit api="outsideLawFirm" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Search @search="handleSearch" />
+    <List api="outsideLawFirm" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
 
   </page-header-wrapper>
 </template>
@@ -15,22 +15,20 @@ import { page as httpGetList } from '@/api/outsideLawFirm'
 import { PageList as List } from '@/components'
 import Edit from './components/Edit'
 import Search from './components/Search'
-import Detail from './components/Detail'
 
 export default {
   components: {
     Search,
-    Detail,
     List,
     Edit
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
-        editId: 0,
+        editId: '',
         act: '',
-        showAdd: false,
-        showDetail: false
+        showAdd: false
       },
       searchData: {},
       list: [],
@@ -92,12 +90,7 @@ export default {
       const id = item.id
       this.dialog.editId = id
       this.dialog.act = act
-
-      if (act === ACTIONS.Detail) {
-        this.dialog.showDetail = true
-      } else if (act === ACTIONS.Edit) {
-        this.dialog.showAdd = true
-      }
+      this.dialog.showAdd = true
     }
   },
   mounted() {

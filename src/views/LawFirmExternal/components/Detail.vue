@@ -6,7 +6,7 @@
       </template>
       <a-skeleton v-if="pageLoading" active />
       <template v-else>
-        <a-descriptions bordered layout="vertical">
+        <a-descriptions :bordered="false">
           <a-descriptions-item label="律所名称">
             {{ data.lawFirmName }}
           </a-descriptions-item>

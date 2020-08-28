@@ -94,9 +94,9 @@
           <a-row :gutter="gutter" v-for="(item,index) in form.caseUsers" :key="item.key">
             <a-col v-bind="span">
               <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="[{
-                required: true,
-                message: '必填项',
-                trigger: 'blur'
+                required: true, message: '必填项', trigger: 'blur'
+              }, {
+                max: 30, message: '最大长度30位', trigger: 'blur'
               }]">
                 <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人姓名">
                   <template v-if="isEdit || isAdd" #addonAfter>
@@ -307,27 +307,15 @@
 
 <script>
 import { ACTIONS, CASE_STAGE } from '@/store/mutation-types'
+import formValidate from '@/utils/formValidate'
 import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
-import test from '@/utils/test'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
-const validateLawyerPhoneFn = (rule, value, callback) => {
-  if (!value || value === '') {
-    callback()
-  } else {
-    if (test.mobile(value)) callback()
-    else callback(new Error('手机号格式不正确'))
-  }
-}
-
-const validateChineseFn = (rule, value, callback) => {
-  if (test.chinese(value)) callback()
-  else callback(new Error('必须中文'))
-}
-
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
-const validatePhone = { validator: validateLawyerPhoneFn, trigger: 'blur' }
+const validateRequired = formValidate.required
+const validatePhone = formValidate.phone
+const max30Str = formValidate.max30Str
+const validatePhoneMoney = [formValidate.max20Num, formValidate.money]
 
 const EDIT = ACTIONS.Edit
 const DETAIL = ACTIONS.Detail
@@ -428,24 +416,14 @@ export default {
         caseType: [validateRequired],
         caseStage: [validateRequired],
         importantCase: [validateRequired],
-        caseAmount: [validateRequired],
-        lawyerName: [
-          {
-            validator: (rule, value, callback) => {
-              if (!value || value === '' || this.isKuNei) {
-                callback()
-              } else {
-                if (test.chinese(value)) callback()
-                else callback(new Error('必须中文'))
-              }
-            },
-            trigger: 'blur'
-          }
-        ],
-        lawyerPhone: [validatePhone],
+        caseNo: [max30Str],
+        competentCourt: [max30Str],
+        trialJudge: [max30Str],
+        lawyerPhone: [validatePhone, max30Str],
+        caseAmount: [validateRequired, ...validatePhoneMoney],
+        entrust: [...validatePhoneMoney],
         caseDescription: [validateRequired]
-      },
-      validateChineseFn
+      }
     }
   },
   watch: {

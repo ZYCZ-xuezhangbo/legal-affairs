@@ -179,8 +179,10 @@
 import { ACTIONS } from '@/store/mutation-types'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+import formValidate from '@/utils/formValidate'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validateRequired = formValidate.required
+const validateMax30Str = formValidate.max30Str
 
 export default {
   props: {
@@ -216,6 +218,17 @@ export default {
       this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && [ACTIONS.Edit, ACTIONS.Detail].includes(this.act)) {
         this.getDetail()
+      }
+    },
+    'form.professionStatus'(val) {
+      if (val === '0') {
+        this.form.legalCertificateNumber = ''
+      }
+    },
+    'form.legalProfession'(val) {
+      if (val === '0') {
+        this.form.certificateNumber = ''
+        this.form.professionGrade = ''
       }
     }
   },
@@ -266,24 +279,24 @@ export default {
     rules() {
       return {
         birthDate: [validateRequired],
-        certificateNumber: [this.form.legalProfession === '0' ? {} : validateRequired],
+        certificateNumber: [this.form.legalProfession === '0' ? {} : (validateRequired, validateMax30Str)],
         professionGrade: [this.form.legalProfession === '0' ? {} : validateRequired],
         company: [validateRequired],
         counselorType: [validateRequired],
         dept: [validateRequired],
-        duty: [validateRequired],
+        duty: [validateRequired, validateMax30Str],
         fullTime: [validateRequired],
         gender: [validateRequired],
         lammyCompany: [validateRequired],
         lammyDept: [validateRequired],
-        legalCertificateNumber: [this.form.professionStatus === '0' ? {} : validateRequired],
+        legalCertificateNumber: [this.form.professionStatus === '0' ? {} : (validateRequired, validateMax30Str)],
         legalMajor: [validateRequired],
         legalProfession: [validateRequired],
-        majorName: [validateRequired],
-        name: [validateRequired],
-        officePhone: [validateRequired],
+        majorName: [validateRequired, validateMax30Str],
+        name: [validateRequired, validateMax30Str],
+        officePhone: [validateRequired, validateMax30Str],
         professionStatus: [validateRequired],
-        school: [validateRequired],
+        school: [validateRequired, validateMax30Str],
         userName: [validateRequired],
         work: [validateRequired]
       }

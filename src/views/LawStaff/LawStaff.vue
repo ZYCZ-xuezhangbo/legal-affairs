@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       dialog: {
-        editId: 0,
+        editId: '',
         act: '',
         showAdd: false
       },

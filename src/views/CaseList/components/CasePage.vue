@@ -1,14 +1,13 @@
 <template>
   <div>
     <Search :dic-data="searchDictData" @search="handleSearch" />
-    <List api="user" :title="listTitle" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
+    <List api="user" :title="listTitle" :scroll-width="1800" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
   </div>
 </template>
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
 import { page as httpGetCaseList } from '@/api/case'
-// import { getProgressDictionary as httpGetProStatusDict } from '@/api/caseProgress'
 import { PageList as List } from '@/components'
 import Search from './Search'
 

@@ -41,7 +41,8 @@
             </a-col>
             <a-col :span="24">
               <a-form-model-item label="展示视频" prop="videos">
-                <file-upload :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
+                <video class="video" v-if="ACTIONS.Detail===act && form.videos[0]" id="video" :src="form.videos[0].url" controls></video>
+                <file-upload v-else :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -58,11 +59,13 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import test from '@/utils/test'
+import formValidate from '@/utils/formValidate'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validateRequired = formValidate.required
+const validateMax30Str = formValidate.max30Str
+let video = null
 
 export default {
   props: {
@@ -71,7 +74,7 @@ export default {
       default: ''
     },
     id: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     show: {
@@ -96,9 +99,12 @@ export default {
   watch: {
     show(newVal, oldVal) {
       this.$nextTick(() => this.$refs.form.resetFields())
-      if (newVal && ['edit', 'detail'].includes(this.act)) {
+
+      if (newVal && [ACTIONS.Edit, ACTIONS.Detail].includes(this.act)) {
         this.getDetail()
       }
+      if (!video && !newVal) video = document.getElementById('video')
+      if (this.form.videos[0]) video.pause()
     }
   },
   computed: {
@@ -114,8 +120,6 @@ export default {
     },
     imgRecord() {
       return {
-        key: new Date().getTime(),
-        model: 'upload',
         options: {
           limit: 3,
           listType: 'picture-card',
@@ -151,7 +155,7 @@ export default {
       return title
     },
     disabled() {
-      return this.act === 'detail' && this.id !== ''
+      return this.act === ACTIONS.Detail && this.id !== ''
     }
   },
   data() {
@@ -177,20 +181,11 @@ export default {
         videos: []
       },
       rules: {
-        lawFirmName: [validateRequired],
+        lawFirmName: [validateRequired, validateMax30Str],
         address: [validateRequired],
-        linkman: [validateRequired],
+        linkman: [validateRequired, validateMax30Str],
         lawFirmDesc: [validateRequired],
-        phone: [
-          validateRequired,
-          {
-            validator: (rule, value, callback) => {
-              if (test.mobile(value)) callback()
-              else callback(new Error(this.$t('message.form.validate.mobile.fail')))
-            },
-            trigger: 'blur'
-          }
-        ]
+        phone: [validateRequired, formValidate.phone]
       },
       pageLoading: false,
       confirmLoading: false,
@@ -238,4 +233,9 @@ export default {
 </script>
 
 <style>
+.video {
+  max-width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
 </style>

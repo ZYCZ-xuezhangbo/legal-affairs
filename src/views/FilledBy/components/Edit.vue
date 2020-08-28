@@ -55,16 +55,10 @@
 </template>
 
 <script>
-import test from '@/utils/test'
+import FormValidate from '@/utils/formValidate'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
-const validatePhone = {
-  validator: (rule, value, callback) => {
-    if (test.mobile(value)) callback()
-    else callback(new Error('手机号格式不正确'))
-  },
-  trigger: 'blur'
-}
+const validateRequired = FormValidate.required
+const validatePhone = FormValidate.phone
 
 export default {
   props: {
@@ -138,8 +132,8 @@ export default {
         deptName: [validateRequired],
         lammyCompany: [validateRequired],
         lammyDept: [validateRequired],
-        name: [validateRequired],
-        officePhone: [validateRequired],
+        name: [validateRequired, FormValidate.max30Str],
+        officePhone: [validateRequired, FormValidate.max30Str],
         phone: [validateRequired, validatePhone],
         userName: [validateRequired]
       }

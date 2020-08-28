@@ -17,8 +17,12 @@
 </template>
 
 <script>
+import FormValidate from '@/utils/formValidate'
 import { create as httpCreate, update as httpUpdate } from '@/api/caseReturned'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
+
+const validateRequired = FormValidate.required
+const validateMoney = [FormValidate.max20Num, FormValidate.min0Num, FormValidate.money]
 
 export default {
   components: {
@@ -59,12 +63,8 @@ export default {
         }
       },
       rules: {
-        returnedMoney: [
-          { required: true, message: '必填项', trigger: 'blur' }
-        ],
-        returnedTime: [
-          { required: true, message: '必填项', trigger: ['blur', 'change'] }
-        ]
+        returnedMoney: [validateRequired, ...validateMoney],
+        returnedTime: [validateRequired]
       }
     }
   },
@@ -74,7 +74,7 @@ export default {
     },
     isEdit(val) {
       if (!val) {
-       this.$refs.form.resetFields()
+        this.$refs.form.resetFields()
       }
     }
   },

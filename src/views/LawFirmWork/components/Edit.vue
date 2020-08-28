@@ -71,8 +71,9 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="服务费用（请上传费用凭证）" prop="serviceCharge">
-                <a-input-number v-model="form.serviceCharge" :disabled="disabled || isRate" placeholder="请输入" class="response" />
+              <a-form-model-item label="服务费用(元)" prop="serviceCharge">
+                <template #help> 请上传费用凭证 </template>
+                <a-input-number v-model="form.serviceCharge" :disabled="disabled || isRate" :min="0" :precision="2" placeholder="请输入" class="response" />
               </a-form-model-item>
             </a-col>
             <a-col v-if="!isKuNei" v-bind="span">
@@ -121,8 +122,9 @@ import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawMa
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import deepClone from '@/utils/deepClone'
+import formValidate from '@/utils/formValidate'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validateRequired = formValidate.required
 
 export default {
   props: {
@@ -208,7 +210,7 @@ export default {
         lawFirmName: [validateRequired],
         lawName: [validateRequired],
         lawSource: [validateRequired],
-        serviceCharge: [validateRequired],
+        serviceCharge: [validateRequired, formValidate.money, formValidate.max20Num],
         serviceMatter: [validateRequired],
         serviceTime: [validateRequired],
         serviceType: [validateRequired],

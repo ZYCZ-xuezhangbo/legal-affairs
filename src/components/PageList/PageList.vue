@@ -5,7 +5,7 @@
         <a-button type="primary" @click="handleShowAdd"> 新建 </a-button>
         <a-button type="primary" @click="handleExport"> 导出 </a-button>
       </template>
-      <a-table :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
+      <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
         <template #action="item">
           <span v-if="actList.length>0">
             <span v-for="(v,k) in actList" :key="k">
@@ -66,6 +66,10 @@ export default {
         return []
       }
     },
+    scrollWidth: {
+      type: Number,
+      default: 0
+    },
     actions: {
       type: Array,
       default() {
@@ -81,13 +85,24 @@ export default {
   computed: {
     columnList() {
       const c = this.columns
-      c.push({
+      const item = {
         title: '操作',
         align: 'right',
         key: 'action',
         scopedSlots: { customRender: 'action' }
-      })
+      }
+      if (this.scrollWidth > 0) item.fixed = 'right'
+      c.push(item)
       return c
+    },
+    tableModal() {
+      if (this.scrollWidth > 0) {
+        return {
+          scroll: { x: this.scrollWidth }
+        }
+      } else {
+        return {}
+      }
     },
     actList() {
       const list = []
@@ -117,8 +132,8 @@ export default {
         list.push(item)
       }
       // 按固定顺序排序
+      const order = ['查看', '修改', '评价', '下载', '删除']
       list.sort((a, b) => {
-        const order = ['查看', '修改', '评价', '下载', '删除']
         return order.indexOf(a.name) - order.indexOf(b.name)
       })
       return list

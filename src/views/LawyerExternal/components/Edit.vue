@@ -74,7 +74,7 @@
             </a-col>
             <a-col :span="24">
               <a-form-model-item label="主要服务内容" prop="serviceContent">
-                <a-textarea placeholder="主要服务内容" :disabled="disabled" v-model="form.serviceContent" :auto-size="{ minRows: 2, maxRows: 6 }" />
+                <a-textarea placeholder="主要服务内容" :disabled="disabled" v-model="form.serviceContent" :auto-size="{ minRows: 5, maxRows: 15 }" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -84,7 +84,8 @@
             </a-col>
             <a-col :span="24">
               <a-form-model-item label="展示视频" prop="videos">
-                <FileUpload :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
+                <video class="video" id="video" v-if="ACTIONS.Detail===act && form.videos[0]" :src="form.videos[0].url" controls></video>
+                <FileUpload v-else :record="videoRecord" :value="form.videos" @change="e=>form.videos=e" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -101,11 +102,12 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import test from '@/utils/test'
+import FormValidate from '@/utils/formValidate'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validateRequired = FormValidate.required
+let video = null
 
 export default {
   props: {
@@ -139,9 +141,11 @@ export default {
   watch: {
     show(newVal, oldVal) {
       this.$nextTick(() => this.$refs.form.resetFields())
-      if (newVal && ['edit', 'detail'].includes(this.act)) {
+      if (newVal && [ACTIONS.Edit, ACTIONS.Detail].includes(this.act)) {
         this.getDetail()
       }
+      if (!video && !newVal) video = document.getElementById('video')
+      if (this.form.videos[0]) video.pause()
     }
   },
   computed: {
@@ -182,17 +186,17 @@ export default {
     },
     modalTitle() {
       let title = ''
-      if (this.act === 'edit') {
+      if (this.act === ACTIONS.Edit) {
         title = '修改'
-      } else if (this.act === 'detail') {
+      } else if (this.act === ACTIONS.Detail) {
         title = '查看'
-      } else if (this.act === 'add') {
+      } else if (this.act === ACTIONS.Add) {
         title = '新增'
       }
       return title
     },
     disabled() {
-      return this.act === 'detail' && this.id !== ''
+      return this.act === ACTIONS.Detail && this.id !== ''
     }
   },
   data() {
@@ -234,20 +238,7 @@ export default {
         outsideLawFirmName: [validateRequired],
         professionalLife: [validateRequired],
         serviceContent: [validateRequired],
-        phone: [
-          validateRequired,
-          {
-            validator: (rule, value, callback) => {
-              if (!value || value === '') {
-                callback()
-              } else {
-                if (test.mobile(value)) callback()
-                else callback(new Error(this.$t('message.form.validate.mobile.fail')))
-              }
-            },
-            trigger: 'blur'
-          }
-        ]
+        phone: [validateRequired, FormValidate.phone]
       },
       pageLoading: false,
       confirmLoading: false,
@@ -295,4 +286,9 @@ export default {
 </script>
 
 <style>
+.video {
+  max-width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
 </style>

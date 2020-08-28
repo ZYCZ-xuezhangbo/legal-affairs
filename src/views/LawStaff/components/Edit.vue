@@ -198,7 +198,6 @@
           </a-row>
         </a-form-model>
       </div>
-
     </a-modal>
   </div>
 </template>
@@ -207,8 +206,11 @@
 import { ACTIONS } from '@/store/mutation-types'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
+import formValidate from '@/utils/formValidate'
 
-const validateRequired = { required: true, message: '必填项', trigger: ['change', 'blur'] }
+const validateRequired = formValidate.required
+const validateMax30Str = formValidate.max30Str
+
 export default {
   props: {
     act: {
@@ -216,7 +218,7 @@ export default {
       default: ''
     },
     id: {
-      type: [String, Number],
+      type: String,
       default: ''
     },
     show: {
@@ -243,6 +245,17 @@ export default {
       this.$nextTick(() => this.$refs.form.resetFields())
       if (newVal && [ACTIONS.Detail, ACTIONS.Edit].includes(this.act)) {
         this.getDetail()
+      }
+    },
+    'form.legalProfession'(val) {
+      if (val === '0') {
+        this.form.certificateNumber = ''
+      }
+    },
+    'form.enterpriseProfession'(val) {
+      if (val === '0') {
+        this.form.enterpriseNumber = ''
+        this.form.professionGrade = ''
       }
     }
   },
@@ -293,13 +306,13 @@ export default {
     rules() {
       return {
         birthDate: [validateRequired],
-        certificateNumber: [this.form.legalProfession === '0' ? {} : validateRequired],
-        enterpriseNumber: [this.form.enterpriseProfession === '0' ? {} : validateRequired],
+        certificateNumber: [this.form.legalProfession === '0' ? {} : (validateRequired, validateMax30Str)],
+        enterpriseNumber: [this.form.enterpriseProfession === '0' ? {} : (validateRequired, validateMax30Str)],
         professionGrade: [this.form.enterpriseProfession === '0' ? {} : validateRequired],
         company: [validateRequired],
         dept: [validateRequired],
-        educationBackground: [validateRequired],
-        educationalSystem: [validateRequired],
+        educationBackground: [validateRequired, validateMax30Str],
+        educationalSystem: [validateRequired, validateMax30Str],
         employmentPeriod: [validateRequired],
         enterpriseProfession: [validateRequired],
         fullTime: [validateRequired],
@@ -309,14 +322,14 @@ export default {
         lammyDept: [validateRequired],
         legalMajor: [validateRequired],
         legalProfession: [validateRequired],
-        majorName: [validateRequired],
-        name: [validateRequired],
-        officePhone: [validateRequired],
-        phone: [validateRequired],
+        majorName: [validateRequired, validateMax30Str],
+        name: [validateRequired, validateMax30Str],
+        officePhone: [validateRequired, validateMax30Str],
+        phone: [validateRequired, formValidate.phone],
         portrait: [validateRequired],
         postLevel: [validateRequired],
-        postName: [validateRequired],
-        school: [validateRequired],
+        postName: [validateRequired, validateMax30Str],
+        school: [validateRequired, validateMax30Str],
         userName: [validateRequired],
         work: [validateRequired]
       }
