@@ -33,8 +33,6 @@ import TabCaseDetail from './components/TabCaseDetail'
 import TabCaseModifyRecord from './components/TabCaseModifyRecord'
 import ModalAddJinzhan from './components/ModalAddJinzhan'
 
-// const caseStageDict = ['FIRST_INSTANCE', 'SECOND_INSTANCE', 'EXECUTE', 'REVIEW_INSTANCE', 'ARBITRATION', 'NOT_LAWSUIT', 'FINALITY']
-
 const paginatinoInit = {
   pageNum: 1,
   pageSize: 10,
