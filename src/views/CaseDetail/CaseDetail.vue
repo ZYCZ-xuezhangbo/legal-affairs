@@ -7,17 +7,17 @@
 
     <a-card :bordered="false" :tab-list="tabs" :active-tab-key="activeTab" @tabChange="handleTabChange" class="margin-top-lg">
       <template #tabBarExtraContent>
-        <div v-show="activeTab=='1'">
+        <div v-show="activeTab==='1'">
           <a-button type="primary" @click="dialog.showAddJinzhan=true">新增进展</a-button>
           <a-button :type="isEdit?'':'primary'" @click="handleEditBtnClick">
             {{ isEdit?'取消修改':'修改' }}
           </a-button>
         </div>
       </template>
-      <div v-show="activeTab=='1'">
+      <div v-show="activeTab==='1'">
         <TabCaseDetail :loading="caseInfoLoading" :act="formAct" :case-info="caseInfo" :case-pro-status="caseProStatus" @submit="handleCaseUpdate" />
       </div>
-      <div v-show="activeTab=='2'">
+      <div v-show="activeTab==='2'">
         <TabCaseModifyRecord :list="modifyRecord" :loading="modifyLoading" :pagination="modifyRecordPagination" @reload="handleModifyRecordReload" />
       </div>
     </a-card>
