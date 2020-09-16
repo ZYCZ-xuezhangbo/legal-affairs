@@ -173,7 +173,7 @@ export default {
       // 下载文件
       const file = this.downloadFile
       const downloadWay = 'ajax'
-      const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`
+      const href = encodeURIComponent(`${process.env.VUE_APP_API_BASE_URL}/file/download?url=${file.url}&name=${file.name}`)
 
       // 测试文件路径
       // const href = 'http://47.98.58.218:8082/%2Fapi%2Ffile%2Fdownload%3Furl%3Dhttp%3A%2F%2F47.98.58.218%3A8083%2F20200827%2F1598502127476003.png%26name%3Dimg_153797686856810530.png'

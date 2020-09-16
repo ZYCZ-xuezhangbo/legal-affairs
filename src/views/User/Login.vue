@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-
     <a-form-model ref="formLogin" :model="form" :rules="rules" class="user-layout-login">
       <a-form-model-item>
         <a-alert v-if="isLoginError" type="error" showIcon :message="loginErrorMsg===''? 'error':loginErrorMsg" />
