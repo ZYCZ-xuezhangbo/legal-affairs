@@ -217,7 +217,7 @@ export default {
           if (xhr.status === 200 || String(xhr.status).substring(0, 1) === '2') {
             resolve(xhr.response)
           } else {
-            reject(xhr.response)
+            reject(new Error(xhr.response))
           }
         }
         xhr.onerror = (e) => {
