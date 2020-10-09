@@ -31,10 +31,6 @@ import Pagination from '@/components/Pagination/Index'
 import EditModalTitle from '@/components/EditModalTitle/EditModalTitle'
 import PageEdit from '@/components/PageEdit'
 import PageList from '@/components/PageList'
-
-import GenerateForm from '@/components/GenerateForm/GenerateForm'
-import GenerateButtonGroup from '@/components/GenerateButtonGroup/GenerateButtonGroup'
-
 import Dialog from '@/components/Dialog'
 
 export {
@@ -68,9 +64,5 @@ export {
   EditModalTitle,
   PageEdit,
   PageList,
-
-  GenerateForm,
-  GenerateButtonGroup,
-
   Dialog
 }

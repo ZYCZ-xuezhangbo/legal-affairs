@@ -55,10 +55,7 @@
 </template>
 
 <script>
-import FormValidate from '@/utils/formValidate'
-
-const validateRequired = FormValidate.required
-const validatePhone = FormValidate.phone
+import { required as validateRequired, phone as validatePhone, max30Str } from '@/utils/formValidate'
 
 export default {
   props: {
@@ -132,8 +129,8 @@ export default {
         deptName: [validateRequired],
         lammyCompany: [validateRequired],
         lammyDept: [validateRequired],
-        name: [validateRequired, FormValidate.max30Str],
-        officePhone: [validateRequired, FormValidate.max30Str],
+        name: [validateRequired, max30Str],
+        officePhone: [validateRequired, max30Str],
         phone: [validateRequired, validatePhone],
         userName: [validateRequired]
       }

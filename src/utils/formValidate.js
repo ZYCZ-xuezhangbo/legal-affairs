@@ -31,6 +31,18 @@ const phone = {
   trigger: 'blur'
 }
 
+const landlineOrPhone = {
+  validator: (rule, value, callback) => {
+    if (!value || value === '') {
+      callback()
+    } else {
+      if (test.mobile(value) || test.landline(value)) callback()
+      else callback(new Error('联系电话格式不正确'))
+    }
+  },
+  trigger: 'blur'
+}
+
 const money = {
   validator: (rule, value, callback) => {
     if (!value || value === '' || value === 0 || test.amount(value)) callback()
@@ -47,12 +59,13 @@ const chinese = {
   trigger: 'blur'
 }
 
-export default {
+export {
   required,
   max30Str,
   max20Num,
   min0Num,
   phone,
   money,
-  chinese
+  chinese,
+  landlineOrPhone
 }

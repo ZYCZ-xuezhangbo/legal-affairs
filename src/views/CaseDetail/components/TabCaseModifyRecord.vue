@@ -2,7 +2,7 @@
   <div>
     <a-table :columns="columns" :data-source="list" :loading="loading" :pagination="false" :row-key="e=>e.id">
       <template #contentList="list">
-        <a-tag v-for="(item,index) in list" :key="index">
+        <a-tag v-for="(item,index) in list" :key="index" class="margin-tb-sm">
           {{ item }}
         </a-tag>
       </template>
@@ -66,6 +66,7 @@ export default {
         {
           title: '内容',
           dataIndex: 'contentList',
+          width: '70%',
           key: 'contentList',
           scopedSlots: { customRender: 'contentList' }
         }
@@ -89,5 +90,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="less">
 </style>

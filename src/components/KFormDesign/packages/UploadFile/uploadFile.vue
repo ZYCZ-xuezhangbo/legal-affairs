@@ -11,7 +11,25 @@
 
     <a-modal v-model="previewVisible" :footer="null" style="height:99vh;">
       <img v-if="perviewType==='img'" alt="" style="width: 100%" :src="previewUrl" />
-      <video id="video" v-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
+
+      <video id="video" v-else-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
+
+      <div v-else-if="perviewType==='pdf'">
+        <pdf ref="pdf" :src="previewUrl" :page="pdfPageNum" @progress="pdfLoadedRatio=$event" @num-pages="pdfTotalNum=$event"></pdf>
+        <div class="pdf-pagination">
+          <div class="padding-bottom-sm">{{ pdfPageNum }} / {{ pdfTotalNum }}</div>
+          <a-button-group>
+            <a-button type="primary" @click="prePage">
+              <a-icon type="left" />
+              上一页
+            </a-button>
+            <a-button type="primary" @click="nextPage" style="margin-left:0;">
+              下一页
+              <a-icon type="right" />
+            </a-button>
+          </a-button-group>
+        </div>
+      </div>
     </a-modal>
 
     <a-spin :spinning="spinning">
@@ -33,9 +51,12 @@
 
 <script>
 import { RESPONSE_CODE } from '@/store/mutation-types'
+import pdf from 'vue-pdf'
+import { saveAs } from '@/utils/util'
 // import { download as httpDownload } from '@/api/download'
 const IMG_TYPE = ['jpg', 'png', 'jpeg']
 const VIDEO_TYPE = ['mp4', 'rmvb']
+const PDF_TYPE = ['pdf']
 
 let video = null
 export default {
@@ -65,6 +86,9 @@ export default {
       default: false
     }
   },
+  components: {
+    pdf
+  },
   data() {
     return {
       spinning: false,
@@ -74,7 +98,10 @@ export default {
       previewUrl: '',
       perviewType: '',
       fileList: [],
-      downloadLoading: false
+      downloadLoading: false,
+      pdfPageNum: 1,
+      pdfTotalNum: 0,
+      pdfLoadedRatio: 0
     }
   },
   watch: {
@@ -153,18 +180,23 @@ export default {
       const fileName = file.name
       const suffix = fileName.substr(fileName.lastIndexOf('.') + 1)
 
+      let visible = true
+      let previewUrl = file.url
       if (IMG_TYPE.includes(suffix)) {
         // 如果是视频、图片
-        this.previewUrl = file.url
-        this.visible = true
         this.perviewType = 'img'
       } else if (VIDEO_TYPE.includes(suffix)) {
-        this.previewUrl = file.url
-        this.visible = true
         this.perviewType = 'video'
+      } else if (PDF_TYPE.includes(suffix)) {
+        this.perviewType = 'pdf'
+        previewUrl = 'http://image.cache.timepack.cn/nodejs.pdf'
+        // debugger
       } else {
+        visible = false
         this.download()
       }
+      this.previewUrl = previewUrl
+      this.visible = visible
     },
     handlePreviewOnModal() {
       this.previewVisible = true
@@ -191,7 +223,7 @@ export default {
         this.downloadLoading = true
 
         this.getBlob(href).then(blob => {
-          this.saveAs(blob, file.name)
+          saveAs(blob, file.name)
         }).catch((e) => {
           this.$notification.error({
             message: '请求出错',
@@ -226,29 +258,6 @@ export default {
         xhr.send()
       })
     },
-    /**
-     * 保存 blob
-     * filename 想要保存的文件名称
-     */
-    saveAs(blob, filename) {
-      if (window.navigator.msSaveOrOpenBlob) {
-        navigator.msSaveBlob(blob, filename)
-      } else {
-        const link = document.createElement('a')
-        const body = document.querySelector('body')
-        link.href = window.URL.createObjectURL(blob)
-        link.download = filename
-
-        // fix Firefox
-        link.style.display = 'none'
-        body.appendChild(link)
-
-        link.click()
-        body.removeChild(link)
-
-        window.URL.revokeObjectURL(link.href)
-      }
-    },
     remove() {
       this.handleSelectChange()
     },
@@ -271,6 +280,18 @@ export default {
       } else if (info.file.status === 'error') {
         this.$message.error(`文件上传失败`)
       }
+    },
+    // pdf插件，上一页
+    prePage() {
+      let page = this.pdfPageNum
+      page = page > 1 ? page - 1 : this.pdfTotalNum
+      this.pdfPageNum = page
+    },
+    // pdf插件，下一页
+    nextPage() {
+      let page = this.pdfPageNum
+      page = page < this.pdfTotalNum ? page + 1 : 1
+      this.pdfPageNum = page
     }
   }
 }
@@ -285,5 +306,9 @@ export default {
 }
 .text-center {
   text-align: center;
+}
+.pdf-pagination {
+  text-align: center;
+  padding-top: 8px;
 }
 </style>

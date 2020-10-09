@@ -90,7 +90,7 @@
       <a-col v-bind="span">
         <a-card :bordered="false" class="margin-top-lg">
           <div class="statistics-title">案件数量合计</div>
-          <div class="statistics-num"><a>15</a></div>
+          <div class="statistics-num"><a>{{ 15 | NumberFormat }}</a></div>
           <a-row type="flex" class="margin-top-lg">
             <a-col :flex="1">
               <a-statistic title="本单位" :value="4" />
@@ -104,7 +104,7 @@
       <a-col v-bind="span">
         <a-card :bordered="false" class="margin-top-lg">
           <div class="statistics-title">案件金额（万元）</div>
-          <div class="statistics-num"><a>23000</a></div>
+          <div class="statistics-num"><a>{{ 23000 | NumberFormat }}</a></div>
           <a-row type="flex" class="margin-top-lg">
             <a-col :flex="1">
               <a-statistic title="本单位" :value="4000" />

@@ -102,11 +102,10 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import FormValidate from '@/utils/formValidate'
+import { required as validateRequired, phone as validatePhone } from '@/utils/formValidate'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = FormValidate.required
 let video = null
 
 export default {
@@ -238,7 +237,7 @@ export default {
         outsideLawFirmName: [validateRequired],
         professionalLife: [validateRequired],
         serviceContent: [validateRequired],
-        phone: [validateRequired, FormValidate.phone]
+        phone: [validateRequired, validatePhone]
       },
       pageLoading: false,
       confirmLoading: false,

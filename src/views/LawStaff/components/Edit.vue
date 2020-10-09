@@ -206,10 +206,7 @@
 import { ACTIONS } from '@/store/mutation-types'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
-import formValidate from '@/utils/formValidate'
-
-const validateRequired = formValidate.required
-const validateMax30Str = formValidate.max30Str
+import { required as validateRequired, max30Str as validateMax30Str, phone as validatePhone } from '@/utils/formValidate'
 
 export default {
   props: {
@@ -325,7 +322,7 @@ export default {
         majorName: [validateRequired, validateMax30Str],
         name: [validateRequired, validateMax30Str],
         officePhone: [validateRequired, validateMax30Str],
-        phone: [validateRequired, formValidate.phone],
+        phone: [validateRequired, validatePhone],
         portrait: [validateRequired],
         postLevel: [validateRequired],
         postName: [validateRequired, validateMax30Str],

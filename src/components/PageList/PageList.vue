@@ -2,8 +2,8 @@
   <div>
     <a-card :bordered="false" :title="title" class="margin-top-lg">
       <template #extra>
-        <a-button type="primary" @click="handleShowAdd"> 新建 </a-button>
-        <a-button type="primary" @click="handleExport"> 导出 </a-button>
+        <button-add @click="handleShowAdd" />
+        <button-export @click="handleExport" />
       </template>
       <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
         <template #action="item">
@@ -87,7 +87,6 @@ export default {
       const c = this.columns
       const item = {
         title: '操作',
-        align: 'right',
         key: 'action',
         scopedSlots: { customRender: 'action' }
       }
@@ -181,7 +180,7 @@ export default {
       })
     },
     handleExport() {
-      this.$message.info('导出')
+      this.$emit('export')
     }
   }
 }

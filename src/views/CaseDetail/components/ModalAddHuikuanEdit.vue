@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import FormValidate from '@/utils/formValidate'
+import deepClone from '@/utils/deepClone'
+import { required as validateRequired, max20Num, min0Num, money as validateMoney_ } from '@/utils/formValidate'
 import { create as httpCreate, update as httpUpdate } from '@/api/caseReturned'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = FormValidate.required
-const validateMoney = [FormValidate.max20Num, FormValidate.min0Num, FormValidate.money]
+const validateMoney = [max20Num, min0Num, validateMoney_]
 
 export default {
   components: {
@@ -69,12 +69,10 @@ export default {
     }
   },
   watch: {
-    info(val) {
-      this.form = val
-    },
-    isEdit(val) {
-      if (!val) {
-        this.$refs.form.resetFields()
+    show(val) {
+      if (val) {
+        if (!this.isEdit) this.$nextTick(() => this.$refs.form.resetFields())
+        else this.form = deepClone(this.info)
       }
     }
   },

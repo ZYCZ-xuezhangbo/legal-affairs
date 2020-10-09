@@ -42,8 +42,11 @@ request.interceptors.request.use(config => {
 
 // 响应拦截器
 request.interceptors.response.use((res) => {
-  res = res.data
+  if (res.headers['content-type'].indexOf('application/x-download') > -1) {
+    return Promise.resolve(res.data)
+  }
 
+  res = res.data
   const codePrefix = res.code.substring(0, 1) // code前缀
 
   if (codePrefix === 'M') {

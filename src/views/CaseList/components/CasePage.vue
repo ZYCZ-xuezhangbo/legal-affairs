@@ -1,13 +1,14 @@
 <template>
   <div>
     <Search :dic-data="searchDictData" @search="handleSearch" />
-    <List api="user" :title="listTitle" :scroll-width="1800" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" />
+    <List api="user" :title="listTitle" :scroll-width="1800" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" @export="handleExport" />
   </div>
 </template>
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import { page as httpGetCaseList } from '@/api/case'
+import { saveAs } from '@/utils/util'
+import { page as httpGetCaseList, export_ as httpExport } from '@/api/case'
 import { PageList as List } from '@/components'
 import Search from './Search'
 
@@ -158,6 +159,12 @@ export default {
           }
         })
       }
+    },
+    handleExport() {
+      httpExport({ type: this.type, ...this.searchForm }).then(res => {
+        const curDate = new Date().getTime()
+        saveAs(res, `案件列表${curDate}.xlsx`)
+      })
     }
   },
   mounted() {

@@ -88,13 +88,12 @@ const user = {
     LogoutByApi({ commit, state }) {
       return new Promise((resolve) => {
         logout(state.token).then((res) => {
-          resolve()
-        }).catch(() => {
-          resolve()
-        }).finally(() => {
           commit('SET_TOKEN', '')
           commit('SET_PERMISSIONS', [])
           storage.remove(ACCESS_TOKEN)
+          resolve()
+        }).catch(() => {
+          resolve()
         })
       })
     }

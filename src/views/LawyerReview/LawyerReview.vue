@@ -35,8 +35,8 @@
           </a-col>
           <a-col :xs="24" :sm="12" :md="8" :lg="6">
             <a-form-model-item>
-              <a-button type="primary" class="margin-right">搜索</a-button>
-              <a-button @click="handleSearchReset">重置</a-button>
+              <button-search class="margin-right" />
+              <button-reset @click="handleSearchReset" />
             </a-form-model-item>
           </a-col>
         </a-row>

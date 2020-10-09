@@ -122,9 +122,7 @@ import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawMa
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import deepClone from '@/utils/deepClone'
-import formValidate from '@/utils/formValidate'
-
-const validateRequired = formValidate.required
+import { required as validateRequired, money as validateMoney, max20Num } from '@/utils/formValidate'
 
 export default {
   props: {
@@ -210,7 +208,7 @@ export default {
         lawFirmName: [validateRequired],
         lawName: [validateRequired],
         lawSource: [validateRequired],
-        serviceCharge: [validateRequired, formValidate.money, formValidate.max20Num],
+        serviceCharge: [validateRequired, validateMoney, max20Num],
         serviceMatter: [validateRequired],
         serviceTime: [validateRequired],
         serviceType: [validateRequired],

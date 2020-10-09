@@ -26,7 +26,7 @@
             </a-col>
             <a-col v-bind="span">
               <a-form-model-item label="联系电话" prop="phone">
-                <a-input-number v-model="form.phone" :disabled="disabled" placeholder="请输入" class="response" />
+                <a-input v-model="form.phone" :disabled="disabled" placeholder="请输入" class="response" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24">
@@ -59,12 +59,10 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import formValidate from '@/utils/formValidate'
+import { required as validateRequired, max30Str as validateMax30Str } from '@/utils/formValidate'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = formValidate.required
-const validateMax30Str = formValidate.max30Str
 let video = null
 
 export default {
@@ -185,7 +183,7 @@ export default {
         address: [validateRequired],
         linkman: [validateRequired, validateMax30Str],
         lawFirmDesc: [validateRequired],
-        phone: [validateRequired, formValidate.phone]
+        phone: [validateRequired]
       },
       pageLoading: false,
       confirmLoading: false,

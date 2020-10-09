@@ -26,8 +26,8 @@
             </a-col>
             <a-col v-bind="searchTableGrid.span">
               <a-form-model-item>
-                <a-button type="primary" @click="handleSearch">搜索</a-button>
-                <a-button @click="resetForm">重置</a-button>
+                <button-search @click="handleSearch" />
+                <button-reset @click="resetForm" />
               </a-form-model-item>
             </a-col>
           </a-row>

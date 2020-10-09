@@ -56,11 +56,16 @@ import Viser from 'viser-vue'
 
 // ext library
 import VueCropper from 'vue-cropper'
-import Dialog from '@/components/Dialog'
 import MultiTab from '@/components/MultiTab'
-import PageLoading from '@/components/PageLoading'
-import PermissionHelper from '@/utils/helper/permission'
-import './directives/action'
+// import Dialog from '@/components/Dialog'
+// import PageLoading from '@/components/PageLoading'
+// import PermissionHelper from '@/utils/helper/permission'
+// import './directives/action' // 指令
+
+import ButtonSearch from '@/components/ButtonSearch'
+import ButtonReset from '@/components/ButtonReset'
+import ButtonAdd from '@/components/ButtonAdd'
+import ButtonExport from '@/components/ButtonExport'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -119,10 +124,15 @@ Vue.prototype.$error = Modal.error
 Vue.prototype.$warning = Modal.warning
 
 Vue.use(Viser)
-Vue.use(Dialog) // this.$dialog func
 Vue.use(MultiTab)
-Vue.use(PageLoading)
-Vue.use(PermissionHelper)
 Vue.use(VueCropper)
+// Vue.use(Dialog) // this.$dialog func
+// Vue.use(PageLoading)
+// Vue.use(PermissionHelper)
+
+Vue.component(ButtonSearch.name, ButtonSearch)
+Vue.component(ButtonReset.name, ButtonReset)
+Vue.component(ButtonAdd.name, ButtonAdd)
+Vue.component(ButtonExport.name, ButtonExport)
 
 process.env.NODE_ENV !== 'production' && console.warn('[antd-pro] NOTICE: Antd use lazy-load.')

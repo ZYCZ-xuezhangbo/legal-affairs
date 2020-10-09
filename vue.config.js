@@ -45,7 +45,6 @@ const vueConfig = {
 		// if prod, add externals
 		externals: isProd ? assetsCDN.externals : {}
 	},
-
 	chainWebpack: (config) => {
 		config.resolve.alias.set('@$', resolve('src'))
 
@@ -73,7 +72,6 @@ const vueConfig = {
 			})
 		}
 	},
-
 	css: {
 		loaderOptions: {
 			less: {
@@ -83,13 +81,12 @@ const vueConfig = {
 			}
 		}
 	},
-
 	devServer: {
 		port: 8000,
 		proxy: {
 			'/api': {
-				// target: 'http://192.168.18.97:8055',
-				target: 'http://47.98.58.218:8055',
+				target: 'http://192.168.18.98:8055',
+				// target: 'http://47.98.58.218:8055',
 				ws: false,
 				changeOrigin: true,
 				pathRewrite: {
@@ -98,7 +95,6 @@ const vueConfig = {
 			}
 		}
 	},
-
 	// disable source map in production
 	productionSourceMap: false,
 	lintOnSave: undefined,

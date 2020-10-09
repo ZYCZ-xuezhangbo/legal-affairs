@@ -85,13 +85,7 @@ export default {
         }, 16)
       })
     }
-
-    // first update color
     // updateTheme(this.settings.primaryColor)
-
-    // const box = document.getElementsByClassName('ant-pro-grid-content')
-    // console.log(box)
-    // console.log(box[0].clientWidth)
   },
   methods: {
     i18nRender(key) {
@@ -137,5 +131,39 @@ export default {
 </script>
 
 <style lang="less">
-@import './BasicLayout.less';
+@import '~ant-design-vue/es/style/themes/default.less';
+
+.ant-pro-global-header-index-right {
+  margin-right: 8px;
+
+  &.ant-pro-global-header-index-dark {
+    .ant-pro-global-header-index-action {
+      color: hsla(0, 0%, 100%, 0.85);
+
+      &:hover {
+        background: #1890ff;
+      }
+    }
+  }
+
+  .ant-pro-account-avatar {
+    .antd-pro-global-header-index-avatar {
+      margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+      margin-right: 8px;
+      color: @primary-color;
+      vertical-align: top;
+      background: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .menu {
+    .anticon {
+      margin-right: 8px;
+    }
+
+    .ant-dropdown-menu-item {
+      min-width: 100px;
+    }
+  }
+}
 </style>

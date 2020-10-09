@@ -36,7 +36,7 @@
         </a-col>
         <a-col v-bind="span">
           <a-form-model-item label="成诉时间" prop="lawsuitTime">
-            <a-date-picker v-model="form.lawsuitTime" :disabled="disabled" inputReadOnly @change="(e,str)=>form.lawsuitTime=str" class="response" />
+            <a-date-picker v-model="form.lawsuitTime" :disabled="disabled" :disabled-date="disabledDate" inputReadOnly @change="(e,str)=>form.lawsuitTime=str" class="response" />
           </a-form-model-item>
         </a-col>
         <a-col v-bind="span">
@@ -306,17 +306,14 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { ACTIONS, CASE_STAGE } from '@/store/mutation-types'
-import formValidate from '@/utils/formValidate'
+import { required as validateRequired, phone as validatePhone, max30Str, max20Num, money as validateMoney } from '@/utils/formValidate'
 import { getBrief as httpGetBriefList, getCaseDictionaries as httpGetDict, getBriefLabelById as httpGetBriefNameById } from '@/api/case'
 import { getLawFirmName as httpGetLawFirmList, getLayerByFirmId as httpGetLayerListByFirmCode } from '@/api/outsideLawManager'
 import UploadFile from '@/components/KFormDesign/packages/UploadFile'
 
-const validateRequired = formValidate.required
-const validatePhone = formValidate.phone
-const max30Str = formValidate.max30Str
-const validatePhoneMoney = [formValidate.max20Num, formValidate.money]
-
+const validatePhoneMoney = [max20Num, validateMoney]
 const EDIT = ACTIONS.Edit
 const DETAIL = ACTIONS.Detail
 const ADD = ACTIONS.Add
@@ -470,6 +467,9 @@ export default {
     }
   },
   methods: {
+    disabledDate(current) {
+      return current && current > moment().endOf('day')
+    },
     /**
     * 涉案单位下拉框模糊查询（本地查询）
     */

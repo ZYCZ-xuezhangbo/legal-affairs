@@ -150,3 +150,16 @@ export function getBasicInfoById(caseId) {
     method: 'get'
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportCaseExcel`,
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}

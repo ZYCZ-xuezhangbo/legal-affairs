@@ -12,7 +12,7 @@
     "js-beautify-html": {
       // 属性强制折行对齐 [auto|force|force-aligned|force-expand-multiline] ["auto"]
       "wrap_attributes": "auto",
-      "end_with_newline": false
+      "end_with_newline": false,
     },
     "prettier": {
       "singleQuote": true, // 格式化以单引号为主

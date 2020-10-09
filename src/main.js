@@ -9,22 +9,16 @@ import locales from '@/locales/index'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Icon } from 'ant-design-vue'
-// 表单设计器
-import KFormDesign from './components/KFormDesign/packages'
-import './components/KFormDesign/styles/form-design.less'
+import KFormDesign from './components/KFormDesign/packages' // 表单设计器
+import './components/KFormDesign/styles/form-design.less' // 表单设计器样式
 // import './mock'
-
 import bootstrap from './core/bootstrap'
 import './core/lazy_use'
 import './permission'
 import './utils/filter'
 import './global.less'
 
-// 自定义字体文件
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1957392_fuhqlam5lqk.js'
-})
-
+const IconFont = Icon.createFromIconfontCN({ scriptUrl: '//at.alicdn.com/t/font_1957392_fuhqlam5lqk.js' })
 const uploadFileUrl = `${process.env.VUE_APP_API_BASE_URL}/file/upload`
 
 // 表单设计器配置
@@ -32,8 +26,8 @@ KFormDesign.setConfig({
   uploadFile: uploadFileUrl, // 上传文件地址
   uploadImage: uploadFileUrl // 上传图片地址
 })
-Vue.prototype.$uploadFileUrl = uploadFileUrl
 
+Vue.prototype.$uploadFileUrl = uploadFileUrl
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
