@@ -197,26 +197,26 @@ export const asyncRouterMap = [
       {
         path: '/settings',
         name: 'Settings',
-        redirect: '/settings/role',
+        redirect: '/settings/user',
         component: RouteView,
         meta: { title: '系统管理', icon: settingsSvg, keepAlive: false, permission: [] },
         children: [
           {
+            path: '/settings/user',
+            name: 'User',
+            component: () => import('@/views/User/User'),
+            meta: { title: '用户列表', keepAlive: false, permission: [] }
+          },
+          {
             path: '/settings/role',
             name: 'Role',
             component: () => import('@/views/Role/Role'),
-            meta: { title: '用户角色', keepAlive: false, permission: [] }
-          },
-          {
-            path: '/settings/roleList',
-            name: 'RoleList',
-            component: () => import('@/views/RoleList/RoleList'),
             meta: { title: '角色列表', keepAlive: false, permission: [] }
           },
           {
-            path: '/settings/authList',
-            name: 'AuthList',
-            component: () => import('@/views/AuthList/AuthList'),
+            path: '/settings/auth',
+            name: 'Auth',
+            component: () => import('@/views/Auth/Auth'),
             meta: { title: '权限列表', keepAlive: false, permission: [] }
           },
           {
@@ -263,17 +263,7 @@ export const constantRouterMap = [
       {
         path: '/user/login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/User/Login')
-      },
-      {
-        path: '/user/register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/User/Register')
-      },
-      {
-        path: '/user/register-result',
-        name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/User/RegisterResult')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Login/Login')
       }
     ]
   },

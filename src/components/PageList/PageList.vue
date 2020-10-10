@@ -131,6 +131,15 @@ export default {
           case ACTIONS.Preview:
             item.name = '预览'
             break
+          case ACTIONS.Role:
+            item.name = '角色'
+            break
+          case ACTIONS.Auth:
+            item.name = '权限'
+            break
+          case ACTIONS.Add:
+            item.name = '新增'
+            break
           default:
             break
         }

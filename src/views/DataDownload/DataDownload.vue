@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import { ACTIONS } from '@/store/mutation-types'
-import { saveAs } from '@/utils/util'
+import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getTypeList as httpGetTypeList, export_ as httpExport } from '@/api/material'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'
 
 export default {
+  mixins: [paginationMixin],
   components: {
     Edit,
     List,
@@ -23,24 +23,14 @@ export default {
   },
   data() {
     return {
-      ACTIONS,
       dialog: {
         editId: 0,
         isEdit: false,
         showAdd: false
       },
-      searchData: {},
       formData: require('@/formBuilder/dataDownload.json'),
       dynamicData: {},
-      loading: false,
-      exportLoading: false,
       typeList: [],
-      list: [],
-      pagination: {
-        pageNum: 1,
-        pageSize: 10,
-        pageTotal: 0
-      },
       columns: [
         {
           title: '名称',
@@ -70,22 +60,7 @@ export default {
       ]
     }
   },
-  computed: {
-    searchTableGrid() {
-      return this.$store.getters.searchTableGrid
-    }
-  },
   methods: {
-    handleSearch(data) {
-      this.pagination.pageNum = 1
-      this.searchData = data
-      this.getList()
-    },
-    handleReload({ pageNum, pageSize }) {
-      this.pagination.pageNum = pageNum
-      this.pagination.pageSize = pageSize
-      this.getList()
-    },
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
@@ -113,21 +88,14 @@ export default {
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === ACTIONS.Edit) {
+      if (act === this.ACTIONS.Edit) {
         this.dialog.editId = id
         this.dialog.isEdit = true
         this.dialog.showAdd = true
       }
     },
     handleExport() {
-      this.exportLoading = true
-      httpExport(this.searchData).then(res => {
-        const fileName = this.$route.meta.title || ''
-        const timestamp = new Date().getTime()
-        saveAs(res, `${fileName}${timestamp}.xlsx`)
-      }).finally(() => {
-        this.exportLoading = false
-      })
+      this.export(httpExport)
     }
   },
   mounted() {

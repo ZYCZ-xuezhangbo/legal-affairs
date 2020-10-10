@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    用户角色
+    角色列表
   </page-header-wrapper>
 </template>
 

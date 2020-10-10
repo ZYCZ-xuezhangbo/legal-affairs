@@ -8,11 +8,13 @@
 <script>
 import { ACTIONS } from '@/store/mutation-types'
 import { saveAs } from '@/utils/util'
+import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetCaseList, export_ as httpExport } from '@/api/case'
 import { PageList as List } from '@/components'
 import Search from './Search'
 
 export default {
+  mixins: [paginationMixin],
   components: {
     Search,
     List
@@ -39,19 +41,11 @@ export default {
   },
   data() {
     return {
-      ACTIONS,
       dialog: {
         caseId: '',
         showAddJinzhan: false
       },
-      searchForm: {},
-      loading: false,
       exportLoading: false,
-      pagination: {
-        pageNum: 1,
-        pageSize: 10,
-        pageTotal: 0
-      },
       columns: [
         {
           title: '我方涉案单位',
@@ -104,26 +98,13 @@ export default {
           key: 'progressStatus'
         }
       ],
-      list: [],
       caseProStatus: []
     }
   },
   methods: {
-    handleSearch(e) {
-      this.pagination.pageNum = 1
-      this.searchForm = e
-      this.getList()
-    },
-    handleReload(e) {
-      if (e) {
-        this.pagination.pageNum = e.pageNum
-        this.pagination.pageSize = e.pageSize
-      }
-      this.getList()
-    },
     getList() {
       this.loading = true
-      httpGetCaseList({ type: this.type, ...this.pagination, ...this.searchForm }).then(res => {
+      httpGetCaseList({ type: this.type, ...this.pagination, ...this.searchData }).then(res => {
         this.list = res.data.list
         this.pagination.pageTotal = res.data.total
       }).finally(() => {
@@ -163,7 +144,7 @@ export default {
     },
     handleExport() {
       this.exportLoading = true
-      httpExport({ type: this.type, ...this.searchForm }).then(res => {
+      httpExport({ type: this.type, ...this.searchData }).then(res => {
         const fileName = this.$route.meta.title || ''
         const curDate = new Date().getTime()
         saveAs(res, `${fileName}${curDate}.xlsx`)

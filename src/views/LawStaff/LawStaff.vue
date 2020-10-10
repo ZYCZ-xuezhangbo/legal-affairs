@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import { ACTIONS } from '@/store/mutation-types'
-import { saveAs } from '@/utils/util'
+import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getDict as httpGetDict, export_ as httpExport } from '@/api/legalMember'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
 
 export default {
+  mixins: [paginationMixin],
   components: {
     Search,
     List,
@@ -28,8 +28,6 @@ export default {
         act: '',
         showAdd: false
       },
-      searchData: {},
-      list: [],
       companyList: [
         {
           code: '',
@@ -81,27 +79,10 @@ export default {
           key: 'officePhone'
         }
       ],
-      loading: false,
-      exportLoading: false,
-      pagination: {
-        pageNum: 1,
-        pageSize: 10,
-        pageTotal: 0
-      },
       dict: {}
     }
   },
   methods: {
-    handleSearch(data) {
-      this.pagination.pageNum = 1
-      this.searchData = data
-      this.getList()
-    },
-    handleReload({ pageNum, pageSize }) {
-      this.pagination.pageNum = pageNum
-      this.pagination.pageSize = pageSize
-      this.getList()
-    },
     getDict() {
       httpGetDict().then(res => {
         this.dict = res.data
@@ -120,7 +101,7 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.act = ACTIONS.Add
+      this.dialog.act = this.ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
@@ -130,14 +111,7 @@ export default {
       this.dialog.showAdd = true
     },
     handleExport() {
-      this.exportLoading = true
-      httpExport(this.searchData).then(res => {
-        const fileName = this.$route.meta.title || ''
-        const timestamp = new Date().getTime()
-        saveAs(res, `${fileName}${timestamp}.xlsx`)
-      }).finally(() => {
-        this.exportLoading = false
-      })
+      this.export(httpExport)
     }
   },
   mounted() {

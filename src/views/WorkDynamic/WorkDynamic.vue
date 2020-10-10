@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import { ACTIONS } from '@/store/mutation-types'
-import { saveAs } from '@/utils/util'
+import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getById as httpGetById, export_ as httpExport } from '@/api/workTrend'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'
 import DialogRichText from '@/components/DialogRichText'
 
 export default {
+  mixins: [paginationMixin],
   components: {
     Search,
     List,
@@ -27,22 +27,12 @@ export default {
   },
   data() {
     return {
-      ACTIONS,
       dialog: {
         editId: 0,
         isEdit: false,
         showAdd: false
       },
       formData: require('@/formBuilder/workDynamic.json'),
-      searchData: {},
-      list: [],
-      loading: false,
-      exportLoading: false,
-      pagination: {
-        pageNum: 1,
-        pageSize: 10,
-        pageTotal: 0
-      },
       columns: [
         {
           title: '标题',
@@ -70,16 +60,6 @@ export default {
     }
   },
   methods: {
-    handleSearch(data) {
-      this.pagination.pageNum = 1
-      this.searchData = data
-      this.getList()
-    },
-    handleReload({ pageNum, pageSize }) {
-      this.pagination.pageNum = pageNum
-      this.pagination.pageSize = pageSize
-      this.getList()
-    },
     getList() {
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
@@ -95,11 +75,11 @@ export default {
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === ACTIONS.Edit) {
+      if (act === this.ACTIONS.Edit) {
         this.dialog.editId = id
         this.dialog.isEdit = true
         this.dialog.showAdd = true
-      } else if (act === ACTIONS.Preview) {
+      } else if (act === this.ACTIONS.Preview) {
         this.richText = ''
         this.showPreview = true
         httpGetById(id).then(res => {
@@ -108,14 +88,7 @@ export default {
       }
     },
     handleExport() {
-      this.exportLoading = true
-      httpExport(this.searchData).then(res => {
-        const fileName = this.$route.meta.title || ''
-        const timestamp = new Date().getTime()
-        saveAs(res, `${fileName}${timestamp}.xlsx`)
-      }).finally(() => {
-        this.exportLoading = false
-      })
+      this.export(httpExport)
     }
   },
   mounted() {

@@ -4,6 +4,8 @@ const actions = {
   Edit: 'edit',
   Rate: 'rate',
   Download: 'download',
+  Role: 'role',
+  Auth: 'auth',
   Delete: 'delete',
   Add: 'add'
 }
