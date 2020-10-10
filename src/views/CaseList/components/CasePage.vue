@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import { ACTIONS } from '@/store/mutation-types'
-import { saveAs } from '@/utils/util'
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetCaseList, export_ as httpExport } from '@/api/case'
 import { PageList as List } from '@/components'
@@ -115,7 +113,7 @@ export default {
       this.$router.push('/case/caseEntry')
     },
     handleActClick({ act, item }) {
-      if (act === ACTIONS.Edit) {
+      if (act === this.ACTIONS.Edit) {
         this.$router.push({
           path: '/case/caseDetail',
           query: {
@@ -131,7 +129,7 @@ export default {
         // })
         // this.dialog.caseId = item.id
         // this.dialog.showAddJinzhan = true
-      } else if (act === ACTIONS.Detail) {
+      } else if (act === this.ACTIONS.Detail) {
         this.$router.push({
           path: '/case/caseDetail',
           query: {
@@ -143,14 +141,7 @@ export default {
       }
     },
     handleExport() {
-      this.exportLoading = true
-      httpExport({ type: this.type, ...this.searchData }).then(res => {
-        const fileName = this.$route.meta.title || ''
-        const curDate = new Date().getTime()
-        saveAs(res, `${fileName}${curDate}.xlsx`)
-      }).finally(() => {
-        this.exportLoading = false
-      })
+      this.export(httpExport, { type: this.type })
     }
   },
   mounted() {

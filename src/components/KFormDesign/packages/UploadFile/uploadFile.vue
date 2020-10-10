@@ -217,6 +217,11 @@ export default {
       this.visible = visible
     },
     handlePreviewOnModal() {
+      const suffix = this.downloadFile.name.substr(this.downloadFile.name.lastIndexOf('.') + 1)
+      if (PDF_TYPE.includes(suffix)) {
+        window.open(this.downloadFile.url, '_blank')
+        return
+      }
       this.previewVisible = true
     },
     download() {

@@ -1,7 +1,8 @@
 <template>
   <page-header-wrapper>
-    <Search />
-    <List api="" :columns="columns" :actions="[ACTIONS.Role]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" />
+    用户列表
+    <!-- <Search @search="handleSearch" />
+    <List api="" :columns="columns" :actions="[ACTIONS.Role]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" /> -->
   </page-header-wrapper>
 </template>
 
@@ -57,10 +58,13 @@ export default {
       }).finally(() => {
         this.loading = false
       })
+    },
+    handleActClick({ act, item }) {
+      console.log(item)
     }
   },
   mounted() {
-    this.getList()
+    // this.getList()
   }
 }
 </script>

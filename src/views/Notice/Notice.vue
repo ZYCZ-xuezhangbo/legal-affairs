@@ -2,15 +2,15 @@
   <page-header-wrapper>
     <Edit api="announcement" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
     <Search @search="handleSearch" />
-    <List api="announcement" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
+    <List api="announcement" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
 <script>
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, export_ as httpExport } from '@/api/announcement'
-import Search from './components/Search'
 import { PageEdit as Edit, PageList as List } from '@/components'
+import Search from './components/Search'
 
 export default {
   mixins: [paginationMixin],

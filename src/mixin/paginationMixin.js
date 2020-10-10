@@ -1,6 +1,6 @@
-
 import { ACTIONS } from '@/store/mutation-types'
 import { saveAs } from '@/utils/util'
+import { object as isObject } from '@/utils/test'
 
 export default {
   data() {
@@ -30,9 +30,11 @@ export default {
       }
       this.getList()
     },
-    export(httpExport) {
+    export(httpExport, condition) {
+      const params = isObject(condition) ? condition : {}
       this.exportLoading = true
-      httpExport(this.searchData).then(res => {
+
+      httpExport({ ...this.searchData, ...params }).then(res => {
         const fileName = this.$route.meta.title || ''
         const timestamp = new Date().getTime()
         saveAs(res, `${fileName}${timestamp}.xlsx`)
