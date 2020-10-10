@@ -51,3 +51,16 @@ export function getInformantDictionary() {
     method: 'get'
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportInformantExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
+  })
+}

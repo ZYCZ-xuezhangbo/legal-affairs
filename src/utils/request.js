@@ -54,7 +54,7 @@ request.interceptors.response.use((res) => {
   } else if (codePrefix === 'S') {
     // 成功类code，不弹框
   } else {
-    if (res.code !== RESPONSE_CODE.ACCOUNT_006) {
+    if (res.code !== RESPONSE_CODE.USER_NOT_LOGIN) {
       Notification.error({
         message: res.code,
         description: res.msg,
@@ -65,7 +65,7 @@ request.interceptors.response.use((res) => {
 
   if (!['M', 'S'].includes(codePrefix)) { // code不以M或S开头时，一律视为失败返回码
     switch (res.code) {
-      case RESPONSE_CODE.ACCOUNT_006: // 用户未登录
+      case RESPONSE_CODE.USER_NOT_LOGIN: // 用户未登录
         store.dispatch('Logout').then(() => {
           router.push('/user/login')
         })

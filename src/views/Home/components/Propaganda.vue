@@ -103,7 +103,7 @@ export default {
         api = getAnnouncementInfo
       }
       api(id).then(res => {
-        this.richText = res.data.others
+        this.richText = res.data.others || res.data.content
       }).finally(() => {
         this.richTextLoading = false
       })

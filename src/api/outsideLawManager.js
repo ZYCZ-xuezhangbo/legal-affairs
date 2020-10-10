@@ -50,9 +50,23 @@ export function getLawFirmName() {
     method: 'get'
   })
 }
+
 export function getLayerByFirmId(id) {
   return request({
     url: `${api}/getLayerByFirmId/${id}`,
     method: 'get'
+  })
+}
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportOutsideLawManagerExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
   })
 }

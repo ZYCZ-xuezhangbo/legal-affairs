@@ -98,7 +98,7 @@
               }, {
                 max: 30, message: '最大长度30位', trigger: 'blur'
               }]">
-                <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人姓名">
+                <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人">
                   <template v-if="isEdit || isAdd" #addonAfter>
                     <a-popconfirm title="确定删除该当事人吗？" ok-text="删除" ok-type="danger" cancel-text="取消" @confirm="handleDelCaseUsers(item)">
                       <a class="text-red">删除</a>

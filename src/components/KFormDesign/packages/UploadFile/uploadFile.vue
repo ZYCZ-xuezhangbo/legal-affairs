@@ -10,24 +10,29 @@
     </a-modal>
 
     <a-modal v-model="previewVisible" :footer="null" style="height:99vh;">
-      <img v-if="perviewType==='img'" alt="" style="width: 100%" :src="previewUrl" />
+      <a-skeleton v-if="previewUrl===''" active />
+      <div v-else>
+        <img v-if="perviewType==='img'" :src="previewUrl" alt="" style="width: 100%" />
 
-      <video id="video" v-else-if="perviewType==='video'" alt="" controls style="width: 100%" :src="previewUrl"></video>
+        <video id="video" v-else-if="perviewType==='video'" :src="previewUrl" alt="" controls style="width: 100%"></video>
 
-      <div v-else-if="perviewType==='pdf'">
-        <pdf ref="pdf" :src="previewUrl" :page="pdfPageNum" @progress="pdfLoadedRatio=$event" @num-pages="pdfTotalNum=$event"></pdf>
-        <div class="pdf-pagination">
-          <div class="padding-bottom-sm">{{ pdfPageNum }} / {{ pdfTotalNum }}</div>
-          <a-button-group>
-            <a-button type="primary" @click="prePage">
-              <a-icon type="left" />
-              上一页
-            </a-button>
-            <a-button type="primary" @click="nextPage" style="margin-left:0;">
-              下一页
-              <a-icon type="right" />
-            </a-button>
-          </a-button-group>
+        <div v-else-if="perviewType==='pdf'">
+          <div v-if="pdfLoadedRatio < 1" class="text-center">{{ pdfLoadedRatioStr }}</div>
+          <pdf ref="pdf" :src="previewUrl" :page="pdfPageNum" @progress="pdfLoadedRatio=$event" @num-pages="pdfTotalNum=$event" @page-loaded="currentPage=$event"></pdf>
+
+          <div class="pdf-pagination">
+            <div class="padding-bottom-sm">{{ pdfPageNum }} / {{ pdfTotalNum }}</div>
+            <a-button-group>
+              <a-button type="primary" @click="prePage">
+                <a-icon type="left" />
+                上一页
+              </a-button>
+              <a-button type="primary" @click="nextPage" style="margin-left:0;">
+                下一页
+                <a-icon type="right" />
+              </a-button>
+            </a-button-group>
+          </div>
         </div>
       </div>
     </a-modal>
@@ -53,12 +58,12 @@
 import { RESPONSE_CODE } from '@/store/mutation-types'
 import pdf from 'vue-pdf'
 import { saveAs } from '@/utils/util'
-// import { download as httpDownload } from '@/api/download'
+
 const IMG_TYPE = ['jpg', 'png', 'jpeg']
 const VIDEO_TYPE = ['mp4', 'rmvb']
 const PDF_TYPE = ['pdf']
-
 let video = null
+
 export default {
   name: 'KUploadFile',
   props: {
@@ -116,13 +121,18 @@ export default {
       deep: true
     },
     previewVisible(val) {
-      if (!val && this.perviewType === 'video') {
-        video.pause()
+      if (val) {
+        if (this.perviewType === 'video') {
+          this.$nextTick(() => {
+            if (!video) video = document.getElementById('video')
+          })
+        }
       } else {
-        this.$nextTick(() => {
-          if (!video) video = document.getElementById('video')
-        })
+        if (this.perviewType === 'video') video.pause()
       }
+    },
+    visible(val) {
+      if (!val) this.resetData()
     }
   },
   computed: {
@@ -132,9 +142,21 @@ export default {
       } catch (e) {
         return {}
       }
+    },
+    pdfLoadedRatioStr() {
+      const num = Math.round(this.pdfLoadedRatio) * 100
+      return `${num}%`
     }
   },
   methods: {
+    resetData() {
+      this.downloadFile = undefined
+      this.previewUrl = ''
+      this.perviewType = ''
+      this.pdfPageNum = 1
+      this.pdfTotalNum = 0
+      this.pdfLoadedRatio = 0
+    },
     setFileList() {
       // 当传入value改变时，fileList也要改变
       // 如果传入的值为字符串，则转成json
@@ -176,21 +198,17 @@ export default {
     },
     handlePreview(file) {
       this.downloadFile = file
-
       const fileName = file.name
       const suffix = fileName.substr(fileName.lastIndexOf('.') + 1)
-
+      const previewUrl = file.url
       let visible = true
-      let previewUrl = file.url
+
       if (IMG_TYPE.includes(suffix)) {
-        // 如果是视频、图片
         this.perviewType = 'img'
       } else if (VIDEO_TYPE.includes(suffix)) {
         this.perviewType = 'video'
       } else if (PDF_TYPE.includes(suffix)) {
         this.perviewType = 'pdf'
-        previewUrl = 'http://image.cache.timepack.cn/nodejs.pdf'
-        // debugger
       } else {
         visible = false
         this.download()

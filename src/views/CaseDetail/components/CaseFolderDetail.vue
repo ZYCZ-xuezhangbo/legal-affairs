@@ -21,12 +21,12 @@
           </a-descriptions>
         </a-col>
         <a-col :sm="24" :md="12" :class="!isMobile?'text-right':''">
-          <a-button type="primary" :disabled="btnAddHuikuanDisabled" @click="dialog.showAddHuikuan=true">新增回款</a-button>
+          <a-button type="primary" :disabled="btnAddHuikuanDisabled" @click="dialog.showAddHuikuan=true">回款</a-button>
           <a-button type="primary" @click="handleGoCaseEntry">新增案件</a-button>
           <a-button type="primary" :disabled="btnCaseFinalityDisabled" @click="handleShowCaseFinality(false)">终结</a-button>
           <a-button :type="isFav?'primary':''" :loading="favLoading" @click="handleChangeFav">
-            <a-icon v-if="!favLoading && isFav" theme="filled" type="star"></a-icon>
-            {{ isFav?'已收藏':'收藏' }}
+            <!-- <a-icon v-if="!favLoading && isFav" theme="filled" type="star"></a-icon> -->
+            {{ isFav?'取消收藏':'收藏' }}
           </a-button>
         </a-col>
       </a-row>

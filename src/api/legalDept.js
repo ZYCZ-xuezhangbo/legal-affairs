@@ -46,3 +46,16 @@ export function getDeptDictionary() {
     method: 'get'
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportLegalDeptExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
+  })
+}

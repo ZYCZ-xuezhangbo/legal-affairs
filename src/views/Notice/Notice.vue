@@ -4,13 +4,14 @@
 
     <Search @search="handleSearch" />
 
-    <List api="announcement" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="announcement" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
 
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/announcement'
+import { saveAs } from '@/utils/util'
+import { page as httpGetList, export_ as httpExport } from '@/api/announcement'
 import Search from './components/Search'
 import { PageEdit as Edit, PageList as List } from '@/components'
 
@@ -31,6 +32,7 @@ export default {
       searchData: {},
       list: [],
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -91,6 +93,16 @@ export default {
         this.dialog.isEdit = true
         this.dialog.showAdd = true
       }
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
+      })
     }
   },
   mounted() {

@@ -46,3 +46,16 @@ export function getDict() {
     method: 'get'
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportMemberExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
+  })
+}

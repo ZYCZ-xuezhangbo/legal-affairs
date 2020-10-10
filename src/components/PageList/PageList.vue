@@ -3,7 +3,7 @@
     <a-card :bordered="false" :title="title" class="margin-top-lg">
       <template #extra>
         <button-add @click="handleShowAdd" />
-        <button-export @click="handleExport" />
+        <button-export :loading="exportLoading" @click="handleExport" />
       </template>
       <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
         <template #action="item">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { ACTIONS } from '@/store/mutation-types'
+import { ACTIONS, ACTIONS_ORDER } from '@/store/mutation-types'
 import { Pagination } from '@/components'
 
 export default {
@@ -35,6 +35,10 @@ export default {
       default: 'user'
     },
     loading: {
+      type: Boolean,
+      default: false
+    },
+    exportLoading: {
       type: Boolean,
       default: false
     },
@@ -84,15 +88,15 @@ export default {
   },
   computed: {
     columnList() {
-      const c = this.columns
+      const col = this.columns
       const item = {
         title: '操作',
         key: 'action',
         scopedSlots: { customRender: 'action' }
       }
       if (this.scrollWidth > 0) item.fixed = 'right'
-      c.push(item)
-      return c
+      col.push(item)
+      return col
     },
     tableModal() {
       if (this.scrollWidth > 0) {
@@ -124,16 +128,18 @@ export default {
           case ACTIONS.Download:
             item.name = '下载'
             break
+          case ACTIONS.Preview:
+            item.name = '预览'
+            break
           default:
             break
         }
-
         list.push(item)
       }
+
       // 按固定顺序排序
-      const order = ['查看', '修改', '评价', '下载', '删除']
       list.sort((a, b) => {
-        return order.indexOf(a.name) - order.indexOf(b.name)
+        return ACTIONS_ORDER.indexOf(a.code) - ACTIONS_ORDER.indexOf(b.code)
       })
       return list
     }

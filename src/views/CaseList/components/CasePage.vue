@@ -1,7 +1,7 @@
 <template>
   <div>
     <Search :dic-data="searchDictData" @search="handleSearch" />
-    <List api="user" :title="listTitle" :scroll-width="1800" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" @export="handleExport" />
+    <List api="user" :title="listTitle" :scroll-width="1800" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleCaseEntry" @actClick="handleActClick" @export="handleExport" />
   </div>
 </template>
 
@@ -46,6 +46,7 @@ export default {
       },
       searchForm: {},
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -161,9 +162,13 @@ export default {
       }
     },
     handleExport() {
+      this.exportLoading = true
       httpExport({ type: this.type, ...this.searchForm }).then(res => {
+        const fileName = this.$route.meta.title || ''
         const curDate = new Date().getTime()
-        saveAs(res, `案件列表${curDate}.xlsx`)
+        saveAs(res, `${fileName}${curDate}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
       })
     }
   },

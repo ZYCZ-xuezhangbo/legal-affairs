@@ -4,12 +4,13 @@
 
     <Search :company-list="dict.COMPANY" @search="handleSearch" />
 
-    <List api="informant" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="informant" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList, getInformantDictionary as httpGetDict } from '@/api/informant'
+import { page as httpGetList, getInformantDictionary as httpGetDict, export_ as httpExport } from '@/api/informant'
+import { saveAs } from '@/utils/util'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
@@ -62,6 +63,7 @@ export default {
         }
       ],
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -105,6 +107,16 @@ export default {
         this.dialog.isEdit = true
         this.dialog.showAdd = true
       }
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
+      })
     }
   },
   mounted() {

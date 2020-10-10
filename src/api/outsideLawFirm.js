@@ -40,3 +40,16 @@ export function update(data) {
     data
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportOutsideLawFirmExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
+  })
+}

@@ -1,27 +1,34 @@
 <template>
   <page-header-wrapper>
+    <DialogRichText :show.sync="showPreview" :content="richText" />
+
     <Edit api="policy" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
 
     <Search @search="handleSearch" />
 
-    <List api="policy" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="policy" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete, ACTIONS.Preview]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
 
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList } from '@/api/policy'
+import { ACTIONS } from '@/store/mutation-types'
+import { saveAs } from '@/utils/util'
+import { page as httpGetList, getById as httpGetById, export_ as httpExport } from '@/api/policy'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'
+import DialogRichText from '@/components/DialogRichText'
 
 export default {
   components: {
     Search,
     List,
-    Edit
+    Edit,
+    DialogRichText
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
         editId: 0,
         isEdit: false,
@@ -31,6 +38,7 @@ export default {
       searchData: {},
       list: [],
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -57,7 +65,9 @@ export default {
           dataIndex: 'createTime',
           key: 'createTime'
         }
-      ]
+      ],
+      showPreview: false, // 是否显示预览框
+      richText: '' // 预览框中的富文本内容
     }
   },
   methods: {
@@ -86,11 +96,27 @@ export default {
     },
     handleActClick({ act, item }) {
       const id = item.id
-      if (act === 'edit') {
+      if (act === ACTIONS.Edit) {
         this.dialog.editId = id
         this.dialog.isEdit = true
         this.dialog.showAdd = true
+      } else if (act === ACTIONS.Preview) {
+        this.richText = ''
+        this.showPreview = true
+        httpGetById(id).then(res => {
+          this.richText = res.data.others
+        })
       }
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
+      })
     }
   },
   mounted() {

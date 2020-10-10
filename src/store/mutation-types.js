@@ -1,5 +1,14 @@
-export const ACCESS_TOKEN = 'Access-Token'
+const actions = {
+  Detail: 'detail',
+  Preview: 'preview',
+  Edit: 'edit',
+  Rate: 'rate',
+  Download: 'download',
+  Delete: 'delete',
+  Add: 'add'
+}
 
+export const ACCESS_TOKEN = 'Access-Token'
 export const SIDEBAR_TYPE = 'sidebar_type'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
 export const TOGGLE_NAV_THEME = 'nav_theme'
@@ -18,20 +27,18 @@ export const APP_LANGUAGE = 'app_language'
  */
 export const RESPONSE_CODE = {
   S0000: 'S0000',
-  ACCOUNT_006: 'ACCOUNT_006'
+  USER_NOT_LOGIN: 'ACCOUNT_004'
 }
 
 /**
  * 列表页的操作项
  */
-export const ACTIONS = {
-  Edit: 'edit',
-  Detail: 'detail',
-  Add: 'add',
-  Delete: 'delete',
-  Download: 'download',
-  Rate: 'rate'
-}
+export const ACTIONS = actions
+
+/**
+ * 列表页操作按钮排序
+ */
+export const ACTIONS_ORDER = valueToArrayFromObject(actions)
 
 /**
  * 案件阶段
@@ -54,4 +61,12 @@ export const CONTENT_WIDTH_TYPE = {
 export const NAV_THEME = {
   LIGHT: 'light',
   DARK: 'dark'
+}
+
+function valueToArrayFromObject(obj) {
+  const arr = []
+  for (const i in obj) {
+    arr.push(obj[i])
+  }
+  return arr
 }

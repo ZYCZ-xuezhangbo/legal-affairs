@@ -4,19 +4,17 @@
 
     <Search :company-list="dict.COMPANY" :dept-list="dict.DEPT" @search="handleSearch" />
 
-    <List api="legalDept" :columns="columns" :actions="['detail','edit','delete']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="legalDept" :columns="columns" :actions="[ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList, getDeptDictionary as httpGetDict } from '@/api/legalDept'
+import { ACTIONS } from '@/store/mutation-types'
+import { saveAs } from '@/utils/util'
+import { page as httpGetList, getDeptDictionary as httpGetDict, export_ as httpExport } from '@/api/legalDept'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
-
-const ADD = 'add'
-const EDIT = 'edit'
-const DETAIL = 'detail'
 
 export default {
   components: {
@@ -26,6 +24,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
         editId: 0,
         act: '',
@@ -38,6 +37,7 @@ export default {
         COMPANY: []
       },
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -113,18 +113,26 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.act = ADD
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
       const id = item.id
-
       this.dialog.act = act
       this.dialog.editId = id
-
-      if ([DETAIL, EDIT].includes(act)) {
+      if ([ACTIONS.Detail, ACTIONS.Edit].includes(act)) {
         this.dialog.showAdd = true
       }
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
+      })
     }
   },
   mounted() {

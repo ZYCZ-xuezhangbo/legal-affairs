@@ -69,3 +69,16 @@ export function getById(id = '') {
     method: 'get'
   })
 }
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function export_(data) {
+  return request({
+    url: `${api}/exportMaterialExcel`,
+    responseType: 'blob',
+    method: 'post',
+    data
+  })
+}

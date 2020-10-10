@@ -4,14 +4,15 @@
 
     <Edit api="outsideLawFirm" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
     <Search @search="handleSearch" />
-    <List api="outsideLawFirm" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
+    <List api="outsideLawFirm" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
 
   </page-header-wrapper>
 </template>
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import { page as httpGetList } from '@/api/outsideLawFirm'
+import { saveAs } from '@/utils/util'
+import { page as httpGetList, export_ as httpExport } from '@/api/outsideLawFirm'
 import { PageList as List } from '@/components'
 import Edit from './components/Edit'
 import Search from './components/Search'
@@ -33,6 +34,7 @@ export default {
       searchData: {},
       list: [],
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -91,6 +93,16 @@ export default {
       this.dialog.editId = id
       this.dialog.act = act
       this.dialog.showAdd = true
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
+      })
     }
   },
   mounted() {

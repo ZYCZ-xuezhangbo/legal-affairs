@@ -4,13 +4,14 @@
 
     <Search :law-firm-list="lawFirmList" @search="handleSearch" />
 
-    <List api="outsideLawManager" :columns="columns" :actions="['edit', 'detail']" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
-
+    <List api="outsideLawManager" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Detail]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
 <script>
-import { page as httpGetList, getLawFirmName as httpGetLawFirmList } from '@/api/outsideLawManager'
+import { ACTIONS } from '@/store/mutation-types'
+import { saveAs } from '@/utils/util'
+import { page as httpGetList, getLawFirmName as httpGetLawFirmList, export_ as httpExport } from '@/api/outsideLawManager'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'
@@ -23,6 +24,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       dialog: {
         id: 0,
         act: '',
@@ -32,6 +34,7 @@ export default {
       list: [],
       lawFirmList: [], // 律所列表
       loading: false,
+      exportLoading: false,
       pagination: {
         pageNum: 1,
         pageSize: 10,
@@ -97,7 +100,7 @@ export default {
       })
     },
     handleShowAdd() {
-      this.dialog.act = 'add'
+      this.dialog.act = ACTIONS.Add
       this.dialog.showAdd = true
     },
     handleActClick({ act, item }) {
@@ -109,6 +112,16 @@ export default {
     getLawFirmList() {
       httpGetLawFirmList().then(res => {
         this.lawFirmList = res.data
+      })
+    },
+    handleExport() {
+      this.exportLoading = true
+      httpExport(this.searchData).then(res => {
+        const fileName = this.$route.meta.title || ''
+        const timestamp = new Date().getTime()
+        saveAs(res, `${fileName}${timestamp}.xlsx`)
+      }).finally(() => {
+        this.exportLoading = false
       })
     }
   },

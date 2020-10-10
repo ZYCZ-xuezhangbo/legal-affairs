@@ -158,8 +158,8 @@ export function getBasicInfoById(caseId) {
 export function export_(data) {
   return request({
     url: `${api}/exportCaseExcel`,
+    responseType: 'blob',
     method: 'post',
-    data,
-    responseType: 'blob'
+    data
   })
 }
