@@ -13,27 +13,7 @@
       <a-skeleton v-if="previewUrl===''" active />
       <div v-else>
         <img v-if="perviewType==='img'" :src="previewUrl" alt="" style="width: 100%" />
-
         <video id="video" v-else-if="perviewType==='video'" :src="previewUrl" alt="" controls style="width: 100%"></video>
-
-        <div v-else-if="perviewType==='pdf'">
-          <div v-if="pdfLoadedRatio < 1" class="text-center">{{ pdfLoadedRatioStr }}</div>
-          <pdf ref="pdf" :src="previewUrl" :page="pdfPageNum" @progress="pdfLoadedRatio=$event" @num-pages="pdfTotalNum=$event" @page-loaded="currentPage=$event"></pdf>
-
-          <div class="pdf-pagination">
-            <div class="padding-bottom-sm">{{ pdfPageNum }} / {{ pdfTotalNum }}</div>
-            <a-button-group>
-              <a-button type="primary" @click="prePage">
-                <a-icon type="left" />
-                上一页
-              </a-button>
-              <a-button type="primary" @click="nextPage" style="margin-left:0;">
-                下一页
-                <a-icon type="right" />
-              </a-button>
-            </a-button-group>
-          </div>
-        </div>
       </div>
     </a-modal>
 
@@ -56,13 +36,16 @@
 
 <script>
 import { RESPONSE_CODE } from '@/store/mutation-types'
-import pdf from 'vue-pdf'
-import { saveAs } from '@/utils/util'
+import { downloadFile } from '@/utils/util'
 
 const IMG_TYPE = ['jpg', 'png', 'jpeg']
 const VIDEO_TYPE = ['mp4', 'rmvb']
 const PDF_TYPE = ['pdf']
 let video = null
+
+function getFileSuffix(fileName) {
+  return fileName.substr(fileName.lastIndexOf('.') + 1)
+}
 
 export default {
   name: 'KUploadFile',
@@ -91,9 +74,6 @@ export default {
       default: false
     }
   },
-  components: {
-    pdf
-  },
   data() {
     return {
       spinning: false,
@@ -103,10 +83,7 @@ export default {
       previewUrl: '',
       perviewType: '',
       fileList: [],
-      downloadLoading: false,
-      pdfPageNum: 1,
-      pdfTotalNum: 0,
-      pdfLoadedRatio: 0
+      downloadLoading: false
     }
   },
   watch: {
@@ -130,9 +107,6 @@ export default {
       } else {
         if (this.perviewType === 'video') video.pause()
       }
-    },
-    visible(val) {
-      if (!val) this.resetData()
     }
   },
   computed: {
@@ -142,21 +116,9 @@ export default {
       } catch (e) {
         return {}
       }
-    },
-    pdfLoadedRatioStr() {
-      const num = Math.round(this.pdfLoadedRatio) * 100
-      return `${num}%`
     }
   },
   methods: {
-    resetData() {
-      this.downloadFile = undefined
-      this.previewUrl = ''
-      this.perviewType = ''
-      this.pdfPageNum = 1
-      this.pdfTotalNum = 0
-      this.pdfLoadedRatio = 0
-    },
     setFileList() {
       // 当传入value改变时，fileList也要改变
       // 如果传入的值为字符串，则转成json
@@ -199,7 +161,7 @@ export default {
     handlePreview(file) {
       this.downloadFile = file
       const fileName = file.name
-      const suffix = fileName.substr(fileName.lastIndexOf('.') + 1)
+      const suffix = getFileSuffix(fileName)
       const previewUrl = file.url
       let visible = true
 
@@ -217,7 +179,7 @@ export default {
       this.visible = visible
     },
     handlePreviewOnModal() {
-      const suffix = this.downloadFile.name.substr(this.downloadFile.name.lastIndexOf('.') + 1)
+      const suffix = getFileSuffix(this.downloadFile.name)
       if (PDF_TYPE.includes(suffix)) {
         window.open(this.downloadFile.url, '_blank')
         return
@@ -227,58 +189,20 @@ export default {
     download() {
       // 下载文件
       const file = this.downloadFile
-      const downloadWay = 'ajax'
       const paramsUrl = encodeURI(file.url)
-      const paramsName = encodeURI(file.name)
-      const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${paramsUrl}&name=${paramsName}`
+      // const paramsName = encodeURI(file.name)
+      // const href = `${process.env.VUE_APP_API_BASE_URL}/file/download?url=${paramsUrl}&name=${paramsName}`
 
-      if (downloadWay === 'a') {
-        // 使用a标签下载
-        const a = document.createElement('a')
-
-        a.href = href
-        a.download = file.name
-        a.target = '_blank'
-        a.click()
-      } else if (downloadWay === 'ajax') {
-        // 使用ajax获取文件blob，并保持到本地
-        this.spinning = true
-        this.downloadLoading = true
-
-        this.getBlob(href).then(blob => {
-          saveAs(blob, file.name)
-        }).catch((e) => {
-          this.$notification.error({
-            message: '请求出错',
-            description: e
-          })
-        }).finally(() => {
-          this.downloadLoading = false
-          this.spinning = false
+      this.spinning = true
+      this.downloadLoading = true
+      downloadFile(paramsUrl, file.name, 'ajax').catch((e) => {
+        this.$notification.error({
+          message: '请求出错',
+          description: e
         })
-      }
-    },
-    /**
-     * 获取 blob
-     * url 目标文件地址
-     */
-    getBlob(url) {
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-
-        xhr.open('GET', url, true)
-        xhr.responseType = 'blob'
-        xhr.onload = (e) => {
-          if (xhr.status === 200 || String(xhr.status).substring(0, 1) === '2') {
-            resolve(xhr.response)
-          } else {
-            reject(new Error(xhr.response))
-          }
-        }
-        xhr.onerror = (e) => {
-          reject(new Error(e))
-        }
-        xhr.send()
+      }).finally(() => {
+        this.downloadLoading = false
+        this.spinning = false
       })
     },
     remove() {
@@ -303,18 +227,6 @@ export default {
       } else if (info.file.status === 'error') {
         this.$message.error(`文件上传失败`)
       }
-    },
-    // pdf插件，上一页
-    prePage() {
-      let page = this.pdfPageNum
-      page = page > 1 ? page - 1 : this.pdfTotalNum
-      this.pdfPageNum = page
-    },
-    // pdf插件，下一页
-    nextPage() {
-      let page = this.pdfPageNum
-      page = page < this.pdfTotalNum ? page + 1 : 1
-      this.pdfPageNum = page
     }
   }
 }

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <a-pagination class="pagination" :default-current="pageNum" :total="total" :page-size="pageSize" :show-quick-jumper="showQuickJumper" :show-size-changer="showSizeChanger" :show-total="showTotal" @change="handleChange" @showSizeChange="handleShowSizeChange" />
-  </div>
+  <a-pagination class="pagination" :current="pageNum" :total="total" :page-size="pageSize" :show-quick-jumper="showQuickJumper" :show-size-changer="showSizeChanger" :show-total="showTotal" @change="handleChange" @showSizeChange="handleShowSizeChange" />
 </template>
 
 <script>

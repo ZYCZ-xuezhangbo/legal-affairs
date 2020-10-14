@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-// 用户管理模块
+// 角色管理模块
 
-const api = '/systemUser'
+const api = '/systemRole'
 
 /**
  * 分页查询
@@ -27,5 +27,20 @@ export function update(data) {
     url: `${api}/updateUserRole`,
     method: 'post',
     data
+  })
+}
+
+export function create(data) {
+  return request({
+    url: `${api}/saveUserRole`,
+    method: 'post',
+    data
+  })
+}
+
+export function delete_(id) {
+  return request({
+    url: `${api}/delete/${id}`,
+    method: 'post'
   })
 }

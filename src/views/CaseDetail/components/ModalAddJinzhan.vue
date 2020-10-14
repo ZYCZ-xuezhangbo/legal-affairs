@@ -6,7 +6,7 @@
           <a-col :md="24" :lg="12">
             <a-form-model-item label="进展状态" prop="progressStatus">
               <a-select v-model="form.progressStatus" placeholder="进展状态">
-                <a-select-option v-for="(item,index) in caseProStatus" :key="index" :value="item.code">
+                <a-select-option v-for="(item,index) in caseProStatus" :key="index" :value="item.value">
                   {{ item.value }}
                 </a-select-option>
               </a-select>

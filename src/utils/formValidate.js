@@ -4,6 +4,13 @@ const required = { required: true, message: '必填项', trigger: ['change', 'bl
 
 const max30Str = { max: 30, message: '最大长度30位', trigger: ['change', 'blur'] }
 
+const requiredOfArray = {
+  type: 'array',
+  required: true,
+  message: '至少选择一项',
+  trigger: 'change'
+}
+
 const max20Num = {
   validator: (rule, value, callback) => {
     if (test.rangeLength(String(value), [0, 20])) callback()
@@ -60,6 +67,7 @@ const chinese = {
 }
 
 export {
+  requiredOfArray,
   required,
   max30Str,
   max20Num,

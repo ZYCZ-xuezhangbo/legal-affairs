@@ -1,4 +1,5 @@
 import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
+import deepClone from '@/utils/deepClone'
 
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -41,7 +42,7 @@ function hasRole(roles, route) {
  * @param {Array} permissions
  */
 function filterAsyncRouter(routerMap, permissions) {
-  const accessedRouters = routerMap.filter(route => {
+  return routerMap.filter(route => {
     if (hasPermission(permissions, route)) {
       if (route.children && route.children.length) {
         route.children = filterAsyncRouter(route.children, permissions)
@@ -50,7 +51,6 @@ function filterAsyncRouter(routerMap, permissions) {
     }
     return false
   })
-  return accessedRouters
 }
 
 const permission = {
@@ -67,7 +67,8 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, permissions) {
       return new Promise(resolve => {
-        const accessedRouters = filterAsyncRouter(asyncRouterMap, permissions)
+        const routers = deepClone(asyncRouterMap) // 深拷贝，切换账号时，需要重新使用初始化的路由文件来筛选
+        const accessedRouters = filterAsyncRouter(routers, permissions)
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

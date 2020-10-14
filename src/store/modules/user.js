@@ -10,7 +10,6 @@ const user = {
     roles: [],
     permissions: []
   },
-
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -23,6 +22,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    RESET_STATE: (state) => {
+      state.token = ''
+      state.info = {}
+      state.roles = []
+      state.permissions = []
     }
   },
   actions: {
@@ -66,21 +71,20 @@ const user = {
             commit('SET_PERMISSIONS', permissions)
             resolve(permissions)
           } else {
-            reject(new Error('getUserInfo: userMenu必须是一个不为空的数组 !'))
+            reject(new Error('permissionIsNull'))
           }
 
           commit('SET_ROLES', result.userRole)
           commit('SET_INFO', result.userInfo)
-        }).catch(error => {
-          reject(error)
+        }).catch((e) => {
+          reject(new Error(e))
         })
       })
     },
     // 登出
     Logout({ commit }) {
       return new Promise((resolve) => {
-        commit('SET_TOKEN', '')
-        commit('SET_PERMISSIONS', [])
+        commit('RESET_STATE')
         storage.remove(ACCESS_TOKEN)
         resolve()
       })
@@ -88,8 +92,7 @@ const user = {
     LogoutByApi({ commit, state }) {
       return new Promise((resolve) => {
         logout(state.token).then((res) => {
-          commit('SET_TOKEN', '')
-          commit('SET_PERMISSIONS', [])
+          commit('RESET_STATE')
           storage.remove(ACCESS_TOKEN)
           resolve()
         }).catch(() => {

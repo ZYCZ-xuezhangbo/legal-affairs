@@ -2,7 +2,7 @@
   <div>
     <a-modal v-bind="editModal" :title="modalTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
       <template v-if="act==='detail'" #footer>
-        <a-button @click="$emit('close')">关闭</a-button>
+        <button-cancel @click="$emit('close')" />
       </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
@@ -343,14 +343,13 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(formData => {
         this.confirmLoading = true
-        if (this.act === ACTIONS.Edit) { // 修改
-          this.API.update({ id: this.id, ...this.form }).then(res => {
-            this.requestSuccess()
-          }).finally(() => {
-            this.confirmLoading = false
-          })
-        } else if (this.act === ACTIONS.Add) { // 新增
-          this.API.create(this.form).then(res => {
+        let api = null
+        if (this.act === ACTIONS.Edit) api = this.API.update
+        else if (this.act === ACTIONS.Add) api = this.API.create
+        const paramsId = this.act === ACTIONS.Edit ? { id: this.id } : {}
+
+        if (api) {
+          api({ ...paramsId, ...this.form }).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false

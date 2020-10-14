@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-// 用户管理模块
+// 权限管理模块
 
-const api = '/systemUser'
+const api = '/systemMenu'
 
 /**
  * 分页查询
@@ -15,6 +15,16 @@ export function page(params) {
   })
 }
 
+/**
+ * 权限所有列表，相当于字典
+ */
+export function list() {
+  return request({
+    url: `${api}/list`,
+    method: 'get'
+  })
+}
+
 export function getById(id) {
   return request({
     url: `${api}/info/${id}`,
@@ -24,7 +34,7 @@ export function getById(id) {
 
 export function update(data) {
   return request({
-    url: `${api}/updateUserRole`,
+    url: `${api}/updateMenuInfo`,
     method: 'post',
     data
   })

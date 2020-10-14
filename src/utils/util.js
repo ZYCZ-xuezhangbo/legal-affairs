@@ -5,7 +5,7 @@ export function timeFix() {
 }
 
 export function welcome() {
-  const arr = ['休息一会儿吧', '准备吃什么呢?', '要不要打一把 DOTA', '我猜你可能累了']
+  const arr = ['休息一会儿吧', '准备吃什么呢?', '我猜你可能累了']
   const index = Math.floor(Math.random() * arr.length)
   return arr[index]
 }
@@ -105,4 +105,58 @@ export function saveAs(blob, filename) {
 
     window.URL.revokeObjectURL(link.href)
   }
+}
+
+/**
+ * 下载文件
+ * @param {string} downloadType
+ * @param {string} url
+ * @param {string} fileName
+ */
+export function downloadFile(url, fileName, downloadType = 'ajax') {
+  return new Promise((resolve, reject) => {
+    if (downloadType === 'a') {
+      // 使用a标签下载
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      a.target = '_blank'
+      a.click()
+      resolve()
+    } else if (downloadType === 'ajax') {
+      // 使用ajax获取文件blob，并保持到本地
+      getBlob(url).then(blob => {
+        saveAs(blob, fileName)
+        resolve()
+      }).catch((e) => {
+        reject(new Error(e))
+      })
+    } else {
+      reject(new Error('downloadType error'))
+    }
+  })
+}
+
+/**
+ * 获取 blob
+ * url 目标文件地址
+ */
+function getBlob(url) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+
+    xhr.open('GET', url, true)
+    xhr.responseType = 'blob'
+    xhr.onload = (e) => {
+      if (xhr.status === 200 || String(xhr.status).substring(0, 1) === '2') {
+        resolve(xhr.response)
+      } else {
+        reject(new Error(xhr.response))
+      }
+    }
+    xhr.onerror = (e) => {
+      reject(new Error(e))
+    }
+    xhr.send()
+  })
 }

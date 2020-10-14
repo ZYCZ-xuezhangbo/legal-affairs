@@ -1,7 +1,7 @@
 <template>
   <a-modal title="预览" :visible="show" :width="1000" @cancel="handleClose">
     <template #footer>
-      <a-button @click="handleClose">关闭</a-button>
+      <button-cancel @click="handleClose" />
     </template>
     <a-skeleton v-show="curContent===''" active />
     <div v-show="curContent!==''" v-html="curContent"></div>

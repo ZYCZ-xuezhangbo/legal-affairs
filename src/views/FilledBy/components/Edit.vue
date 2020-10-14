@@ -140,19 +140,14 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(() => {
         this.confirmLoading = true
-        if (this.isEdit) { // 修改
-          this.API.update({ id: this.id, ...this.form }).then(res => {
-            this.requestSuccess()
-          }).finally(() => {
-            this.confirmLoading = false
-          })
-        } else { // 新增
-          this.API.create(this.form).then(res => {
-            this.requestSuccess()
-          }).finally(() => {
-            this.confirmLoading = false
-          })
-        }
+        const api = this.isEdit ? this.API.update : this.API.create
+        const paramsId = this.isEdit ? { id: this.id } : {}
+
+        api({ ...paramsId, ...this.form }).then(res => {
+          this.requestSuccess()
+        }).finally(() => {
+          this.confirmLoading = false
+        })
       })
     },
     getDetail() {

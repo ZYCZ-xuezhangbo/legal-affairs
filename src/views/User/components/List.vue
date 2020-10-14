@@ -1,26 +1,26 @@
 <template>
-  <a-card :bordered="false" :title="title" class="margin-top-lg">
-    <template v-if="showExtra" #extra>
-      <button-add v-if="extraIsShow(ADD)" @click="handleShowAdd" />
-      <button-export v-if="extraIsShow(EXPORT)" :loading="exportLoading" @click="handleExport" />
-    </template>
-    <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
-      <template #action="item">
-        <span v-if="actList.length>0">
-          <span v-for="(v,k) in actList" :key="k">
-            <a @click="handleClick(v.code,item)">{{ v.name }}</a>
-            <a-divider v-if="k < actList.length-1" type="vertical" />
+  <div>
+    <a-card :bordered="false" :title="title" class="margin-top-lg">
+      <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
+        <template #action="item">
+          <span v-if="actList.length>0">
+            <span v-for="(v,k) in actList" :key="k">
+              <a @click="handleClick(v.code,item)">{{ v.name }}</a>
+              <a-divider v-if="k < actList.length-1" type="vertical" />
+            </span>
           </span>
-        </span>
-      </template>
-    </a-table>
-    <Pagination :page-num.sync="pagination.pageNum" :page-size="pagination.pageSize" :total="pagination.pageTotal" @change="handlePageNumChange" @sizeChange="handlePageSizeChange" />
-  </a-card>
+        </template>
+        <template #roleMsgList="list">
+          <a-tag v-for="(item,index) in list" :key="index" class="margin-tb-sm">{{ item }}</a-tag>
+        </template>
+      </a-table>
+      <Pagination :page-num="pagination.pageNum" :page-size="pagination.pageSize" :total="pagination.pageTotal" @change="handlePageNumChange" @sizeChange="handlePageSizeChange" />
+    </a-card>
+  </div>
 </template>
 
 <script>
 import { ACTIONS, ACTIONS_ORDER } from '@/store/mutation-types'
-import { array as isArray } from '@/utils/test'
 import { Pagination } from '@/components'
 
 export default {
@@ -79,15 +79,12 @@ export default {
       }
     },
     showExtra: {
-      // 类型为Boolean时：全部显示或全部隐藏，类型为Array时：仅显示数组中的元素
       type: [Boolean, Array],
       default: true
     }
   },
   data() {
     return {
-      ADD: ACTIONS.Add,
-      EXPORT: ACTIONS.Export,
       API: this.api !== '' ? require(`@/api/${this.api}`) : ''
     }
   },
@@ -159,14 +156,6 @@ export default {
     }
   },
   methods: {
-    extraIsShow(code) {
-      if (typeof this.showExtra === 'boolean') {
-        return this.showExtra
-      } else if (isArray(this.showExtra)) {
-        return this.showExtra.includes(code)
-      }
-      return true
-    },
     handlePageNumChange(e) {
       this.$emit('reload', {
         pageNum: e.page,
@@ -180,37 +169,10 @@ export default {
       })
     },
     handleClick(act, item) {
-      const id = item.id
-      if (act === ACTIONS.Delete) {
-        this.handleDelete(id)
-      } else {
-        this.$emit('actClick', { act, item })
-      }
+      this.$emit('actClick', { act, item })
     },
     handleShowAdd() {
       this.$emit('showAdd')
-    },
-    handleDelete(id) {
-      this.$confirm({
-        title: '删除',
-        content: '确定删除该数据吗？',
-        okType: 'danger',
-        cancelText: '取消',
-        okText: '确定',
-        onOk: () => {
-          if (this.api !== '') {
-            return this.API.delete_(id).then(res => {
-              this.$emit('reload', {
-                pageNum: this.pagination.pageNum,
-                pageSize: this.pagination.pageSize
-              })
-            })
-          }
-        }
-      })
-    },
-    handleExport() {
-      this.$emit('export')
     }
   }
 }

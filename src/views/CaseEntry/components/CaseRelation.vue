@@ -2,7 +2,7 @@
   <div>
     <a-modal title="关联案件选择" :visible="show" @ok="handleOk" @cancel="handleCancel" :width="1000">
       <template #footer>
-        <a-button @click="handleCancel">关闭</a-button>
+        <button-cancel @click="handleCancel" />
       </template>
       <div class="table-page-search-wrapper">
         <a-form-model ref="searchForm" layout="inline" :model="searchForm">

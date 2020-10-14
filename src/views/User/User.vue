@@ -1,40 +1,41 @@
 <template>
   <page-header-wrapper>
-    用户列表
-    <!-- <Search @search="handleSearch" />
-    <List api="" :columns="columns" :actions="[ACTIONS.Role]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" /> -->
+    <Edit api="systemUser" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
+    <Search @search="handleSearch" />
+    <List :columns="columns" :show-extra="false" :actions="[ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" />
   </page-header-wrapper>
 </template>
 
 <script>
 import { page as httpGetList } from '@/api/systemUser'
-import { PageList as List } from '@/components'
 import paginationMixin from '@/mixin/paginationMixin'
+import List from './components/List'
 import Search from './components/Search'
+import Edit from './components/Edit'
 
 export default {
   mixins: [paginationMixin],
   components: {
     Search,
-    List
+    List,
+    Edit
   },
   data() {
     return {
+      dialog: {
+        showEdit: false,
+        editId: ''
+      },
       columns: [
         {
-          title: 'ID',
-          dataIndex: 'id',
-          key: 'id'
-        },
-        {
           title: '账号',
-          dataIndex: 'account',
-          key: 'account'
+          dataIndex: 'username',
+          key: 'username'
         },
         {
           title: '用户名',
-          dataIndex: 'userName',
-          key: 'userName'
+          dataIndex: 'name',
+          key: 'name'
         },
         {
           title: '手机号',
@@ -42,9 +43,16 @@ export default {
           key: 'phone'
         },
         {
+          title: '角色',
+          dataIndex: 'roleMsgList',
+          key: 'roleMsgList',
+          width: '30%',
+          scopedSlots: { customRender: 'roleMsgList' }
+        },
+        {
           title: '状态',
-          dataIndex: 'state',
-          key: 'state'
+          dataIndex: 'statusMsg',
+          key: 'statusMsg'
         }
       ]
     }
@@ -60,11 +68,14 @@ export default {
       })
     },
     handleActClick({ act, item }) {
-      console.log(item)
+      this.dialog.editId = item.id
+      if (act === this.ACTIONS.Edit) {
+        this.dialog.showEdit = true
+      }
     }
   },
   mounted() {
-    // this.getList()
+    this.getList()
   }
 }
 </script>

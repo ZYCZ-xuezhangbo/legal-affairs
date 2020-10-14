@@ -23,6 +23,7 @@ export const TOGGLE_COLOR = 'color'
 export const TOGGLE_WEAK = 'weak'
 export const TOGGLE_MULTI_TAB = 'multi_tab'
 export const APP_LANGUAGE = 'app_language'
+export const DEFAULT_ROUTE_PATH = '/welcome'
 
 /**
  * 响应码
@@ -46,13 +47,13 @@ export const ACTIONS_ORDER = valueToArrayFromObject(actions)
  * 案件阶段
  */
 export const CASE_STAGE = {
-  一审: 'FIRST_INSTANCE', // 一审
-  二审: 'SECOND_INSTANCE', // 二审
-  执行: 'EXECUTE', // 执行
-  再审: 'REVIEW_INSTANCE', // 再审
-  仲裁: 'ARBITRATION', // 仲裁
-  非诉: 'NOT_LAWSUIT', // 非诉
-  终结: 'FINALITY' // 终结
+  '一审': 'FIRST_INSTANCE', // 一审
+  '二审': 'SECOND_INSTANCE', // 二审
+  '执行': 'EXECUTE', // 执行
+  '再审': 'REVIEW_INSTANCE', // 再审
+  '仲裁': 'ARBITRATION', // 仲裁
+  '非诉': 'NOT_LAWSUIT', // 非诉
+  '终结': 'FINALITY' // 终结
 }
 
 export const CONTENT_WIDTH_TYPE = {
@@ -65,6 +66,10 @@ export const NAV_THEME = {
   DARK: 'dark'
 }
 
+/**
+ * 将对象的value转为数组
+ * @param {object} obj
+ */
 function valueToArrayFromObject(obj) {
   const arr = []
   for (const i in obj) {

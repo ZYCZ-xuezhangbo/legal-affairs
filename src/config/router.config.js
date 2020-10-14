@@ -6,8 +6,7 @@ import {
   lvSuo as lvSuoSvg,
   huiQian as huiQianSvg,
   notice as noticeSvg,
-  settings as settingsSvg,
-  designer as designerSvg
+  settings as settingsSvg
 } from '@/core/icons'
 
 const RouteView = {
@@ -65,6 +64,12 @@ export const asyncRouterMap = [
             name: 'CaseStatistics',
             component: () => import('@/views/CaseStatistics/CaseStatistics'),
             meta: { title: '案件统计', keepAlive: false, permission: [] }
+          },
+          {
+            path: '/case/caseCollect',
+            name: 'CaseCollect',
+            component: () => import('@/views/CaseCollect/CaseCollect'),
+            meta: { title: '案件汇总表', keepAlive: false, permission: [] }
           }
         ]
       },
@@ -239,13 +244,6 @@ export const asyncRouterMap = [
     path: '*',
     redirect: '/404',
     hidden: true
-  },
-  {
-    path: '/test',
-    name: 'Test',
-    hidden: true,
-    component: () => import('@/views/Test/Index2'),
-    meta: { title: 'Test', icon: designerSvg, keepAlive: false, permission: [] }
   }
 ]
 
@@ -268,7 +266,24 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/404',
-    component: () => import(/* webpackChunkName: "fail" */ '@/views/Exception/404')
+    path: '/',
+    component: BasicLayout,
+    hidden: true,
+    redirect: '/welcome',
+    children: [
+      {
+        path: '/welcome',
+        name: 'Welcome',
+        component: () => import(/* webpackChunkName: "user" */ '@/views/Welcome/Welcome')
+      },
+      {
+        path: '/403',
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/Exception/403')
+      },
+      {
+        path: '/404',
+        component: () => import(/* webpackChunkName: "fail" */ '@/views/Exception/404')
+      }
+    ]
   }
 ]

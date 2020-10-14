@@ -4,13 +4,12 @@ import storage from 'store'
 import NProgress from 'nprogress'
 import '@/components/NProgress/nprogress.less'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, DEFAULT_ROUTE_PATH } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: true })
 
-const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
+const whiteList = ['login'] // no redirect whitelist
 const loginRoutePath = '/user/login'
-const defaultRoutePath = '/analysis'
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
@@ -18,14 +17,14 @@ router.beforeEach((to, from, next) => {
 
   if (storage.get(ACCESS_TOKEN)) {
     if (to.path === loginRoutePath) {
-      next({ path: defaultRoutePath })
+      next({ path: DEFAULT_ROUTE_PATH })
       NProgress.done()
     } else {
       if (store.getters.permissions.length === 0) {
         store.dispatch('GetUserInfo').then(permissions => {
           store.dispatch('GenerateRoutes', permissions).then(() => {
             router.addRoutes(store.getters.addRouters)
-            // 请求带有 redirect 重定向时，登录自动重定向到该地址
+            // 请求带有 redirect 重定向时，登录成功后会自动重定向到该地址
             const redirect = decodeURIComponent(from.query.redirect || to.path)
             if (to.path === redirect) {
               // 设置replace:true，这样导航就不会留下历史记录
@@ -35,10 +34,14 @@ router.beforeEach((to, from, next) => {
             }
           })
         }).catch((res) => {
-          // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
-          store.dispatch('Logout').then(() => {
-            next({ path: loginRoutePath, query: { redirect: to.fullPath } })
-          })
+          if (res.message === 'permissionIsNull') {
+            next('/403')
+          } else {
+            // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
+            store.dispatch('Logout').then(() => {
+              next({ path: loginRoutePath, query: { redirect: to.fullPath } })
+            })
+          }
         })
       } else {
         next()

@@ -7,7 +7,7 @@
 
     <a-card :loading="loading" :bordered="false">
       <a-row>
-        <a-col :sm="24" :md="12">
+        <a-col :lg="24" :xl="12">
           <a-descriptions>
             <a-descriptions-item label="执行金额(万元)">
               {{ sumPayment }}
@@ -20,14 +20,11 @@
             </a-descriptions-item>
           </a-descriptions>
         </a-col>
-        <a-col :sm="24" :md="12" :class="!isMobile?'text-right':''">
+        <a-col :lg="24" :xl="12" class="btns">
           <a-button type="primary" :disabled="btnAddHuikuanDisabled" @click="dialog.showAddHuikuan=true">回款</a-button>
           <a-button type="primary" @click="handleGoCaseEntry">新增案件</a-button>
           <a-button type="primary" :disabled="btnCaseFinalityDisabled" @click="handleShowCaseFinality(false)">终结</a-button>
-          <a-button :type="isFav?'primary':''" :loading="favLoading" @click="handleChangeFav">
-            <!-- <a-icon v-if="!favLoading && isFav" theme="filled" type="star"></a-icon> -->
-            {{ isFav?'取消收藏':'收藏' }}
-          </a-button>
+          <a-button :type="isFav?'primary':''" :loading="favLoading" @click="handleChangeFav"> {{ btnFavText }} </a-button>
         </a-col>
       </a-row>
       <div class="margin-top-xl">
@@ -100,6 +97,9 @@ export default {
     isFav() {
       return this.data.collect === '1'
     },
+    btnFavText() {
+      return this.isFav ? '取消收藏' : '收藏'
+    },
     // 当前所选中的阶段
     curStep() {
       return this.data.caseStageList.findIndex(v => v.id === this.caseId)
@@ -119,12 +119,12 @@ export default {
     // “新增回款”按钮是否可点击
     btnAddHuikuanDisabled() {
       // 如果案件阶段列表中没有“执行”阶段，则不可点击
-      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE.执行) <= -1
+      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE['执行']) <= -1
     },
     // “终结”按钮是否可点击
     btnCaseFinalityDisabled() {
       // 如果案件阶段列表中存在“终结”阶段，则不可点击
-      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE.终结) > -1
+      return this.data.caseStageList.findIndex(v => v.caseStage === CASE_STAGE['终结']) > -1
     },
     // 执行金额
     sumPayment() {
@@ -147,7 +147,8 @@ export default {
       if (this.sumPayment === 0) {
         return 0
       } else {
-        return NP.minus(this.sumPayment, this.paymentReceived)
+        const num = NP.minus(this.sumPayment, this.paymentReceived)
+        return num < 0 ? 0 : num
       }
     }
   },
@@ -155,7 +156,7 @@ export default {
     handleStepChange(e) {
       const chooseCaseId = this.data.caseStageList[e].id
       const caseCode = this.data.caseStageList[e].caseStage
-      if (caseCode === CASE_STAGE.终结) {
+      if (caseCode === CASE_STAGE['终结']) {
         this.handleShowCaseFinality(true)
       } else {
         this.$emit('changeStep', chooseCaseId)
@@ -191,4 +192,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.btns {
+  text-align: right;
+}
+@media screen and(max-width: 1200px) {
+  .btns {
+    text-align: left;
+  }
+}
 </style>

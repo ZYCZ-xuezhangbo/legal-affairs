@@ -19,6 +19,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { DEFAULT_ROUTE_PATH } from '@/store/mutation-types'
 
 export default {
   data() {
@@ -63,7 +64,7 @@ export default {
     },
     loginSuccess() {
       this.isLoginError = false
-      this.$router.push('/')
+      this.$router.push(DEFAULT_ROUTE_PATH)
     },
     requestFailed(msg) {
       this.isLoginError = true

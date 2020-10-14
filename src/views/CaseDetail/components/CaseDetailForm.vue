@@ -93,11 +93,7 @@
           </div>
           <a-row :gutter="gutter" v-for="(item,index) in form.caseUsers" :key="item.key">
             <a-col v-bind="span">
-              <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="[{
-                required: true, message: '必填项', trigger: 'blur'
-              }, {
-                max: 30, message: '最大长度30位', trigger: 'blur'
-              }]">
+              <a-form-model-item label="对方当事人" :key="item.key" :prop="`caseUsers.${index}.adversary`" :rules="[validateRequired, max30Str]">
                 <a-input v-model="item.adversary" :disabled="disabled" placeholder="对方当事人">
                   <template v-if="isEdit || isAdd" #addonAfter>
                     <a-popconfirm title="确定删除该当事人吗？" ok-text="删除" ok-type="danger" cancel-text="取消" @confirm="handleDelCaseUsers(item)">
@@ -108,11 +104,7 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="对方当事人是否国有企业" :key="item.key" :prop="`caseUsers.${index}.stateOwned`" :rules="{
-                required: true,
-                message: '必填项',
-                trigger: ['blur','change']
-              }">
+              <a-form-model-item label="对方当事人是否国有企业" :key="item.key" :prop="`caseUsers.${index}.stateOwned`" :rules="validateRequired">
                 <a-select v-model="item.stateOwned" :disabled="disabled">
                   <a-select-option value="1">
                     是
@@ -124,11 +116,7 @@
               </a-form-model-item>
             </a-col>
             <a-col v-bind="span">
-              <a-form-model-item label="对方当事人是否市管企业" :key="item.key" :prop="`caseUsers.${index}.cityPipe`" :rules="{
-                required: true,
-                message: '必填项',
-                trigger: ['blur','change']
-              }">
+              <a-form-model-item label="对方当事人是否市管企业" :key="item.key" :prop="`caseUsers.${index}.cityPipe`" :rules="validateRequired">
                 <a-select v-model="item.cityPipe" :disabled="disabled">
                   <a-select-option value="1">
                     是
@@ -271,7 +259,7 @@
               </a-form-model-item>
               <a-form-model-item label="进展状态" :prop="`caseProgressList.${index}.progressStatus`">
                 <a-select v-model="item.progressStatus" :disabled="disabled" placeholder="进展状态">
-                  <a-select-option v-for="(pItem,pIndex) in caseProStatus" :key="pIndex" :value="pItem.code">
+                  <a-select-option v-for="(pItem,pIndex) in caseProStatus" :key="pIndex" :value="pItem.value">
                     {{ pItem.value }}
                   </a-select-option>
                 </a-select>
@@ -420,7 +408,9 @@ export default {
         caseAmount: [validateRequired, ...validatePhoneMoney],
         entrust: [...validatePhoneMoney],
         caseDescription: [validateRequired]
-      }
+      },
+      validateRequired,
+      max30Str
     }
   },
   watch: {
@@ -452,10 +442,10 @@ export default {
       return this.form.lawOffice === '0'
     },
     courtName() {
-      return CASE_STAGE.仲裁 === this.form.caseStage ? '仲裁委员会' : '审理法院'
+      return CASE_STAGE['仲裁'] === this.form.caseStage ? '仲裁委员会' : '审理法院'
     },
     judgeName() {
-      return CASE_STAGE.仲裁 === this.form.caseStage ? '仲裁员' : '主管法官'
+      return CASE_STAGE['仲裁'] === this.form.caseStage ? '仲裁员' : '主管法官'
     },
     uploadFileRecord() {
       return {
@@ -528,9 +518,7 @@ export default {
         return
       }
       const index = this.form.caseUsers.indexOf(item)
-      if (index !== -1) {
-        this.form.caseUsers.splice(index, 1)
-      }
+      if (index !== -1) this.form.caseUsers.splice(index, 1)
     },
     handleLawOfficeChange() {
       this.form.lawOfficeName = this.form.lawyerName = ''

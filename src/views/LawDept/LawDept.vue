@@ -11,9 +11,9 @@
 <script>
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getDeptDictionary as httpGetDict, export_ as httpExport } from '@/api/legalDept'
+import { PageList as List } from '@/components'
 import Search from './components/Search'
 import Edit from './components/Edit'
-import { PageList as List } from '@/components'
 
 export default {
   mixins: [paginationMixin],

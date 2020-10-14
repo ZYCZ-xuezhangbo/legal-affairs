@@ -4,7 +4,7 @@
 
     <a-modal title="回款情况" ok-text="提交" :visible="show" @cancel="handleClose">
       <template #footer>
-        <a-button @click="handleClose">关闭</a-button>
+        <button-cancel @click="handleClose" />
       </template>
       <a-row class="margin-bottom" type="flex" align="middle" justify="space-between">
         <a-col> 已回款总金额(万元)：{{ paymentReceived }} </a-col>
