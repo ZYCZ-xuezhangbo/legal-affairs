@@ -1,16 +1,14 @@
 <template>
   <page-header-wrapper>
     <!-- <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" /> -->
-
     <Edit api="outsideLawFirm" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search @search="handleSearch" />
     <List api="outsideLawFirm" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
-
   </page-header-wrapper>
 </template>
 
 <script>
-import paginationMixin from '@/mixin/paginationMixin'
+import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetList, export_ as httpExport } from '@/api/outsideLawFirm'
 import { PageList as List } from '@/components'
 import Edit from './components/Edit'

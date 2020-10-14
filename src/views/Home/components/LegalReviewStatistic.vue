@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <a-card hoverable @click="handleClick">
-      <a-row type="flex" align="bottom">
-        <a-col v-for="(item,index) in values" :key="index">
-          <span class="value">{{ item.value }}</span>
-          <span class="suffix">{{ item.suffix }}</span>
-        </a-col>
-      </a-row>
-      <div class="title"> {{ title }} </div>
-    </a-card>
-  </div>
+  <a-card hoverable @click="handleClick">
+    <a-row type="flex" align="bottom">
+      <a-col v-for="(item,index) in values" :key="index">
+        <span class="value">{{ item.value }}</span>
+        <span class="suffix">{{ item.suffix }}</span>
+      </a-col>
+    </a-row>
+    <div class="title"> {{ title }} </div>
+  </a-card>
 </template>
 
 <script>

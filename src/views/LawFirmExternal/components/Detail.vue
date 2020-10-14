@@ -1,42 +1,40 @@
 <template>
-  <div>
-    <a-modal title="查看" :visible="show" @cancel="handleCancel" :width="1000">
-      <template #footer>
-        <a-button @click="handleCancel">取消</a-button>
-      </template>
-      <a-skeleton v-if="pageLoading" active />
-      <template v-else>
-        <a-descriptions :bordered="false">
-          <a-descriptions-item label="律所名称">
-            {{ data.lawFirmName }}
-          </a-descriptions-item>
-          <a-descriptions-item label="地址">
-            {{ data.address }}
-          </a-descriptions-item>
-          <a-descriptions-item label="联系人">
-            {{ data.linkman }}
-          </a-descriptions-item>
-          <a-descriptions-item label="联系电话" :span="3">
-            {{ data.phone }}
-          </a-descriptions-item>
-          <a-descriptions-item label="律所简介" :span="3">
-            {{ data.lawFirmDesc }}
-          </a-descriptions-item>
-          <a-descriptions-item label="展示视频" :span="3">
-            <video class="my-video" v-for="(item,index) in data.videos" :key="index" controls>
-              <source :src="item.url" type="video/mp4">
-            </video>
-          </a-descriptions-item>
-          <a-descriptions-item label="展示图片" :span="3">
-            <UploadImg :record="photographsRecord" :value="data.photographs" />
-          </a-descriptions-item>
-          <a-descriptions-item label="附件" :span="3">
-            <UploadFile :record="resourceUrlRecord" :value="data.resourceUrl" />
-          </a-descriptions-item>
-        </a-descriptions>
-      </template>
-    </a-modal>
-  </div>
+  <a-modal title="查看" :visible="show" @cancel="handleCancel" :width="1000">
+    <template #footer>
+      <a-button @click="handleCancel">取消</a-button>
+    </template>
+    <a-skeleton v-if="pageLoading" active />
+    <template v-else>
+      <a-descriptions :bordered="false">
+        <a-descriptions-item label="律所名称">
+          {{ data.lawFirmName }}
+        </a-descriptions-item>
+        <a-descriptions-item label="地址">
+          {{ data.address }}
+        </a-descriptions-item>
+        <a-descriptions-item label="联系人">
+          {{ data.linkman }}
+        </a-descriptions-item>
+        <a-descriptions-item label="联系电话" :span="3">
+          {{ data.phone }}
+        </a-descriptions-item>
+        <a-descriptions-item label="律所简介" :span="3">
+          {{ data.lawFirmDesc }}
+        </a-descriptions-item>
+        <a-descriptions-item label="展示视频" :span="3">
+          <video class="my-video" v-for="(item,index) in data.videos" :key="index" controls>
+            <source :src="item.url" type="video/mp4">
+          </video>
+        </a-descriptions-item>
+        <a-descriptions-item label="展示图片" :span="3">
+          <UploadImg :record="photographsRecord" :value="data.photographs" />
+        </a-descriptions-item>
+        <a-descriptions-item label="附件" :span="3">
+          <UploadFile :record="resourceUrlRecord" :value="data.resourceUrl" />
+        </a-descriptions-item>
+      </a-descriptions>
+    </template>
+  </a-modal>
 </template>
 
 <script>

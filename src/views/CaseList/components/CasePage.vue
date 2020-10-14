@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import paginationMixin from '@/mixin/paginationMixin'
+import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetCaseList, export_ as httpExport } from '@/api/case'
 import { PageList as List } from '@/components'
 import Search from './Search'

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import dialogEditMixin from '@/mixin/dialogEditMixin'
+import dialogEditMixin from '@/mixin/dialogEdit-mixin'
 import { ACTIONS } from '@/store/mutation-types'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import { required as validateRequired } from '@/utils/formValidate'

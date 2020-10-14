@@ -1,17 +1,14 @@
 <template>
   <page-header-wrapper>
     <DialogRichText :show.sync="showPreview" :content="richText" />
-
     <Edit api="workTrend" :form-data="formData" :is-edit="dialog.isEdit" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
     <Search @search="handleSearch" />
-
     <List api="workTrend" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete, ACTIONS.Preview]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
 <script>
-import paginationMixin from '@/mixin/paginationMixin'
+import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetList, getById as httpGetById, export_ as httpExport } from '@/api/workTrend'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'

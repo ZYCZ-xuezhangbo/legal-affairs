@@ -117,7 +117,7 @@
 <script>
 import deepClone from '@/utils/deepClone'
 import { ACTIONS } from '@/store/mutation-types'
-import dialogEditMixin from '@/mixin/dialogEditMixin'
+import dialogEditMixin from '@/mixin/dialogEdit-mixin'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawManager'

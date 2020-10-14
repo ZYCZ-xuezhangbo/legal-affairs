@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form-model ref="searchForm" layout="inline" :model="searchForm">
-          <a-row :gutter="searchTableGrid.gutter">
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="权限名称" prop="name">
-                <a-input v-model="searchForm.name" placeholder="权限名称" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item>
-                <button-search @click="handleSearch" />
-                <button-reset @click="resetForm" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-card>
-  </div>
+  <a-card :bordered="false">
+    <div class="table-page-search-wrapper">
+      <a-form-model ref="searchForm" layout="inline" :model="searchForm">
+        <a-row :gutter="searchTableGrid.gutter">
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="权限名称" prop="name">
+              <a-input v-model="searchForm.name" placeholder="权限名称" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item>
+              <button-search @click="handleSearch" />
+              <button-reset @click="resetForm" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-card>
 </template>
 
 <script>

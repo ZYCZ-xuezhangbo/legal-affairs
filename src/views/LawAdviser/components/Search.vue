@@ -1,59 +1,57 @@
 <template>
-  <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form-model ref="searchForm" layout="inline" :model="searchForm">
-          <a-row :gutter="searchTableGrid.gutter">
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="公司" prop="company">
-                <a-select v-model="searchForm.company">
-                  <a-select-option value="">
-                    {{ $t('select.search.all') }}
-                  </a-select-option>
-                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="法学类专业" prop="legalMajor">
-                <a-select v-model="searchForm.legalMajor">
-                  <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="法律职业资格" prop="professionStatus">
-                <a-select v-model="searchForm.professionStatus">
-                  <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="企业法律顾问职业资格" prop="legalProfession">
-                <a-select v-model="searchForm.legalProfession">
-                  <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item>
-                <button-search class="margin-right" @click="handleSearch" />
-                <button-reset @click="resetForm" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-card>
-  </div>
+  <a-card :bordered="false">
+    <div class="table-page-search-wrapper">
+      <a-form-model ref="searchForm" layout="inline" :model="searchForm">
+        <a-row :gutter="searchTableGrid.gutter">
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="公司" prop="company">
+              <a-select v-model="searchForm.company">
+                <a-select-option value="">
+                  {{ $t('select.search.all') }}
+                </a-select-option>
+                <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="法学类专业" prop="legalMajor">
+              <a-select v-model="searchForm.legalMajor">
+                <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="法律职业资格" prop="professionStatus">
+              <a-select v-model="searchForm.professionStatus">
+                <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="企业法律顾问职业资格" prop="legalProfession">
+              <a-select v-model="searchForm.legalProfession">
+                <a-select-option v-for="(item,index) in trueOrFalse" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item>
+              <button-search class="margin-right" @click="handleSearch" />
+              <button-reset @click="resetForm" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-card>
 </template>
 
 <script>

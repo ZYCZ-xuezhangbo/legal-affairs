@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import dialogEditMixin from '@/mixin/dialogEditMixin'
+import dialogEditMixin from '@/mixin/dialogEdit-mixin'
 import { ACTIONS } from '@/store/mutation-types'
 import { required as validateRequired, phone as validatePhone } from '@/utils/formValidate'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'

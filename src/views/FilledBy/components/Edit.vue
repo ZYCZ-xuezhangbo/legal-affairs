@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import dialogEditMixin from '@/mixin/dialogEditMixin'
+import dialogEditMixin from '@/mixin/dialogEdit-mixin'
 import { required as validateRequired, phone as validatePhone, max30Str } from '@/utils/formValidate'
 
 export default {

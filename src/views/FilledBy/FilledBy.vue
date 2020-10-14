@@ -8,7 +8,7 @@
 
 <script>
 import { page as httpGetList, getInformantDictionary as httpGetDict, export_ as httpExport } from '@/api/informant'
-import paginationMixin from '@/mixin/paginationMixin'
+import paginationMixin from '@/mixin/pagination-mixin'
 import Search from './components/Search'
 import Edit from './components/Edit'
 import { PageList as List } from '@/components'

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import paginationMixin from '@/mixin/paginationMixin'
+import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetList, getTypeList as httpGetTypeList, export_ as httpExport } from '@/api/material'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'

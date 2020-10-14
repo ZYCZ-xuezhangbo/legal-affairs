@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { deviceMixin } from '@/store/device-mixin'
+import { deviceMixin } from '@/mixin/device-mixin'
 
 export default {
   name: 'UserLayout',

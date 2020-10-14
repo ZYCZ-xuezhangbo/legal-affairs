@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <a-row type="flex" align="middle">
-      <a-col :span="6" class="text-right">
-        <div class="title">{{ title }}</div>
-        <a-statistic title="占比" :value="pro"> </a-statistic>
-      </a-col>
-      <a-col :span="18">
-        <div v-if="total>0">
-          <ChartRingSimple :total="total" :value="value" />
-        </div>
-        <div v-else class="text-center text-gray"> 暂无数据 </div>
-      </a-col>
-    </a-row>
-  </div>
+  <a-row type="flex" align="middle">
+    <a-col :span="6" class="text-right">
+      <div class="title">{{ title }}</div>
+      <a-statistic title="占比" :value="pro"> </a-statistic>
+    </a-col>
+    <a-col :span="18">
+      <div v-if="total>0">
+        <ChartRingSimple :total="total" :value="value" />
+      </div>
+      <div v-else class="text-center text-gray"> 暂无数据 </div>
+    </a-col>
+  </a-row>
 </template>
 
 <script>

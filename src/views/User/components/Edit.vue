@@ -1,24 +1,22 @@
 <template>
-  <div>
-    <a-modal v-bind="editModal" title="关联角色" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <a-skeleton v-show="pageLoading" active />
-      <div v-show="!pageLoading">
-        <a-form-model ref="form" :rules="rules" :model="form">
-          <a-row>
-            <a-col>
-              <a-form-model-item label="" prop="roleIdList">
-                <a-checkbox-group :options="roleAllList" v-model="form.roleIdList" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-modal>
-  </div>
+  <a-modal v-bind="editModal" title="关联角色" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
+    <a-skeleton v-show="pageLoading" active />
+    <div v-show="!pageLoading">
+      <a-form-model ref="form" :rules="rules" :model="form">
+        <a-row>
+          <a-col class="role-list">
+            <a-form-model-item label="" prop="roleIdList">
+              <a-checkbox-group :options="roleAllList" v-model="form.roleIdList" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-modal>
 </template>
 
 <script>
-import dialogEditMixin from '@/mixin/dialogEditMixin'
+import dialogEditMixin from '@/mixin/dialogEdit-mixin'
 import { requiredOfArray } from '@/utils/formValidate'
 
 export default {
@@ -49,5 +47,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="less">
+.role-list /deep/ .ant-checkbox-group-item {
+  margin-bottom: 8px;
+}
 </style>

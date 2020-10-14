@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <a-modal :title="title" ok-text="提交" :visible="show" :confirm-loading="confirmLoading" @ok="handleSubmit" @cancel="handleClose">
-      <a-form-model ref="form" :model="form" :rules="rules">
-        <a-form-model-item label="回款金额(万元)" prop="returnedMoney">
-          <a-input-number v-model="form.returnedMoney" :precision="2" :min="0" placeholder="回款金额" class="response" />
-        </a-form-model-item>
-        <a-form-model-item label="回款日期" prop="returnedTime">
-          <a-date-picker v-model="form.returnedTime" inputReadOnly @change="(e,str)=>form.returnedTime=str" class="response" />
-        </a-form-model-item>
-        <a-form-model-item label="附件" prop="resourceUrl">
-          <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.caseAccessory=e" />
-        </a-form-model-item>
-      </a-form-model>
-    </a-modal>
-  </div>
+  <a-modal :title="title" ok-text="提交" :visible="show" :confirm-loading="confirmLoading" @ok="handleSubmit" @cancel="handleClose">
+    <a-form-model ref="form" :model="form" :rules="rules">
+      <a-form-model-item label="回款金额(万元)" prop="returnedMoney">
+        <a-input-number v-model="form.returnedMoney" :precision="2" :min="0" placeholder="回款金额" class="response" />
+      </a-form-model-item>
+      <a-form-model-item label="回款日期" prop="returnedTime">
+        <a-date-picker v-model="form.returnedTime" inputReadOnly @change="(e,str)=>form.returnedTime=str" class="response" />
+      </a-form-model-item>
+      <a-form-model-item label="附件" prop="resourceUrl">
+        <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.caseAccessory=e" />
+      </a-form-model-item>
+    </a-form-model>
+  </a-modal>
 </template>
 
 <script>

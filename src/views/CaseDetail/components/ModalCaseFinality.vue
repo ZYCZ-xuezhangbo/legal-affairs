@@ -1,24 +1,22 @@
 <template>
-  <div>
-    <a-modal title="终结" :visible="show" @cancel="handleClose">
-      <template #footer>
-        <a-button @click="handleClose">取消</a-button>
-        <a-button type="primary" :loading="submitLoading" @click="handleSubmit">保存</a-button>
-      </template>
+  <a-modal title="终结" :visible="show" @cancel="handleClose">
+    <template #footer>
+      <a-button @click="handleClose">取消</a-button>
+      <a-button type="primary" :loading="submitLoading" @click="handleSubmit">保存</a-button>
+    </template>
 
-      <a-skeleton v-show="pageLoading" active />
-      <div v-show="!pageLoading">
-        <a-form-model ref="form" :model="form">
-          <a-form-model-item label="" prop="content">
-            <a-textarea v-model="form.content" :auto-size="{ minRows: 5, maxRows: 10 }" />
-          </a-form-model-item>
-          <a-form-model-item label="附件" prop="resourceUrl">
-            <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
-          </a-form-model-item>
-        </a-form-model>
-      </div>
-    </a-modal>
-  </div>
+    <a-skeleton v-show="pageLoading" active />
+    <div v-show="!pageLoading">
+      <a-form-model ref="form" :model="form">
+        <a-form-model-item label="" prop="content">
+          <a-textarea v-model="form.content" :auto-size="{ minRows: 5, maxRows: 10 }" />
+        </a-form-model-item>
+        <a-form-model-item label="附件" prop="resourceUrl">
+          <UploadFile :value="form.resourceUrl" :record="uploadFileRecord" @change="e=>form.resourceUrl=e" />
+        </a-form-model-item>
+      </a-form-model>
+    </div>
+  </a-modal>
 </template>
 
 <script>

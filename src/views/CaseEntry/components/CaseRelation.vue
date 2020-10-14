@@ -1,66 +1,64 @@
 <template>
-  <div>
-    <a-modal title="关联案件选择" :visible="show" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <template #footer>
-        <button-cancel @click="handleCancel" />
+  <a-modal title="关联案件选择" :visible="show" @ok="handleOk" @cancel="handleCancel" :width="1000">
+    <template #footer>
+      <button-cancel @click="handleCancel" />
+    </template>
+    <div class="table-page-search-wrapper">
+      <a-form-model ref="searchForm" layout="inline" :model="searchForm">
+        <a-row :gutter="gutter">
+          <a-col v-bind="span">
+            <a-form-model-item label="成诉时间" prop="legalMajor">
+              <a-date-picker v-model="searchForm.startTime" inputReadOnly placeholder="开始时间" @change="(e,str)=>searchForm.startTime=str" class="response" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="成诉时间" prop="legalMajor">
+              <a-date-picker v-model="searchForm.endTime" inputReadOnly placeholder="结束时间" @change="(e,str)=>searchForm.endTime=str" class="response" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="案件号" prop="caseNo">
+              <a-input v-model="searchForm.caseNo" placeholder="请输入" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="案由" prop="professionStatus">
+              <a-tree-select v-model="searchForm.brief" style="width: 100%;overflow:hidden;" allowClear :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
+                <template #suffixIcon>
+                  <a-icon v-show="briefLoading" type="loading" />
+                </template>
+              </a-tree-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="诉讼地位" prop="locusStand">
+              <a-select v-model="searchForm.locusStand" placeholder="诉讼地位" allowClear>
+                <a-select-option v-for="(item,index) in lawsuit" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="我方涉案单位" prop="ourUnits">
+              <a-input v-model="searchForm.ourUnits" placeholder="请输入" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item>
+              <button-search class="margin-right" @click="handleSearch" />
+              <button-reset @click="resetForm" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+    <a-table :loading="loading" :columns="columns" :data-source="data" :pagination="pagination" :row-key="e => e.id">
+      <template #action="item">
+        <a @click="handleChoose(item)">选择</a>
       </template>
-      <div class="table-page-search-wrapper">
-        <a-form-model ref="searchForm" layout="inline" :model="searchForm">
-          <a-row :gutter="gutter">
-            <a-col v-bind="span">
-              <a-form-model-item label="成诉时间" prop="legalMajor">
-                <a-date-picker v-model="searchForm.startTime" inputReadOnly placeholder="开始时间" @change="(e,str)=>searchForm.startTime=str" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="成诉时间" prop="legalMajor">
-                <a-date-picker v-model="searchForm.endTime" inputReadOnly placeholder="结束时间" @change="(e,str)=>searchForm.endTime=str" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="案件号" prop="caseNo">
-                <a-input v-model="searchForm.caseNo" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="案由" prop="professionStatus">
-                <a-tree-select v-model="searchForm.brief" style="width: 100%;overflow:hidden;" allowClear :searchValue="briefSearchValue" :dropdown-style="{ maxHeight: '45vh', overflow: 'auto' }" treeDataSimpleMode show-search treeNodeFilterProp="label" :tree-data="briefList" tree-default-expand-all placeholder="案由" @search="handleSearchbriefList">
-                  <template #suffixIcon>
-                    <a-icon v-show="briefLoading" type="loading" />
-                  </template>
-                </a-tree-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="诉讼地位" prop="locusStand">
-                <a-select v-model="searchForm.locusStand" placeholder="诉讼地位" allowClear>
-                  <a-select-option v-for="(item,index) in lawsuit" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="我方涉案单位" prop="ourUnits">
-                <a-input v-model="searchForm.ourUnits" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item>
-                <button-search class="margin-right" @click="handleSearch" />
-                <button-reset @click="resetForm" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-      <a-table :loading="loading" :columns="columns" :data-source="data" :pagination="pagination" :row-key="e => e.id">
-        <template #action="item">
-          <a @click="handleChoose(item)">选择</a>
-        </template>
-      </a-table>
-    </a-modal>
-  </div>
+    </a-table>
+  </a-modal>
 </template>
 
 <script>

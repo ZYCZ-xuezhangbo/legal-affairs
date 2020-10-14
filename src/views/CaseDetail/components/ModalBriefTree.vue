@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <a-modal title="案由" :visible="show" @ok="handleOk" @cancel="handleCancel">
-      <a-input-search style="margin-bottom: 8px" placeholder="搜索" :loading="searchLoading" @change="onChange" />
-      <a-tree :expanded-keys="expandedKeys" blockNode :auto-expand-parent="true" :tree-data="gData" @expand="onExpand" @select="handleSelect">
-        <template #title="{ title }">
-          <span v-if="title.indexOf(searchValue) > -1">
-            {{ title.substr(0, title.indexOf(searchValue)) }}
-            <span style="color: #f50">{{ searchValue }}</span>
-            {{ title.substr(title.indexOf(searchValue) + searchValue.length) }}
-          </span>
-          <span v-else>{{ title }}</span>
-        </template>
-      </a-tree>
-    </a-modal>
-  </div>
+  <a-modal title="案由" :visible="show" @ok="handleOk" @cancel="handleCancel">
+    <a-input-search style="margin-bottom: 8px" placeholder="搜索" :loading="searchLoading" @change="onChange" />
+    <a-tree :expanded-keys="expandedKeys" blockNode :auto-expand-parent="true" :tree-data="gData" @expand="onExpand" @select="handleSelect">
+      <template #title="{ title }">
+        <span v-if="title.indexOf(searchValue) > -1">
+          {{ title.substr(0, title.indexOf(searchValue)) }}
+          <span style="color: #f50">{{ searchValue }}</span>
+          {{ title.substr(title.indexOf(searchValue) + searchValue.length) }}
+        </span>
+        <span v-else>{{ title }}</span>
+      </template>
+    </a-tree>
+  </a-modal>
 </template>
 
 <script>
