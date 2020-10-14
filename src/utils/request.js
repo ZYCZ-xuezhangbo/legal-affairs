@@ -51,9 +51,8 @@ request.interceptors.response.use((res) => {
 
   if (codePrefix === 'M') {
     Message.success(res.msg)
-  } else if (codePrefix === 'S') {
-    // 成功类code，不弹框
-  } else {
+  } else if (codePrefix !== 'S') {
+    // 成功类code，不弹框，其他的需要弹框
     if (res.code !== RESPONSE_CODE.USER_NOT_LOGIN) {
       Notification.error({
         message: res.code,

@@ -63,21 +63,7 @@ export default {
       })
     },
     getList() {
-      this.loading = true
-      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
-    },
-    handleActClick({ act, item }) {
-      const id = item.id
-      this.dialog.act = act
-      if (act === this.ACTIONS.Edit) {
-        this.dialog.editId = id
-        this.dialog.showEdit = true
-      }
+      this.getListMixin(httpGetList)
     },
     handleExport() {
       this.export(httpExport)

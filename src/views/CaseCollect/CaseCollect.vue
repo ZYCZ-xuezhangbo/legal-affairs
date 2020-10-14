@@ -58,13 +58,7 @@ export default {
       })
     },
     getList() {
-      this.loading = true
-      httpGetList(this.pagination).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
+      this.getListMixin(httpGetList)
     },
     getDict() {
       getCollectType().then(res => {

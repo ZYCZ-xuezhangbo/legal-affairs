@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import dialogEditMixin from '@/mixin/dialogEditMixin'
 import { required as validateRequired, requiredOfArray } from '@/utils/formValidate'
 
@@ -75,8 +76,9 @@ export default {
     handleOk() {
       this.$refs.form.validate().then(() => {
         this.confirmLoading = true
-        const api = this.isEdit ? this.API.update : this.API.create
-        const paramsId = this.isEdit ? { id: this.id } : {}
+        const isEdit = this.act === ACTIONS.Edit
+        const api = isEdit ? this.API.update : this.API.create
+        const paramsId = isEdit ? { id: this.id } : {}
 
         api({ ...paramsId, ...this.form, menuIdList: this.menuIdList }).then(res => {
           this.requestSuccess()

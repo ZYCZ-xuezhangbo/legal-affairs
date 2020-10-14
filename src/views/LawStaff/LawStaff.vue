@@ -94,12 +94,6 @@ export default {
         this.loading = false
       })
     },
-    handleActClick({ act, item }) {
-      const id = item.id
-      this.dialog.act = act
-      this.dialog.editId = id
-      this.dialog.showEdit = true
-    },
     handleExport() {
       this.export(httpExport)
     }

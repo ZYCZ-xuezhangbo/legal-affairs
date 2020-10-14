@@ -237,16 +237,17 @@ export default {
         form.scoreList = scoreList
         if (this.isKuNei) delete form.certificate
 
+        let api = null
+        const params = {}
         if ([ACTIONS.Edit, ACTIONS.Rate].includes(this.act)) { // 修改/评分
-          const isUpdate = this.act === ACTIONS.Edit ? '1' : '0'
-
-          this.API.update({ id: this.id, isUpdate, ...form }).then(res => {
-            this.requestSuccess()
-          }).finally(() => {
-            this.confirmLoading = false
-          })
+          api = this.API.update
+          params.isUpdate = this.act === ACTIONS.Edit ? '1' : '0'
+          params.id = this.id
         } else if (this.act === ACTIONS.Add) { // 新增
-          this.API.create(form).then(res => {
+          api = this.API.create
+        }
+        if (api) {
+          api({ ...params, ...form }).then(res => {
             this.requestSuccess()
           }).finally(() => {
             this.confirmLoading = false

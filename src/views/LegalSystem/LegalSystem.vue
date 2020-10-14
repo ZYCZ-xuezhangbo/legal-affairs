@@ -57,20 +57,7 @@ export default {
   },
   methods: {
     getList() {
-      this.loading = true
-      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
-    },
-    handleActClick({ act, item }) {
-      this.dialog.act = act
-      this.dialog.editId = item.id
-      if (act === this.ACTIONS.Edit) {
-        this.dialog.showEdit = true
-      }
+      this.getListMixin(httpGetList)
     },
     getTypeList() {
       httpGetTypeList().then(res => {

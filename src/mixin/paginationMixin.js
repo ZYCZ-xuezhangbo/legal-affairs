@@ -23,6 +23,15 @@ export default {
     }
   },
   methods: {
+    getListMixin(httpGetList) {
+      this.loading = true
+      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
+        this.list = res.data.list
+        this.pagination.pageTotal = res.data.total
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     handleShowAdd() {
       this.dialog.act = this.ACTIONS.Add
       this.dialog.showEdit = true
@@ -38,6 +47,14 @@ export default {
         this.pagination.pageSize = e.pageSize
       }
       this.getList()
+    },
+    handleActClick({ act, item }) {
+      const id = item.id
+      this.dialog.act = act
+      this.dialog.editId = id
+      if ([this.ACTIONS.Detail, this.ACTIONS.Edit, this.ACTIONS.Rate].includes(act)) {
+        this.dialog.showEdit = true
+      }
     },
     export(httpExport, condition) {
       const params = isObject(condition) ? condition : {}

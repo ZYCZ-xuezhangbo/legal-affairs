@@ -10,9 +10,9 @@
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getDict as httpGetDict, export_ as httpExport } from '@/api/lawFirmWork'
 import { getLawFirmName as httpGetLawFirmList } from '@/api/outsideLawManager'
+import { PageList as List } from '@/components'
 import Search from './components/Search'
 import Edit from './components/Edit'
-import { PageList as List } from '@/components'
 
 export default {
   mixins: [paginationMixin],
@@ -71,19 +71,7 @@ export default {
   },
   methods: {
     getList() {
-      this.loading = true
-      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
-    },
-    handleActClick({ act, item }) {
-      const id = item.id
-      this.dialog.editId = id
-      this.dialog.act = act
-      this.dialog.showEdit = true
+      this.getListMixin(httpGetList)
     },
     getLawFirmList() {
       httpGetLawFirmList().then(res => {

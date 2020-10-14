@@ -53,13 +53,7 @@ export default {
   },
   methods: {
     getList() {
-      this.loading = true
-      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
+      this.getListMixin(httpGetList)
     },
     handleShowAdd() {
       this.dialog.isEdit = false
