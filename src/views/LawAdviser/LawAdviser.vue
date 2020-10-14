@@ -1,12 +1,8 @@
 <template>
   <page-header-wrapper>
-
-    <Edit api="legalCounsel" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.id" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="legalCounsel" :act="dialog.act" :dict="dict" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :dict="dict" @search="handleSearch" />
-
     <List api="legalCounsel" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Detail, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
-
   </page-header-wrapper>
 </template>
 
@@ -26,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        id: '',
-        act: '',
-        showAdd: false
-      },
       columns: [
         {
           title: '公司',
@@ -86,15 +77,11 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
       this.dialog.act = act
-      this.dialog.id = id
-      this.dialog.showAdd = true
+      this.dialog.editId = id
+      this.dialog.showEdit = true
     },
     handleExport() {
       this.export(httpExport)

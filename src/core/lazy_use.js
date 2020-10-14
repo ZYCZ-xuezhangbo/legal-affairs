@@ -67,6 +67,7 @@ import ButtonReset from '@/components/ButtonReset'
 import ButtonAdd from '@/components/ButtonAdd'
 import ButtonExport from '@/components/ButtonExport'
 import ButtonCancel from '@/components/ButtonCancel'
+import ButtonConfirm from '@/components/ButtonConfirm'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -136,5 +137,6 @@ Vue.component(ButtonReset.name, ButtonReset)
 Vue.component(ButtonAdd.name, ButtonAdd)
 Vue.component(ButtonExport.name, ButtonExport)
 Vue.component(ButtonCancel.name, ButtonCancel)
+Vue.component(ButtonConfirm.name, ButtonConfirm)
 
 process.env.NODE_ENV !== 'production' && console.warn('[antd-pro] NOTICE: Antd use lazy-load.')

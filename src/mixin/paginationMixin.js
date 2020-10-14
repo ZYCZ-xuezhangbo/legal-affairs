@@ -6,6 +6,11 @@ export default {
   data() {
     return {
       ACTIONS,
+      dialog: {
+        editId: '',
+        act: '',
+        showEdit: false
+      },
       searchData: {},
       list: [],
       loading: false,
@@ -18,6 +23,10 @@ export default {
     }
   },
   methods: {
+    handleShowAdd() {
+      this.dialog.act = this.ACTIONS.Add
+      this.dialog.showEdit = true
+    },
     handleSearch(data) {
       this.pagination.pageNum = 1
       this.searchData = data

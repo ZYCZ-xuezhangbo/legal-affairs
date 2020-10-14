@@ -1,147 +1,131 @@
 <template>
-  <div>
-    <a-modal v-bind="editModal" :title="modalTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <template #footer>
-        <a-button @click="handleCancel">取消</a-button>
-        <a-button v-if="act!==ACTIONS.Detail" type="primary" :loading="confirmLoading" @click="handleOk">确定</a-button>
-      </template>
-      <a-skeleton v-show="pageLoading" active />
-      <div v-show="!pageLoading">
-        <a-form-model ref="form" :rules="rules" :model="form">
-          <a-row :gutter="gutter">
-            <a-col v-bind="span">
-              <a-form-model-item label="公司" prop="lammyCompany">
-                <a-select v-model="form.lammyCompany" :disabled="disabled || isRate">
-                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+  <a-modal v-bind="editModal" :title="dialogTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="dialogWidth">
+    <template #footer>
+      <button-cancel @click="handleCancel" />
+      <button-confirm :show="act!==ACTIONS.Detail" :loading="confirmLoading" @click="handleOk" />
+    </template>
+    <a-skeleton v-show="pageLoading" active />
+    <div v-show="!pageLoading">
+      <a-form-model ref="form" :rules="rules" :model="form">
+        <a-row :gutter="gutter">
+          <a-col v-bind="span">
+            <a-form-model-item label="公司" prop="lammyCompany">
+              <a-select v-model="form.lammyCompany" :disabled="disabled || isRate">
+                <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="律师来源" prop="lawSource">
+              <a-select v-model="form.lawSource" :disabled="disabled || isRate" @change="handleLawSourceChange">
+                <a-select-option value="0">
+                  库内法律顾问
+                </a-select-option>
+                <a-select-option value="1">
+                  库外法律顾问
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="律所名称" prop="lawFirmName">
+              <a-select v-show="isKuNei" v-model="form.lawFirmName" :disabled="disabled || isRate" @change="handleLawFirmChange">
+                <a-select-option v-for="(item,index) in lawFirmList" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+              <a-input v-show="!isKuNei" v-model="form.lawFirmName" :disabled="disabled || isRate" placeholder="律所名称" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="律师姓名" prop="lawName">
+              <template v-if="isKuNei">
+                <!-- 如果是库内，下拉框 -->
+                <a-select v-model="form.lawName" :disabled="disabled || isRate" :loading="layerLoading" placeholder="律师姓名">
+                  <a-select-option v-for="(item,index) in layerList" :key="index" :value="item.code">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="律师来源" prop="lawSource">
-                <a-select v-model="form.lawSource" :disabled="disabled || isRate" @change="handleLawSourceChange">
-                  <a-select-option value="0">
-                    库内法律顾问
-                  </a-select-option>
-                  <a-select-option value="1">
-                    库外法律顾问
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="律所名称" prop="lawFirmName">
-                <a-select v-show="isKuNei" v-model="form.lawFirmName" :disabled="disabled || isRate" @change="handleLawFirmChange">
-                  <a-select-option v-for="(item,index) in lawFirmList" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-                <a-input v-show="!isKuNei" v-model="form.lawFirmName" :disabled="disabled || isRate" placeholder="律所名称" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="律师姓名" prop="lawName">
-                <template v-if="isKuNei">
-                  <!-- 如果是库内，下拉框 -->
-                  <a-select v-model="form.lawName" :disabled="disabled || isRate" :loading="layerLoading" placeholder="律师姓名">
-                    <a-select-option v-for="(item,index) in layerList" :key="index" :value="item.code">
-                      {{ item.name }}
-                    </a-select-option>
-                  </a-select>
+              </template>
+              <template v-else>
+                <!-- 如果是库外，输入框 -->
+                <a-input v-model="form.lawName" :disabled="disabled || isRate" placeholder="律师名称" />
+              </template>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="服务类型" prop="serviceType">
+              <a-select v-model="form.serviceType" :disabled="disabled || isRate">
+                <a-select-option v-for="(item,index) in dict.LAYERTYPE" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="服务时间" prop="serviceTime">
+              <a-range-picker :value="form.serviceTime" :disabled="disabled || isRate" :allow-clear="false" input-read-only @change="handleServiceTimeChange" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="服务费用(元)" prop="serviceCharge">
+              <template #help> 请上传费用凭证 </template>
+              <a-input-number v-model="form.serviceCharge" :disabled="disabled || isRate" :min="0" :precision="2" placeholder="请输入" class="response" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-if="!isKuNei" v-bind="span">
+            <a-form-model-item label="库外律师审批凭证" prop="certificate">
+              <FileUpload :record="fileRecord" :value="form.certificate" @change="e=>form.certificate=e" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="费用说明" prop="chargeDesc">
+              <a-textarea placeholder="费用说明" :disabled="disabled || isRate" v-model="form.chargeDesc" :auto-size="{ minRows: 5, maxRows: 10 }" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="服务事项" prop="serviceMatter">
+              <a-textarea placeholder="服务事项" :disabled="disabled || isRate" v-model="form.serviceMatter" :auto-size="{ minRows: 5, maxRows: 10 }" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="附件" prop="resourceUrl">
+              <FileUpload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-if="act===ACTIONS.Rate||act===ACTIONS.Detail" :span="24">
+            <a-form-model-item label="评价">
+              <a-table :columns="columns" :data-source="form.scoreList" :pagination="false" :rowKey="e=>e.id">
+                <template #desc="item">
+                  {{ item.description }}
+                  <span class="text-gray padding-left-sm">({{ item.score * scoreScale }}分)</span>
                 </template>
-                <template v-else>
-                  <!-- 如果是库外，输入框 -->
-                  <a-input v-model="form.lawName" :disabled="disabled || isRate" placeholder="律师名称" />
+                <template #score="item">
+                  <a-rate :value="item.score" :allowClear="false" :disabled="act===ACTIONS.Detail" @change="handleRateChange($event,item)" />
                 </template>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="服务类型" prop="serviceType">
-                <a-select v-model="form.serviceType" :disabled="disabled || isRate">
-                  <a-select-option v-for="(item,index) in dict.LAYERTYPE" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="服务时间" prop="serviceTime">
-                <a-range-picker :value="form.serviceTime" :disabled="disabled || isRate" :allow-clear="false" input-read-only @change="handleServiceTimeChange" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="服务费用(元)" prop="serviceCharge">
-                <template #help> 请上传费用凭证 </template>
-                <a-input-number v-model="form.serviceCharge" :disabled="disabled || isRate" :min="0" :precision="2" placeholder="请输入" class="response" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-if="!isKuNei" v-bind="span">
-              <a-form-model-item label="库外律师审批凭证" prop="certificate">
-                <FileUpload :record="fileRecord" :value="form.certificate" @change="e=>form.certificate=e" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-model-item label="费用说明" prop="chargeDesc">
-                <a-textarea placeholder="费用说明" :disabled="disabled || isRate" v-model="form.chargeDesc" :auto-size="{ minRows: 5, maxRows: 10 }" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-model-item label="服务事项" prop="serviceMatter">
-                <a-textarea placeholder="服务事项" :disabled="disabled || isRate" v-model="form.serviceMatter" :auto-size="{ minRows: 5, maxRows: 10 }" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-model-item label="附件" prop="resourceUrl">
-                <FileUpload :record="fileRecord" :value="form.resourceUrl" @change="e=>form.resourceUrl=e" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-if="act===ACTIONS.Rate||act===ACTIONS.Detail" :span="24">
-              <a-form-model-item label="评价">
-                <a-table :columns="columns" :data-source="form.scoreList" :pagination="false" :rowKey="e=>e.id">
-                  <template #desc="item">
-                    {{ item.description }}
-                    <span class="text-gray padding-left-sm">({{ item.score * scoreScale }}分)</span>
-                  </template>
-                  <template #score="item">
-                    <a-rate :value="item.score" :allowClear="false" :disabled="act===ACTIONS.Detail" @change="handleRateChange($event,item)" />
-                  </template>
-                </a-table>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-modal>
-  </div>
+              </a-table>
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-modal>
 </template>
 
 <script>
+import deepClone from '@/utils/deepClone'
 import { ACTIONS } from '@/store/mutation-types'
-import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawManager'
+import dialogEditMixin from '@/mixin/dialogEditMixin'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
-import deepClone from '@/utils/deepClone'
+import { getLayerByFirmId as httpGetLayerListByFirmId } from '@/api/outsideLawManager'
 import { required as validateRequired, money as validateMoney, max20Num } from '@/utils/formValidate'
 
 export default {
+  mixins: [dialogEditMixin],
   props: {
-    act: {
-      type: String,
-      default: ''
-    },
-    id: {
-      type: [String, Number],
-      default: ''
-    },
-    show: {
-      type: Boolean,
-      default: false
-    },
-    api: {
-      type: String,
-      default: ''
-    },
     lawFirmList: {
       type: Array,
       default() {
@@ -161,24 +145,9 @@ export default {
     ImgUpload,
     FileUpload
   },
-  watch: {
-    show(newVal) {
-      this.$nextTick(() => this.$refs.form.resetFields())
-      if (newVal && [ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Rate].includes(this.act)) {
-        this.getDetail()
-      }
-    }
-  },
   data() {
     return {
       ACTIONS,
-      gutter: 48,
-      span: {
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 6
-      },
       scoreScale: 5,
       form: {
         chargeDesc: '',
@@ -215,23 +184,10 @@ export default {
         scoreList: [validateRequired]
       },
       layerLoading: false,
-      layerList: [], // 律师列表
-      pageLoading: false,
-      confirmLoading: false,
-      API: require(`@/api/${this.api}`)
+      layerList: [] // 律师列表
     }
   },
   computed: {
-    editModal() {
-      if (this.confirmLoading) {
-        return {
-          closable: false,
-          keyboard: false,
-          maskClosable: false
-        }
-      }
-      return ''
-    },
     columns() {
       // 每颗星代表5分
       const sum = this.form.scoreList.reduce((total, cur) => total + cur.score, 0) * this.scoreScale
@@ -256,17 +212,6 @@ export default {
           disabled: this.disabled || this.act === ACTIONS.Rate
         }
       }
-    },
-    modalTitle() {
-      let title = ''
-      if (this.act === ACTIONS.Edit) {
-        title = '修改'
-      } else if (this.act === ACTIONS.Detail) {
-        title = '查看'
-      } else if (this.act === ACTIONS.Add) {
-        title = '新增'
-      }
-      return title
     },
     disabled() {
       return this.act === ACTIONS.Detail && this.id !== ''
@@ -325,10 +270,6 @@ export default {
         this.pageLoading = false
       })
     },
-    handleCancel() {
-      this.$emit('close')
-      this.pageLoading = false
-    },
     getLayerListByFirmId(code) {
       this.layerLoading = true
 
@@ -342,11 +283,6 @@ export default {
       this.form.lawName = ''
       this.getLayerListByFirmId(code)
     },
-    requestSuccess() {
-      this.$emit('success')
-      this.$emit('close')
-      this.$refs.form.resetFields()
-    },
     handleLawSourceChange() {
       this.form.lawFirmName = ''
       this.form.lawName = ''
@@ -356,7 +292,6 @@ export default {
     },
     handleServiceTimeChange(e, str) {
       this.form.serviceTime = e
-
       this.form.serviceTimeStart = str[0]
       this.form.serviceTimeEnd = str[1]
     }

@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="systemRole" :show.sync="dialog.showEdit" :is-edit="dialog.isEdit" :id="dialog.editId" :menu-list="menuList" @success="getList" />
+    <Edit api="systemRole" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" :menu-list="menuList" @success="getList" />
     <Search @search="handleSearch" />
     <List api="systemRole" :columns="columns" :show-extra="[ACTIONS.Add]" :actions="[ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" />
   </page-header-wrapper>
@@ -59,15 +59,11 @@ export default {
       })
     },
     handleActClick({ act, item }) {
+      this.dialog.editId = item.id
+      this.dialog.act = act
       if (act === this.ACTIONS.Edit) {
-        this.dialog.editId = item.id
         this.dialog.showEdit = true
-        this.dialog.isEdit = true
       }
-    },
-    handleShowAdd() {
-      this.dialog.showEdit = true
-      this.dialog.isEdit = false
     }
   },
   mounted() {

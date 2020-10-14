@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="systemUser" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
+    <Edit api="systemUser" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search @search="handleSearch" />
     <List :columns="columns" :show-extra="false" :actions="[ACTIONS.Edit]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" />
   </page-header-wrapper>
@@ -22,10 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        showEdit: false,
-        editId: ''
-      },
       columns: [
         {
           title: '账号',
@@ -69,6 +65,7 @@ export default {
     },
     handleActClick({ act, item }) {
       this.dialog.editId = item.id
+      this.dialog.act = act
       if (act === this.ACTIONS.Edit) {
         this.dialog.showEdit = true
       }

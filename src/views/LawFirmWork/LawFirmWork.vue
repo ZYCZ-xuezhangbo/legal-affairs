@@ -1,9 +1,7 @@
 <template>
   <page-header-wrapper>
-    <Edit api="lawFirmWork" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.id" :law-firm-list="lawFirmList" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="lawFirmWork" :act="dialog.act" :dict="dict" :show.sync="dialog.showEdit" :id="dialog.editId" :law-firm-list="lawFirmList" @success="getList" />
     <Search :dict="dict" @search="handleSearch" />
-
     <List api="lawFirmWork" :columns="columns" :actions="[ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Rate]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
@@ -25,11 +23,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        id: 0,
-        act: '',
-        showAdd: false
-      },
       lawFirmList: [], // 律所列表
       columns: [
         {
@@ -86,15 +79,11 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
-      this.dialog.id = id
+      this.dialog.editId = id
       this.dialog.act = act
-      this.dialog.showAdd = true
+      this.dialog.showEdit = true
     },
     getLawFirmList() {
       httpGetLawFirmList().then(res => {

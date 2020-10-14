@@ -1,9 +1,7 @@
 <template>
   <page-header-wrapper>
-    <Edit api="informant" :is-edit="dialog.isEdit" :dict="dict" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="informant" :act="dialog.act" :dict="dict" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :company-list="dict.COMPANY" @search="handleSearch" />
-
     <List api="informant" :columns="columns" :actions="['edit', 'delete']" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
@@ -24,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: 0,
-        isEdit: false,
-        showAdd: false
-      },
       dict: {
         USERNAME: [],
         DEPT: [],
@@ -78,16 +71,12 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.isEdit = false
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
+      this.dialog.act = act
       if (act === this.ACTIONS.Edit) {
         this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
+        this.dialog.showEdit = true
       }
     },
     handleExport() {

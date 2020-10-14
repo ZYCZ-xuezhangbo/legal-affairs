@@ -1,80 +1,64 @@
 <template>
-  <div>
-    <a-modal v-bind="editModal" :title="isEdit?'编辑':'新建'" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <a-skeleton v-show="pageLoading" active />
-      <div v-show="!pageLoading">
-        <a-form-model ref="form" :rules="rules" :model="form">
-          <a-row :gutter="gutter">
-            <a-col v-bind="span">
-              <a-form-model-item label="公司" prop="company">
-                <a-select v-model="form.company">
-                  <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="部门" prop="deptName">
-                <a-select v-model="form.deptName">
-                  <a-select-option v-for="(item,index) in dict.DEPT" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="用户名" prop="userName">
-                <a-select v-model="form.userName">
-                  <a-select-option v-for="(item,index) in dict.USERNAME" :key="index" :value="item.code">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="姓名" prop="name">
-                <a-input v-model="form.name" placeholder="请输入" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="办公室电话" prop="officePhone">
-                <a-input v-model="form.officePhone" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="span">
-              <a-form-model-item label="联系电话" prop="phone">
-                <a-input v-model="form.phone" class="response" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-modal>
-  </div>
+  <a-modal v-bind="editModal" :title="dialogTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="dialogWidth">
+    <a-skeleton v-show="pageLoading" active />
+    <div v-show="!pageLoading">
+      <a-form-model ref="form" :rules="rules" :model="form">
+        <a-row :gutter="gutter">
+          <a-col v-bind="span">
+            <a-form-model-item label="公司" prop="company">
+              <a-select v-model="form.company">
+                <a-select-option v-for="(item,index) in dict.COMPANY" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="部门" prop="deptName">
+              <a-select v-model="form.deptName">
+                <a-select-option v-for="(item,index) in dict.DEPT" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="用户名" prop="userName">
+              <a-select v-model="form.userName">
+                <a-select-option v-for="(item,index) in dict.USERNAME" :key="index" :value="item.code">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="姓名" prop="name">
+              <a-input v-model="form.name" placeholder="请输入" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="办公室电话" prop="officePhone">
+              <a-input v-model="form.officePhone" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="span">
+            <a-form-model-item label="联系电话" prop="phone">
+              <a-input v-model="form.phone" class="response" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-modal>
 </template>
 
 <script>
+import dialogEditMixin from '@/mixin/dialogEditMixin'
 import { required as validateRequired, phone as validatePhone, max30Str } from '@/utils/formValidate'
 
 export default {
+  mixins: [dialogEditMixin],
   props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    },
-    id: {
-      type: [String, Number],
-      default: ''
-    },
-    show: {
-      type: Boolean,
-      default: false
-    },
-    api: {
-      type: String,
-      default: ''
-    },
     dict: {
       type: Object,
       default() {
@@ -82,38 +66,8 @@ export default {
       }
     }
   },
-  watch: {
-    show(newVal, oldVal) {
-      this.$nextTick(() => this.$refs.form.resetFields())
-      if (newVal && this.isEdit) {
-        this.getDetail()
-      }
-    }
-  },
-  computed: {
-    editModal() {
-      if (this.confirmLoading) {
-        return {
-          closable: false,
-          keyboard: false,
-          maskClosable: false
-        }
-      }
-      return ''
-    }
-  },
   data() {
     return {
-      gutter: 48,
-      span: {
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 6
-      },
-      pageLoading: false,
-      confirmLoading: false,
-      API: require(`@/api/${this.api}`),
       form: {
         company: '',
         deptName: '',
@@ -136,38 +90,7 @@ export default {
       }
     }
   },
-  methods: {
-    handleOk() {
-      this.$refs.form.validate().then(() => {
-        this.confirmLoading = true
-        const api = this.isEdit ? this.API.update : this.API.create
-        const paramsId = this.isEdit ? { id: this.id } : {}
-
-        api({ ...paramsId, ...this.form }).then(res => {
-          this.requestSuccess()
-        }).finally(() => {
-          this.confirmLoading = false
-        })
-      })
-    },
-    getDetail() {
-      this.pageLoading = true
-      this.API.getById(this.id).then(res => {
-        this.form = res.data
-      }).finally(() => {
-        this.pageLoading = false
-      })
-    },
-    handleCancel() {
-      this.$emit('close')
-      this.pageLoading = false
-    },
-    requestSuccess() {
-      this.$emit('success')
-      this.$emit('close')
-      this.$refs.form.resetFields()
-    }
-  }
+  methods: { }
 }
 </script>
 

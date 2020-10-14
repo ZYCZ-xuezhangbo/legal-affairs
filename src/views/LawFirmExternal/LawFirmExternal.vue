@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <!-- <Detail api="outsideLawFirm" :show="dialog.showDetail" :id="dialog.editId" @close="dialog.showDetail=false" /> -->
 
-    <Edit api="outsideLawFirm" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="outsideLawFirm" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search @search="handleSearch" />
     <List api="outsideLawFirm" :columns="columns" :actions="[ACTIONS.Detail,ACTIONS.Edit]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
 
@@ -25,11 +25,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: '',
-        act: '',
-        showAdd: false
-      },
       columns: [
         {
           title: '律所名称',
@@ -64,15 +59,11 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
       this.dialog.editId = id
       this.dialog.act = act
-      this.dialog.showAdd = true
+      this.dialog.showEdit = true
     },
     handleExport() {
       this.export(httpExport)

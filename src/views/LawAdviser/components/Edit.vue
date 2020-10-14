@@ -1,8 +1,8 @@
 <template>
   <div>
-    <a-modal v-bind="editModal" :title="modalTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="1000">
-      <template v-if="act==='detail'" #footer>
-        <button-cancel @click="$emit('close')" />
+    <a-modal v-bind="editModal" :title="dialogTitle" :visible="show" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel" :width="dialogWidth">
+      <template v-if="act===ACTIONS.Detail" #footer>
+        <button-cancel @click="handleCancel" />
       </template>
       <a-skeleton v-show="pageLoading" active />
       <div v-show="!pageLoading">
@@ -177,28 +177,14 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
+import dialogEditMixin from '@/mixin/dialogEditMixin'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import { required as validateRequired, max30Str as validateMax30Str } from '@/utils/formValidate'
 
 export default {
+  mixins: [dialogEditMixin],
   props: {
-    act: {
-      type: String,
-      default: ''
-    },
-    id: {
-      type: String,
-      default: ''
-    },
-    show: {
-      type: Boolean,
-      default: false
-    },
-    api: {
-      type: String,
-      default: ''
-    },
     dict: {
       type: Object,
       default() {
@@ -211,12 +197,6 @@ export default {
     FileUpload
   },
   watch: {
-    show(newVal, oldVal) {
-      this.$nextTick(() => this.$refs.form.resetFields())
-      if (newVal && [ACTIONS.Edit, ACTIONS.Detail].includes(this.act)) {
-        this.getDetail()
-      }
-    },
     'form.professionStatus'(val) {
       if (val === '0') {
         this.form.legalCertificateNumber = ''
@@ -230,16 +210,6 @@ export default {
     }
   },
   computed: {
-    editModal() {
-      if (this.confirmLoading) {
-        return {
-          closable: false,
-          keyboard: false,
-          maskClosable: false
-        }
-      }
-      return ''
-    },
     portraitRecord() {
       return {
         key: new Date().getTime(),
@@ -258,17 +228,6 @@ export default {
           disabled: this.disabled
         }
       }
-    },
-    modalTitle() {
-      let title = ''
-      if (this.act === ACTIONS.Edit) {
-        title = '修改'
-      } else if (this.act === ACTIONS.Detail) {
-        title = '查看'
-      } else if (this.act === ACTIONS.Add) {
-        title = '新增'
-      }
-      return title
     },
     disabled() {
       return this.act === ACTIONS.Detail && this.id !== ''
@@ -301,13 +260,7 @@ export default {
   },
   data() {
     return {
-      gutter: 48,
-      span: {
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 6
-      },
+      ACTIONS,
       form: {
         birthDate: '',
         certificateNumber: '',
@@ -332,51 +285,10 @@ export default {
         school: '',
         userName: '',
         work: ''
-      },
-
-      pageLoading: false,
-      confirmLoading: false,
-      API: require(`@/api/${this.api}`)
+      }
     }
   },
-  methods: {
-    handleOk() {
-      this.$refs.form.validate().then(formData => {
-        this.confirmLoading = true
-        let api = null
-        if (this.act === ACTIONS.Edit) api = this.API.update
-        else if (this.act === ACTIONS.Add) api = this.API.create
-        const paramsId = this.act === ACTIONS.Edit ? { id: this.id } : {}
-
-        if (api) {
-          api({ ...paramsId, ...this.form }).then(res => {
-            this.requestSuccess()
-          }).finally(() => {
-            this.confirmLoading = false
-          })
-        }
-      }).catch(() => {
-        this.$message.warning(this.$t('message.form.validate.fail'))
-      })
-    },
-    getDetail() {
-      this.pageLoading = true
-      this.API.getById(this.id).then(res => {
-        this.form = res.data
-      }).finally(() => {
-        this.pageLoading = false
-      })
-    },
-    handleCancel() {
-      this.$emit('close')
-      this.pageLoading = false
-    },
-    requestSuccess() {
-      this.$emit('success')
-      this.$emit('close')
-      this.$refs.form.resetFields()
-    }
-  }
+  methods: { }
 }
 </script>
 

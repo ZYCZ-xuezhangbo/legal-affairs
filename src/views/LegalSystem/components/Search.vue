@@ -1,39 +1,40 @@
 <template>
-  <div>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form-model ref="searchForm" layout="inline" :model="searchForm">
-          <a-row :gutter="searchTableGrid.gutter">
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="名称" prop="name">
-                <a-input v-model="searchForm.name" placeholder="名称" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="类型" prop="type">
-                <a-select v-model="searchForm.type" style="min-width:130px;">
-                  <a-select-option :value="item.code" v-for="(item,index) in typeList" :key="index">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item label="发布人" prop="releasePerson">
-                <a-input v-model="searchForm.releasePerson" placeholder="发布人" />
-              </a-form-model-item>
-            </a-col>
-            <a-col v-bind="searchTableGrid.span">
-              <a-form-model-item>
-                <button-search @click="handleSearch" />
-                <button-reset @click="resetForm" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </div>
-    </a-card>
-  </div>
+  <a-card :bordered="false">
+    <div class="table-page-search-wrapper">
+      <a-form-model ref="searchForm" layout="inline" :model="searchForm">
+        <a-row :gutter="searchTableGrid.gutter">
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="名称" prop="name">
+              <a-input v-model="searchForm.name" placeholder="名称" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="类型" prop="type">
+              <a-select v-model="searchForm.type" style="min-width:130px;">
+                <a-select-option value="">
+                  {{ $t('select.search.all') }}
+                </a-select-option>
+                <a-select-option :value="item.code" v-for="(item,index) in typeList" :key="index">
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item label="发布人" prop="releasePerson">
+              <a-input v-model="searchForm.releasePerson" placeholder="发布人" />
+            </a-form-model-item>
+          </a-col>
+          <a-col v-bind="searchTableGrid.span">
+            <a-form-model-item>
+              <button-search @click="handleSearch" />
+              <button-reset @click="resetForm" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </div>
+  </a-card>
 </template>
 
 <script>

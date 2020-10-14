@@ -1,9 +1,8 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalMember" :dict="dict" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
+    <Edit api="legalMember" :dict="dict" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :company-list="companyList" @search="handleSearch" />
-
-    <List api="legalMember" :columns="columns" :actions="['edit','detail', 'delete']" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
+    <List api="legalMember" :columns="columns" :actions="[ACTIONS.Edit,ACTIONS.Detail, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
 
@@ -23,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: '',
-        act: '',
-        showAdd: false
-      },
       companyList: [
         {
           code: '',
@@ -100,15 +94,11 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
       this.dialog.act = act
       this.dialog.editId = id
-      this.dialog.showAdd = true
+      this.dialog.showEdit = true
     },
     handleExport() {
       this.export(httpExport)

@@ -1,9 +1,7 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalDept" :act="dialog.act" :dict="dict" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="legalDept" :act="dialog.act" :dict="dict" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :company-list="dict.COMPANY" :dept-list="dict.DEPT" @search="handleSearch" />
-
     <List api="legalDept" :columns="columns" :actions="[ACTIONS.Detail, ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
@@ -24,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: 0,
-        act: '',
-        showAdd: false
-      },
       dict: {
         DEPT: [],
         COMPANY: []
@@ -92,16 +85,12 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
       this.dialog.act = act
       this.dialog.editId = id
       if ([this.ACTIONS.Detail, this.ACTIONS.Edit].includes(act)) {
-        this.dialog.showAdd = true
+        this.dialog.showEdit = true
       }
     },
     handleExport() {

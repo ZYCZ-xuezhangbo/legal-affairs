@@ -1,9 +1,7 @@
 <template>
   <page-header-wrapper>
-    <Edit api="generalMatter" :dict="dict" :act="dialog.act" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="generalMatter" :dict="dict" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search @search="handleSearch" />
-
     <List api="generalMatter" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
@@ -24,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: '',
-        act: '',
-        showAdd: false
-      },
       columns: [
         {
           title: '公司',
@@ -74,16 +67,14 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
       this.dialog.act = act
       this.dialog.editId = id
 
-      if (act === this.ACTIONS.Edit) this.dialog.showAdd = true
+      if (act === this.ACTIONS.Edit) {
+        this.dialog.showEdit = true
+      }
     },
     handleExport() {
       this.export(httpExport)

@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <Edit api="systemMenu" :show.sync="dialog.showEdit" :id="dialog.editId" />
+    <Edit api="systemMenu" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" />
     <Search @search="handleSearch" />
     <List api="systemMenu" :columns="columns" :show-extra="false" :actions="[ACTIONS.Detail]" :loading="loading" :list="list" :pagination="pagination" @reload="handleReload" @actClick="handleActClick" />
   </page-header-wrapper>
@@ -22,10 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        showEdit: false,
-        editId: ''
-      },
       columns: [
         {
           title: '权限名称',
@@ -51,8 +47,9 @@ export default {
       })
     },
     handleActClick({ act, item }) {
+      this.dialog.act = act
+      this.dialog.editId = item.id
       if (act === this.ACTIONS.Detail) {
-        this.dialog.editId = item.id
         this.dialog.showEdit = true
       }
     }

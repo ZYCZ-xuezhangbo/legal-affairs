@@ -1,9 +1,7 @@
 <template>
   <page-header-wrapper>
-    <Edit api="outsideLawManager" :act="dialog.act" :show="dialog.showAdd" :id="dialog.id" :law-firm-list="lawFirmList" @close="dialog.showAdd=false" @success="getList" />
-
+    <Edit api="outsideLawManager" :act="dialog.act" :show.sync="dialog.showEdit" :id="dialog.editId" :law-firm-list="lawFirmList" @success="getList" />
     <Search :law-firm-list="lawFirmList" @search="handleSearch" />
-
     <List api="outsideLawManager" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Detail]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
   </page-header-wrapper>
 </template>
@@ -11,9 +9,9 @@
 <script>
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getLawFirmName as httpGetLawFirmList, export_ as httpExport } from '@/api/outsideLawManager'
+import { PageList as List } from '@/components'
 import Search from './components/Search'
 import Edit from './components/Edit'
-import { PageList as List } from '@/components'
 
 export default {
   mixins: [paginationMixin],
@@ -24,11 +22,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        id: 0,
-        act: '',
-        showAdd: false
-      },
       lawFirmList: [], // 律所列表
       columns: [
         {
@@ -79,15 +72,11 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.act = this.ACTIONS.Add
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
       const id = item.id
-      this.dialog.id = id
+      this.dialog.editId = id
       this.dialog.act = act
-      this.dialog.showAdd = true
+      this.dialog.showEdit = true
     },
     getLawFirmList() {
       httpGetLawFirmList().then(res => {

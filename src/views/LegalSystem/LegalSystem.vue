@@ -1,11 +1,9 @@
 <template>
   <page-header-wrapper>
-    <Edit api="legalSystem" :form-data="formData" :dynamic-data="dynamicData" :is-edit="dialog.isEdit" :type-list="typeList" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" />
-
+    <!-- <Edit api="legalSystem" :form-data="formData" :dynamic-data="dynamicData" :is-edit="dialog.isEdit" :type-list="typeList" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" /> -->
+    <Edit api="legalSystem" :act="dialog.act" :dict="typeList" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :type-list="typeList" @search="handleSearch" />
-
     <List api="legalSystem" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
-
   </page-header-wrapper>
 </template>
 
@@ -13,7 +11,8 @@
 import paginationMixin from '@/mixin/paginationMixin'
 import { page as httpGetList, getLegalSystemType as httpGetTypeList, export_ as httpExport } from '@/api/legalSystem'
 import Search from './components/Search'
-import { PageEdit as Edit, PageList as List } from '@/components'
+import { PageList as List } from '@/components'
+import Edit from './components/Edit'
 
 export default {
   mixins: [paginationMixin],
@@ -24,11 +23,6 @@ export default {
   },
   data() {
     return {
-      dialog: {
-        editId: 0,
-        isEdit: false,
-        showAdd: false
-      },
       formData: require('@/formBuilder/legalSystem.json'),
       dynamicData: {},
       typeList: [],
@@ -71,26 +65,16 @@ export default {
         this.loading = false
       })
     },
-    handleShowAdd() {
-      this.dialog.isEdit = false
-      this.dialog.showAdd = true
-    },
     handleActClick({ act, item }) {
-      const id = item.id
+      this.dialog.act = act
+      this.dialog.editId = item.id
       if (act === this.ACTIONS.Edit) {
-        this.dialog.editId = id
-        this.dialog.isEdit = true
-        this.dialog.showAdd = true
+        this.dialog.showEdit = true
       }
     },
     getTypeList() {
       httpGetTypeList().then(res => {
         this.typeList = res.data
-        this.typeList.unshift({
-          code: '',
-          name: '不限'
-        })
-        this.dynamicData.typeList = this.typeList.map(v => ({ label: v.name, value: v.code }))
       })
     },
     handleExport() {
