@@ -1,10 +1,12 @@
 import { ACTIONS, ACTIONS_ENTIRY } from '@/store/mutation-types'
 import { array as isArray } from '@/utils/test'
 import { Pagination } from '@/components'
+import PageListActions from '@/components/PageListActions/PageListActions'
 
 export default {
   components: {
-    Pagination
+    Pagination,
+    PageListActions
   },
   props: {
     api: {

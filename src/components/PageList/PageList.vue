@@ -6,12 +6,7 @@
     </template>
     <a-table v-bind="tableModal" :loading="loading" :columns="columnList" :data-source="list" :pagination="false" :row-key="e => e.id">
       <template #action="item">
-        <span v-if="actList.length>0">
-          <span v-for="(v,k) in actList" :key="k">
-            <a @click="handleClick(v.code,item)">{{ v.text }}</a>
-            <a-divider v-if="k < actList.length-1" type="vertical" />
-          </span>
-        </span>
+        <PageListActions :list="actList" @click="handleClick($event,item)" />
       </template>
     </a-table>
     <Pagination :page-num.sync="pagination.pageNum" :page-size="pagination.pageSize" :total="pagination.pageTotal" @change="handlePageNumChange" @sizeChange="handlePageSizeChange" />
