@@ -1,7 +1,9 @@
 <template>
   <a-card :bordered="false" :loading="loading" class="margin-top-lg">
     <div class="statistics-title">{{ title }}</div>
-    <div class="statistics-num"><a class="number">{{ info.number | NumberFormat }}</a></div>
+    <div class="statistics-num">
+      <a class="number">{{ info.number | NumberFormat }}</a>
+    </div>
     <a-row type="flex" class="margin-top-lg">
       <a-col :flex="1">
         <a-statistic title="本单位" :value="info.deptNum" />

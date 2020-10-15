@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     getListMixin(httpGetList) {
+      if (this.loading) return
       this.loading = true
       httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
         this.list = res.data.list

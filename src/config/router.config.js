@@ -111,10 +111,16 @@ export const asyncRouterMap = [
             meta: { title: '法律制度', keepAlive: false, permission: [] }
           },
           {
-            path: '/staff/Portrait',
+            path: '/staff/portrait',
             name: 'Portrait',
             component: () => import('@/views/Portrait/Portrait'),
             meta: { title: '法务画像', keepAlive: false, permission: [] }
+          },
+          {
+            path: '/staff/legalExamine',
+            name: 'LegalExamine',
+            component: () => import('@/views/LegalExamine/LegalExamine'),
+            meta: { title: '法务考核', keepAlive: false, permission: [] }
           }
         ]
       },
