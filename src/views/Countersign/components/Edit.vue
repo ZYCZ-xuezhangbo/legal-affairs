@@ -103,8 +103,7 @@ export default {
         recipientDepartment: [validateRequired]
       }
     }
-  },
-  methods: {}
+  }
 }
 </script>
 

@@ -1,6 +1,5 @@
 <template>
   <page-header-wrapper>
-    <!-- <Edit api="legalSystem" :form-data="formData" :dynamic-data="dynamicData" :is-edit="dialog.isEdit" :type-list="typeList" :show="dialog.showAdd" :id="dialog.editId" @close="dialog.showAdd=false" @success="getList" /> -->
     <Edit api="legalSystem" :act="dialog.act" :dict="typeList" :show.sync="dialog.showEdit" :id="dialog.editId" @success="getList" />
     <Search :type-list="typeList" @search="handleSearch" />
     <List api="legalSystem" :columns="columns" :actions="[ACTIONS.Edit, ACTIONS.Delete]" :loading="loading" :export-loading="exportLoading" :list="list" :pagination="pagination" @reload="handleReload" @showAdd="handleShowAdd" @actClick="handleActClick" @export="handleExport" />
@@ -23,8 +22,6 @@ export default {
   },
   data() {
     return {
-      formData: require('@/formBuilder/legalSystem.json'),
-      dynamicData: {},
       typeList: [],
       columns: [
         {

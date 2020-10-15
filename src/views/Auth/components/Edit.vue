@@ -35,8 +35,7 @@ export default {
         permission: ''
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

@@ -285,8 +285,7 @@ export default {
         work: ''
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

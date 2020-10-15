@@ -196,8 +196,7 @@ export default {
         phone: [validateRequired, validatePhone]
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

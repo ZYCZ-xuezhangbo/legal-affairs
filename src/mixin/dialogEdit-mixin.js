@@ -1,4 +1,4 @@
-import { ACTIONS } from '@/store/mutation-types'
+import { ACTIONS, getActionText } from '@/store/mutation-types'
 
 export default {
   props: {
@@ -56,15 +56,7 @@ export default {
       return ''
     },
     dialogTitle() {
-      let title = ''
-      if (this.act === ACTIONS.Edit) {
-        title = '修改'
-      } else if (this.act === ACTIONS.Detail) {
-        title = '查看'
-      } else if (this.act === ACTIONS.Add) {
-        title = '新增'
-      }
-      return title
+      return getActionText(this.act)
     }
   },
   methods: {

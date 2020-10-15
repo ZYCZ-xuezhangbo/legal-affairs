@@ -142,8 +142,7 @@ export default {
         phone: [validateRequired]
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

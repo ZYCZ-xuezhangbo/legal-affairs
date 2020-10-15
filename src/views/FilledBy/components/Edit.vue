@@ -89,8 +89,7 @@ export default {
         userName: [validateRequired]
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

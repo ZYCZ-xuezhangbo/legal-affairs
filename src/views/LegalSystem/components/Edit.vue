@@ -80,8 +80,7 @@ export default {
         resourceUrl: []
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 

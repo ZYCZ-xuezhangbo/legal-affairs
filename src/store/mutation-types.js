@@ -1,15 +1,3 @@
-const actions = {
-  Detail: 'detail',
-  Preview: 'preview',
-  Edit: 'edit',
-  Rate: 'rate',
-  Download: 'download',
-  Role: 'role',
-  Auth: 'auth',
-  Delete: 'delete',
-  Add: 'add'
-}
-
 export const ACCESS_TOKEN = 'Access-Token'
 export const SIDEBAR_TYPE = 'sidebar_type'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
@@ -34,14 +22,67 @@ export const RESPONSE_CODE = {
 }
 
 /**
- * 列表页的操作项
+ * 列表操作项
  */
-export const ACTIONS = actions
+const actionsEntity = [
+  {
+    code: 'Detail',
+    text: '查看'
+  },
+  {
+    code: 'Preview',
+    text: '预览'
+  },
+  {
+    code: 'Edit',
+    text: '修改'
+  },
+  {
+    code: 'Rate',
+    text: '评分'
+  },
+  {
+    code: 'Download',
+    text: '下载'
+  },
+  {
+    code: 'Role',
+    text: '角色'
+  },
+  {
+    code: 'Auth',
+    text: '权限'
+  },
+  {
+    code: 'Delete',
+    text: '删除'
+  },
+  {
+    code: 'Add',
+    text: '新增'
+  }
+]
+export function getActionText(code) {
+  const item = actionsEntity.find(v => v.code === code)
+  if (item) return item.text
+  return ''
+}
+
+function getActionsCode() {
+  let codes = {}
+  actionsEntity.forEach(v => {
+    const item = {}
+    item[v.code] = v.code
+    codes = { ...item, ...codes }
+  })
+  return codes
+}
 
 /**
- * 列表页操作按钮排序
+ * 列表页的操作项
  */
-export const ACTIONS_ORDER = valueToArrayFromObject(actions)
+export const ACTIONS = getActionsCode()
+export const ACTIONS_ENTIRY = actionsEntity
 
 /**
  * 案件阶段
@@ -64,16 +105,4 @@ export const CONTENT_WIDTH_TYPE = {
 export const NAV_THEME = {
   LIGHT: 'light',
   DARK: 'dark'
-}
-
-/**
- * 将对象的value转为数组
- * @param {object} obj
- */
-function valueToArrayFromObject(obj) {
-  const arr = []
-  for (const i in obj) {
-    arr.push(obj[i])
-  }
-  return arr
 }

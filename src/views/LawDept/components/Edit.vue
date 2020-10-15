@@ -144,8 +144,7 @@ export default {
         principal: [validateRequired, validataMax30]
       }
     }
-  },
-  methods: { }
+  }
 }
 </script>
 
