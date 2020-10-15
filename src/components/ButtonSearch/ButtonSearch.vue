@@ -1,5 +1,7 @@
 <template>
-  <a-button type="primary" @click="handleClick"> 搜索 </a-button>
+  <a-button type="primary" @click="handleClick">
+    <slot> 搜索 </slot>
+  </a-button>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <a-button @click="handleClick">
-    <slot>关闭</slot>
+    <slot> 关闭 </slot>
   </a-button>
 </template>
 

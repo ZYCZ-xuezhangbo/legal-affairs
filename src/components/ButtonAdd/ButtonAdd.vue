@@ -1,5 +1,7 @@
 <template>
-  <a-button type="primary" @click="handleClick"> 新建 </a-button>
+  <a-button type="primary" @click="handleClick">
+    <slot> 新建 </slot>
+  </a-button>
 </template>
 
 <script>

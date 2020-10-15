@@ -1,5 +1,7 @@
 <template>
-  <a-button v-if="show" :loading="loading" type="primary" @click="handleClick"> 确定 </a-button>
+  <a-button v-if="show" :loading="loading" type="primary" @click="handleClick">
+    <slot> 确定 </slot>
+  </a-button>
 </template>
 
 <script>

@@ -85,22 +85,12 @@ export default {
       return col
     },
     tableModal() {
-      if (this.scrollWidth > 0) {
-        return {
-          scroll: { x: this.scrollWidth }
-        }
-      } else {
-        return {}
-      }
+      return this.scrollWidth > 0 ? { scroll: { x: this.scrollWidth } } : {}
     },
     actList() {
-      const list = ACTIONS_ENTIRY.filter(v => {
-        return this.actions.includes(v.code)
-      })
+      const list = ACTIONS_ENTIRY.filter(v => this.actions.includes(v.code))
       // 按固定顺序排序
-      list.sort((a, b) => {
-        return ACTIONS_ENTIRY.findIndex(v => v.code === a.code) - ACTIONS_ENTIRY.findIndex(v => v.code === b.code)
-      })
+      list.sort((a, b) => ACTIONS_ENTIRY.findIndex(v => v.code === a.code) - ACTIONS_ENTIRY.findIndex(v => v.code === b.code))
       return list
     }
   },

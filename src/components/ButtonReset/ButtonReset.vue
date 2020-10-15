@@ -1,5 +1,7 @@
 <template>
-  <a-button @click="handleClick"> 重置 </a-button>
+  <a-button @click="handleClick">
+    <slot> 重置 </slot>
+  </a-button>
 </template>
 
 <script>
