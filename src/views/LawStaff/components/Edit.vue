@@ -202,7 +202,7 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import dialogEditMixin from '@/mixin/dialogEdit-mixin'
+import { dialogEditMixin } from '@/mixin/dialogEdit-mixin'
 import ImgUpload from '@/components/KFormDesign/packages/UploadImg'
 import FileUpload from '@/components/KFormDesign/packages/UploadFile'
 import { required as validateRequired, max30Str as validateMax30Str, phone as validatePhone } from '@/utils/formValidate'

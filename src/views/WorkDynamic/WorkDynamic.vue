@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import paginationMixin from '@/mixin/pagination-mixin'
+import { paginationMixin } from '@/mixin/pagination-mixin'
 import { page as httpGetList, getById as httpGetById, export_ as httpExport } from '@/api/workTrend'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'

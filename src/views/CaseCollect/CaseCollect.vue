@@ -8,7 +8,7 @@
 <script>
 import { ACTIONS } from '@/store/mutation-types'
 import { downloadFile } from '@/utils/util'
-import paginationMixin from '@/mixin/pagination-mixin'
+import { paginationMixin } from '@/mixin/pagination-mixin'
 import { list as httpGetList, export_ as httpExport, getCollectType } from '@/api/caseCollect'
 import { PageList as List } from '@/components'
 import Search from './components/Search'

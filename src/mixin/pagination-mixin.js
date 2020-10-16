@@ -2,7 +2,7 @@ import { ACTIONS } from '@/store/mutation-types'
 import { saveAs } from '@/utils/util'
 import { object as isObject } from '@/utils/test'
 
-export default {
+const paginationMixin = {
   data() {
     return {
       ACTIONS,
@@ -71,3 +71,5 @@ export default {
     }
   }
 }
+
+export { paginationMixin }

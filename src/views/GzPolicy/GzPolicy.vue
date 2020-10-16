@@ -9,7 +9,7 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import paginationMixin from '@/mixin/pagination-mixin'
+import { paginationMixin } from '@/mixin/pagination-mixin'
 import { page as httpGetList, getById as httpGetById, export_ as httpExport } from '@/api/policy'
 import { PageEdit as Edit, PageList as List } from '@/components'
 import Search from './components/Search'

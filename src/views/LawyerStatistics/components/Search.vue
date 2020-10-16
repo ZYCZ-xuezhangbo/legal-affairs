@@ -54,7 +54,7 @@
         </template>
       </a-col>
     </a-row>
-    <a-button type="primary">查询</a-button>
+    <button-search />
   </a-card>
 </template>
 

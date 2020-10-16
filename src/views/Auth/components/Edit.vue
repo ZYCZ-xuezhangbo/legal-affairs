@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import dialogEditMixin from '@/mixin/dialogEdit-mixin'
+import { dialogEditMixin } from '@/mixin/dialogEdit-mixin'
 
 export default {
   mixins: [dialogEditMixin],

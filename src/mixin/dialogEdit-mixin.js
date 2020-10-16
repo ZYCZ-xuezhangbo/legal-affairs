@@ -1,6 +1,6 @@
 import { ACTIONS, getActionText } from '@/store/mutation-types'
 
-export default {
+const dialogEditMixin = {
   props: {
     act: {
       type: String,
@@ -99,3 +99,5 @@ export default {
     }
   }
 }
+
+export { dialogEditMixin }

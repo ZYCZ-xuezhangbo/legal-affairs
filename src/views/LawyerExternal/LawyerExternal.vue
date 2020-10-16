@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import paginationMixin from '@/mixin/pagination-mixin'
+import { paginationMixin } from '@/mixin/pagination-mixin'
 import { page as httpGetList, getLawFirmName as httpGetLawFirmList, export_ as httpExport } from '@/api/outsideLawManager'
 import { PageList as List } from '@/components'
 import Search from './components/Search'

@@ -8,7 +8,7 @@
 
 <script>
 import { page as httpGetList } from '@/api/systemUser'
-import paginationMixin from '@/mixin/pagination-mixin'
+import { paginationMixin } from '@/mixin/pagination-mixin'
 import List from './components/List'
 import Search from './components/Search'
 
@@ -54,20 +54,7 @@ export default {
   },
   methods: {
     getList() {
-      this.loading = true
-      httpGetList({ ...this.pagination, ...this.searchData }).then(res => {
-        this.list = res.data.list
-        this.pagination.pageTotal = res.data.total
-      }).finally(() => {
-        this.loading = false
-      })
-    },
-    handleActClick({ act, item }) {
-      this.dialog.editId = item.id
-      this.dialog.act = act
-      if (act === this.ACTIONS.Edit) {
-        this.dialog.showEdit = true
-      }
+      this.getListMixin(httpGetList)
     }
   },
   mounted() {

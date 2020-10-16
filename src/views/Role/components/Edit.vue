@@ -27,7 +27,7 @@
 
 <script>
 import { ACTIONS } from '@/store/mutation-types'
-import dialogEditMixin from '@/mixin/dialogEdit-mixin'
+import { dialogEditMixin } from '@/mixin/dialogEdit-mixin'
 import { required as validateRequired, requiredOfArray } from '@/utils/formValidate'
 
 export default {

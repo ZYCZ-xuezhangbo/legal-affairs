@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import pageListMixin from '@/mixin/pageList-mixin'
+import { pageListMixin } from '@/mixin/pageList-mixin'
 
 export default {
   mixins: [pageListMixin]

@@ -3,7 +3,7 @@ import { array as isArray } from '@/utils/test'
 import { Pagination } from '@/components'
 import PageListActions from '@/components/PageListActions/PageListActions'
 
-export default {
+const pageListMixin = {
   components: {
     Pagination,
     PageListActions
@@ -150,3 +150,5 @@ export default {
     }
   }
 }
+
+export { pageListMixin }
