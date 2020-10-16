@@ -100,4 +100,6 @@ const dialogEditMixin = {
   }
 }
 
-export { dialogEditMixin }
+export {
+  dialogEditMixin
+}

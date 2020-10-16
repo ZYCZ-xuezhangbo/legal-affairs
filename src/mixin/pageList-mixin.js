@@ -151,4 +151,6 @@ const pageListMixin = {
   }
 }
 
-export { pageListMixin }
+export {
+  pageListMixin
+}

@@ -72,4 +72,6 @@ const paginationMixin = {
   }
 }
 
-export { paginationMixin }
+export {
+  paginationMixin
+}
