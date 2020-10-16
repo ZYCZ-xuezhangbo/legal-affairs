@@ -11,7 +11,6 @@
 import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetList, export_ as httpExport } from '@/api/outsideLawFirm'
 import { PageList as List } from '@/components'
-import Edit from './components/Edit'
 import Search from './components/Search'
 
 export default {
@@ -19,7 +18,7 @@ export default {
   components: {
     Search,
     List,
-    Edit
+    Edit: () => import('./components/Edit')
   },
   data() {
     return {

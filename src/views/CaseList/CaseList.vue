@@ -9,7 +9,6 @@
 
 <script>
 import { getCaseDictionaries as httpGetDict } from '@/api/case'
-import CasePage from './components/CasePage'
 
 const ZAISU = '0'
 const YEAR = '1'
@@ -18,7 +17,7 @@ const FAV = '3'
 
 export default {
   components: {
-    CasePage
+    CasePage: () => import('./components/CasePage')
   },
   data() {
     return {

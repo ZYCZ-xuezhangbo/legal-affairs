@@ -31,7 +31,6 @@ import { getCaseFolderById as httpGetCaseFolderById, getById as httpGetCaseInfo,
 import CaseFolderDetail from './components/CaseFolderDetail'
 import TabCaseDetail from './components/TabCaseDetail'
 import TabCaseModifyRecord from './components/TabCaseModifyRecord'
-import ModalAddJinzhan from './components/ModalAddJinzhan'
 
 const paginatinoInit = {
   pageNum: 1,
@@ -44,7 +43,7 @@ export default {
     CaseFolderDetail,
     TabCaseDetail,
     TabCaseModifyRecord,
-    ModalAddJinzhan
+    ModalAddJinzhan: () => import('./components/ModalAddJinzhan')
   },
   data() {
     return {

@@ -12,14 +12,13 @@ import { page as httpGetList, getDict as httpGetDict, export_ as httpExport } fr
 import { getLawFirmName as httpGetLawFirmList } from '@/api/outsideLawManager'
 import { PageList as List } from '@/components'
 import Search from './components/Search'
-import Edit from './components/Edit'
 
 export default {
   mixins: [paginationMixin],
   components: {
     Search,
     List,
-    Edit
+    Edit: () => import('./components/Edit')
   },
   data() {
     return {

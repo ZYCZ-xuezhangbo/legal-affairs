@@ -11,14 +11,13 @@ import { page as httpGetList } from '@/api/systemUser'
 import paginationMixin from '@/mixin/pagination-mixin'
 import List from './components/List'
 import Search from './components/Search'
-import Edit from './components/Edit'
 
 export default {
   mixins: [paginationMixin],
   components: {
     Search,
     List,
-    Edit
+    Edit: () => import('./components/Edit')
   },
   data() {
     return {

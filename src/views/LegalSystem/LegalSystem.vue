@@ -11,14 +11,13 @@ import paginationMixin from '@/mixin/pagination-mixin'
 import { page as httpGetList, getLegalSystemType as httpGetTypeList, export_ as httpExport } from '@/api/legalSystem'
 import Search from './components/Search'
 import { PageList as List } from '@/components'
-import Edit from './components/Edit'
 
 export default {
   mixins: [paginationMixin],
   components: {
     Search,
     List,
-    Edit
+    Edit: () => import('./components/Edit')
   },
   data() {
     return {
