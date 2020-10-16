@@ -12,7 +12,8 @@ import { timeFix, welcome } from '@/utils/util'
 export default {
   computed: {
     msg() {
-      return `${timeFix()}，${welcome()}`
+      const username = this.$store.getters.userInfo.userName
+      return `${timeFix()}，${username}，${welcome()}`
     }
   }
 }

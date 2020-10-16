@@ -11,7 +11,7 @@
         </div>
       </div>
       <router-view />
-      <div class="footer">
+      <!-- <div class="footer">
         <div class="links">
           <a href="_self">帮助</a>
           <a href="_self">隐私</a>
@@ -20,7 +20,7 @@
         <div class="copyright">
           Copyright &copy; 2020 xxxxx
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
