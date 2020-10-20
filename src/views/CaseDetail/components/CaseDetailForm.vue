@@ -84,6 +84,18 @@
             <a-input v-model="form.trialJudge" :disabled="disabled" :placeholder="judgeName" />
           </a-form-model-item>
         </a-col>
+        <a-col v-bind="span" v-if="form.importantCase==='1'">
+          <a-form-model-item label="是否已提交重大法律信息报告材料" prop="submitMaterial">
+            <a-select v-model="form.submitMaterial" :disabled="disabled">
+              <a-select-option value="1">
+                是
+              </a-select-option>
+              <a-select-option value="0">
+                否
+              </a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
         <a-col :span="24">
           <div v-if="isEdit || isAdd">
             <a @click="handleAddCaseUsers">
@@ -391,7 +403,8 @@ export default {
         ourUnits: undefined, // 我方涉案单位
         propertyClue: '',
         riskAgency: '1',
-        trialJudge: ''
+        trialJudge: '',
+        submitMaterial: '0'
       },
       rules: {
         ourUnits: [validateRequired],
