@@ -24,12 +24,13 @@
     </template>
     <CaseRelation :show="dialog.caseRelationShow" :lawsuit="dict.lawsuit" @choose="handleCaseRelationChoose" @close="dialog.caseRelationShow=false" />
     <a-card :bordered="false">
-      <CaseDetailForm :submitLoading="submitLoading" act="add" @submit="handleSubmit" />
+      <CaseDetailForm :submitLoading="submitLoading" :act="ACTIONS.Add" @submit="handleSubmit" />
     </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
+import { ACTIONS } from '@/store/mutation-types'
 import { create as httpCreate, getCaseDictionaries as httpGetDict, getBasicInfoById as httpGetBasicInfoById } from '@/api/case'
 import CaseRelation from './components/CaseRelation'
 import CaseDetailForm from '../CaseDetail/components/CaseDetailForm'
@@ -41,6 +42,7 @@ export default {
   },
   data() {
     return {
+      ACTIONS,
       isDefaultRelationCase: false,
       submitLoading: false,
       dialog: {
